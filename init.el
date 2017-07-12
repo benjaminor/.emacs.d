@@ -2,6 +2,8 @@
 (setq inhibit-startup-message t)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (delete-selection-mode 1)
+(global-hl-line-mode t)
+
 					;(require 'iso-transl)
 ;; Tell emacs where is your personal elisp lib dir
 (load-library "url-handlers")
@@ -14,7 +16,7 @@
 ;;;;;;;;;;;;;;;; ELPA Sources ;;;;;;;;;;;;;;;;
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                         ("marmalade" . "https://marmalade-repo.org/packages/")
+                         ;;("marmalade" . "https://marmalade-repo.org/packages/")
 			 ("melpa" . "https://melpa.org/packages/")
 		         ;; ("melpa_stable" . "https://stable.melpa.org/packages/")
 			 ))
@@ -60,7 +62,7 @@
     (call-interactively 'helm-find-files)))
 
 (global-set-key "\C-xü" 'my-find-cfiles)
-(defun my-find-cfiles ()
+	(defun my-find-cfiles ()
   "force a starting path"
   (interactive)
   (let ((default-directory "~/Documents/c-files/"))
@@ -149,12 +151,23 @@
 ;; (define-key yas-minor-mode-map (kbd "C-<tab>") 'yas-expand)
 
 ;;; auto complete mod
-;;; should be loaded after yasnippet so that they can work together
+;;; should be loaded after yasnippet so that they can work togethe
 					;(load "autocomplete")
-;; (use-package company-auctex
-;;   :ensure t
-;;   :config
-;;   (company-auctex-init))
+
+(use-package company-math
+  :ensure t)
+(use-package company-auctex
+  :ensure t)
+(use-package company-irony
+  :ensure t)
+;; (use-package company-yasnippet
+;;   :ensure t)
+
+
+(use-package  company-statistics
+  :ensure t
+  :config
+  (company-statistics-mode))
 
 
 (use-package company
@@ -175,93 +188,14 @@
 	company-tooltip-limit           20
 	company-dabbrev-downcase        nil
 	)
-   ;; (add-to-list 'company-backends 'company-c-headers)
-   ;;    (add-to-list 'company-backends 'company-anaconda)
-   ;;    (add-to-list 'company-backends 'company-math-symbols-unicode)
-   ;;    (add-to-list 'company-backends 'company-dabbrev-code)
-   ;;    (add-to-list 'company-backends 'company-yasnippet)
-   ;;    (add-to-list 'company-backends 'company-files)
-
-
-
+  (add-to-list 'company-backends 'company-c-headers)
+  (add-to-list 'company-backends 'company-anaconda)
+;;  (add-to-list 'company-backends 'company-math-symbols-unicode)
+ ;; (add-to-list 'company-backends 'company-dabbrev-code)
+;; (add-to-list 'company-backends 'company-yasnippet)
+  (add-to-list 'company-backends 'company-irony)
   )
 
-(use-package  company-statistics
-  :ensure t
-  :config
-  (company-statistics-mode))
-
-
-;; (use-package auto-complete
-;;   :diminish auto-complete-mode
-;;   :config
-;;   (progn
-;;     (use-package go-autocomplete)
-;; 	(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-;;     (setq ac-use-fuzzy t
-;;           ac-disable-inline t
-;;           ac-use-menu-map t
-;;           ac-auto-show-menu t
-;;           ac-auto-start t
-;;           ac-ignore-case t
-;; 		  ac-candidate-menu-min 0)
-;; 	(ac-set-trigger-key "TAB")
-;; 	(ac-set-trigger-key "<tab>")))
-
-
-
-
-
-
-;; ;; (require 'auto-complete)
-;; ;; (require 'auto-complete-config)
-;; ;; (ac-config-default)
-
-;; ;; (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-;; ;; (setq-default ac-dwim nil)
-
-;; (use-package ac-math
-;;   :ensure t
-;;   :config
-;;   (add-to-list 'ac-modes 'latex-mode)
-;;   (defun ac-LaTex-mode-setup ()
-;; 	(setq ac-sources
-;; 		  (append '(ac-source-math-unicode ac-source-math-latex ac-source-latex-commands)
-;; 				  ac-sources))
-;; 	)
-
-;;   (add-hook 'LaTeX-mode-hook 'ac-LaTex-mode-setup)
-;;   (setq ac-math-unicode-in-math-p t))
-
-
-
-
-;; (require 'ac-math)
-;; (add-to-list 'ac-modes 'latex-mode) ; make auto-complete aware of latex
-
-;; (defun ac-LaTex-mode-setup ()
-;;   (setq ac-sources
-;; 		(append '(ac-source-math-unicode ac-source-math-latex ac-source-latex-commands)
-;; 				ac-sources))
-;;   )
-
-;; (add-hook 'LaTeX-mode-hook 'ac-LaTex-mode-setup)
-
-;; (setq ac-math-unicode-in-math-p t)
-
-					;(ac-flyspell-workaround) ; fixes a known bug of delay due to flyspell (if it is there)
-					;(add-to-list 'ac-modes 'org-mode) ; auto-complete for org-mode (optional)
-					;(require 'auto-complete-config) ; should be after add-to-list 'ac-modes and hooks
-					;(ac-config-default)
-;; (setq ac-auto-start t)            ; if t starts ac at startup automatically
-;; (setq ac-auto-show-menu t)
-;; (global-auto-complete-mode t)
-
-;;; set the trigger key so that it can work together with yasnippet on tab key,
-;;; if the word exists in yasnippet, pressing tab will cause yasnippet to
-;;; activate, otherwise, auto-complete will
-;; (ac-set-trigger-key "TAB")
-;; (ac-set-trigger-key "<tab>")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -332,12 +266,15 @@
   (setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
 
 
-  (defun my-latex-mode-setup ()
-    (progn(setq-local company-backends
-  		(append '((company-math-symbols-latex company-math-symbols-unicode company-latex-commands))
-  			company-backends)))
-    (company-auctex-init))
-  (add-hook 'LaTeX-mode-hook 'my-latex-mode-setup)
+  ;; (defun my-latex-mode-setup ()
+  ;;   (progn(setq-local company-backends
+  ;; 		      (append '((company-math-symbols-latex company-latex-commands))
+  ;; 			company-backends)))
+  ;;  (company-auctex-init))
+  (add-hook 'TeX-mode-hook  (lambda ()
+			       (add-to-list 'company-backends
+;;					    '(company-auctex company-math :with company-yasnippet))))
+                    '(company-auctex-labels company-auctex-bibs company-auctex-macros company-auctex-symbols company-auctex-environments company-math-symbols-latex company-latex-commands company-dabbrev-code :with company-yasnippet))))
 
 
   ;; Don't use Helm for the reftex-citation lookup
@@ -434,8 +371,8 @@ d: delete"
 
 
 
-;; Add yasnippet support for all company backends
-;; https://github.com/syl20bnr/spacemacs/pull/179
+;;Add yasnippet support for all company backends
+;;https://github.com/syl20bnr/spacemacs/pull/179
 (defvar company-mode/enable-yas t
   "Enable yasnippet for all backends.")
 
@@ -490,7 +427,7 @@ d: delete"
     (setq helm-swoop-split-direction 'split-window-vertically)
 
     ;; If nil, you can slightly boost invoke speed in exchange for text color
-    (setq helm-swoop-speed-or-color nil)
+;;    (setq helm-swoop-speed-or-color nil)
 
     ;; ;; Go to the opposite side of line from the end or beginning of line
     (setq helm-swoop-move-to-line-cycle t)
@@ -500,7 +437,11 @@ d: delete"
     (setq helm-swoop-use-line-number-face t)
 
     ;; If you prefer fuzzy matching
-    (setq helm-swoop-use-fuzzy-match t)))
+;;    (setq helm-swoop-use-fuzzy-match t)
+
+    ;; Disable pre-input
+    (setq helm-swoop-pre-input-function
+	  (lambda () ""))))
 
 
 
@@ -563,58 +504,13 @@ d: delete"
 	    (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)))
 
 
-;;Flymake;;;;;;;;;;;
-;; (require 'flymake)
-;; (defun flymake-get-tex-args (file-name)
-;;   (list "pdflatex"
-;; 		(list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
-;; (add-to-list
-;;  `flymake-err-line-patterns
-;;  '("Runaway argument?" nil nil nil)) ; fixes unbalanced braces in LaTeX files
-;; ;;(add-hook 'LaTeX-mode-hook 'flymake-mode)
-;; (setq LaTeX-command-style '(("" "%(PDF)%(latex) -file-line-error %S%(PDFout)")))
-;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;
 
-;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;
-;; (defadvice flymake-post-syntax-check (before flymake-force-check-was-interrupted)
-;;     (setq flymake-check-was-interrupted t))
-;; (ad-activate 'flymake-post-syntax-check)
-;; (delete-selection-mode 1)
-;; (custom-set-variables
-;;  ;; custom-set-variables was added by Custom.
-;;  ;; If you edit it by hand, you could mess it up, so be careful.
-;;  ;; Your init file should contain only one such instance.
-;;  ;; If there is more than one, they won't work right.
-;;  '(package-selected-packages
-;;    (quote
-;; 	(auto-complete-clang auto-complete-c-headers auto-complete-auctex ac-math))))
-;; (custom-set-faces
-;;  ;; custom-set-faces was added by Custom.
-;;  ;; If you edit it by hand, you could mess it up, so be careful.
-;;  ;; Your init file should contain only one such instance.
-;;  ;; If there is more than one, they won't work right.
-;;  )
-;; (custom-set-variables
-;;  ;; custom-set-variables was added by Custom.
-;;  ;; If you edit it by hand, you could mess it up, so be careful.
-;;  ;; Your init file should contain only one such instance.
-;;  ;; If there is more than one, they won't work right.
-;;  '(package-selected-packages
-;;    (quote
-;; 	(hydra yaml-mode use-package flycheck auto-complete-auctex auctex ac-math))))
-;; (custom-set-faces
-;;  ;; custom-set-faces was added by Custom.
-;;  ;; If you edit it by hand, you could mess it up, so be careful.
-;;  ;; Your init file should contain only one such instance.
-;;  ;; If there is more than one, they won't work right.
-;;  )
 
 
 
 ;; == undo-tree ==
 (use-package undo-tree
+  :ensure t
   :diminish undo-tree-mode
   :config
   (progn
@@ -656,17 +552,24 @@ d: delete"
 ;;;;;;;;;;;;;;;;
 
 
+;;;;;;;;;;;;;;;;;;;;;
+;;;python
+;;;;;;;;;;;;;;;;
+(defun my/python-mode-hook ()
+  (add-to-list 'company-backends 'company-jedi))
 
+(add-hook 'python-mode-hook 'my/python-mode-hook)
 
-
+(use-package elpy
+:ensure t
+:config
+(elpy-enable))
 
 
 ;;; Commentary:
 ;; The Robot Operating System (ROS) requires a number of different disambiguated
 ;; tools for emacs editing. This file has some of the hooks and modes for
 ;; working with the various files.
-
-
 ;;; Code:
 
 ;; == File types ==
@@ -683,74 +586,46 @@ d: delete"
   )
 
 
+; flashes the cursor's line when you scroll
+(use-package beacon
+:ensure t
+:config
+(beacon-mode 1)
+; this color looks good for the zenburn theme but not for the one
+; I'm using for the videos
+; (setq beacon-color "#666600")
+)
+
+; deletes all the whitespace when you hit backspace or delete
+(use-package hungry-delete
+:ensure t
+:config
+(global-hungry-delete-mode))
 
 
+; expand the marked region in semantic increments (negative prefix to reduce region)
+(use-package expand-region
+:ensure t
+:config
+(global-set-key (kbd "C-=") 'er/expand-region))
+
+;; tags for code navigation
+(use-package ggtags
+  :ensure t
+  :config
+  (add-hook 'c-mode-common-hook
+	    (lambda ()
+	      (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+		(ggtags-mode 1))))
+  )
 
 
-
-
-
-
-
-;; old:::
-
-
-;; (require 'tex)
-
-;; (setq TeX-auto-save t)
-;; (setq TeX-parse-self t)
-;; (setq-default TeX-master nil)
-
-
-;; (setq TeX-PDF-mode t) ;; .pdf statt .dvi per default:
-;; ;;Zeilenumbruch
-;; (add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
-
-;; ;(add-hook 'LaTeX-mode-hook 'visual-line-mode)
-
-;; ;;Syntax Higlight
-;; (add-hook 'LaTeX-mode-hook 'turn-on-font-lock)
-;; ;; Mathe Modus
-;; (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-;; ;; Reftex einflechten und laden
-;; (setq reftex-plug-into-AUCTeX t)
-;; (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
-;; ;; Satzende ". " statt ". ". " f ̈ur M-k: l ̈oschen bis Satzende usw.
-;; (setq sentence-end "[.?!][]\"’)}]*\\($\\| \\| \\)[
-;; ;;]*") ;; Da ist ein "Newline in der Zeile!"
-;; (setq sentence-end-double-space nil)
-;; ;;direkte Rechtschreib Korrektur:
-;; (add-hook 'LaTeX-mode-hook 'flyspell-mode)
-;; (setq flyspell-default-dictionary "german8")
-;; ;; Nur benutzen falls Auctex > 11.81 mit preview-latex:
-;; ;(require 'preview-latex)
-;; ;; aspell ist besser als ispell.
-;; ;; Zeile kommentieren, falls nicht installiert:
-;; (setq-default ispell-program-name "aspell")
-;; ;; Deutsche Rechtschreibung falls \usepackage{ngerman}
-;; ;; oder german benutzt wird
-;; (add-hook 'TeX-language-de-hook
-;; 		  (lambda () (ispell-change-dictionary "de")))
-;; (add-hook 'TeX-language-en-hook
-;; 		  (lambda () (ispell-change-dictionary "english")))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+;; Theme
+(use-package color-theme
+  :ensure t)
+;; (use-package moe-theme
+;;   :ensure t)
+;; (moe-light)
 
 
 
@@ -768,14 +643,14 @@ d: delete"
  '(flycheck-c/c++-clang-executable "clang-3.5")
  '(package-selected-packages
    (quote
-    (company-statistics company-math helm-company company-anaconda helm-swoop magit cmake-mode with-editor magit-popup
-			(\, git-commit)
-			(\, general)
-			(\, company-auctex)
-			(\, cmake-mode)
-			(\, undo-tree)
-			(\, ace-window)
-			try tabbar which-key helm-ag ag helm-projectile projectile ws-butler yaml-mode use-package markdown-mode hydra helm flycheck auto-complete-auctex auctex))))
+    (company-yasnippet company-irony color-theme moe-theme ggtags expand-region hungry-delete beacon elpy undo-tree company-statistics company-math helm-company company-anaconda helm-swoop magit cmake-mode with-editor magit-popup
+		       (\, git-commit)
+		       (\, general)
+		       (\, company-auctex)
+		       (\, cmake-mode)
+		       (\, undo-tree)
+		       (\, ace-window)
+		       try tabbar which-key helm-ag ag helm-projectile projectile ws-butler yaml-mode use-package markdown-mode hydra helm flycheck auto-complete-auctex auctex))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
