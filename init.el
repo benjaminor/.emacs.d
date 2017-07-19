@@ -1,11 +1,15 @@
 ;;;;; My emacs configuration file;;;;;;;;;;;;;;;;;;
 (setq inhibit-startup-message t)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;write over marked code
 (delete-selection-mode 1)
+
 (global-hl-line-mode t)
 
-					;(require 'iso-transl)
+;(require 'iso-transl)
 ;; Tell emacs where is your personal elisp lib dir
+
 (load-library "url-handlers")
 
 (add-to-list 'load-path "~/.emacs.d/lisp/autopair")
@@ -98,7 +102,8 @@
   (which-key-mode))
 
 (use-package try
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package tabbar
   :ensure t
@@ -143,29 +148,27 @@
   )
 
 
-;; ;; Remove Yasnippet's default tab key binding
-;; (define-key yas-minor-mode-map (kbd "<tab>") nil)
-;; (define-key yas-minor-mode-map (kbd "TAB") nil)
-
-;; ;; Set Yasnippet's key binding to shift+tab
-;; (define-key yas-minor-mode-map (kbd "C-<tab>") 'yas-expand)
-
-;;; auto complete mod
-;;; should be loaded after yasnippet so that they can work togethe
-					;(load "autocomplete")
-
 (use-package company-math
-  :ensure t)
+  :ensure t
+  :defer t)
 (use-package company-auctex
-  :ensure t)
+  :ensure t
+  :defer t)
 (use-package company-irony
-  :ensure t)
-;; (use-package company-yasnippet
-;;   :ensure t)
+  :ensure t
+  :defer t)
+(use-package company-anaconda
+  :ensure t
+  :defer t)
+(use-package company-c-headers
+  :ensure t
+  :defer t)
+
 
 
 (use-package  company-statistics
   :ensure t
+  :defer t
   :config
   (company-statistics-mode))
 
@@ -209,14 +212,6 @@
   (define-key c-mode-base-map (kbd "RET") 'newline-and-indent))
 
 
-
-
-;; (defun turn-on-outline-minor-mode ()
-;;   (outline-minor-mode 1))
-
-;; (add-hook 'LaTeX-mode-hook 'turn-on-outline-minor-mode)
-
-;; (setq outline-minor-mode-prefix "\C-c C-o") ; Or something else
 
 
 (use-package cmake-mode
@@ -511,6 +506,7 @@ d: delete"
 ;; == undo-tree ==
 (use-package undo-tree
   :ensure t
+;;  :defer t
   :diminish undo-tree-mode
   :config
   (progn
@@ -544,8 +540,9 @@ d: delete"
 	 )))
   (add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-language-standard "c++11")))
   (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-gcc))
-  );;;; Flycheck;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;
+  )
+
+;;;; Flycheck;;;;;
 ;; (use-package flycheck
 ;;   :ensure t
 ;;   :init (global-flycheck-mode))
@@ -555,15 +552,29 @@ d: delete"
 ;;;;;;;;;;;;;;;;;;;;;
 ;;;python
 ;;;;;;;;;;;;;;;;
-(defun my/python-mode-hook ()
-  (add-to-list 'company-backends 'company-jedi))
+;; (defun my/python-mode-hook ()
+;; 	(add-to-list 'company-backends 'company-jedi))
 
-(add-hook 'python-mode-hook 'my/python-mode-hook)
+;;(add-hook 'python-mode-hook 'my/python-mode-hook)
 
 (use-package elpy
 :ensure t
 :config
-(elpy-enable))
+(setq elpy-modules (delq 'elpy-module-company elpy-modules))
+(elpy-enable)
+
+(add-hook 'python-mode-hook
+          (lambda ()
+            ;; explicitly load company for the occasion when the deferred
+            ;; loading with use-package hasn't kicked in yet
+            (company-mode)
+            (add-to-list 'company-backends
+                         (company-mode/backend-with-yas 'elpy-company-backend))))
+
+
+
+;;(elpy-enable)
+)
 
 
 ;;; Commentary:
@@ -588,7 +599,8 @@ d: delete"
 
 ; flashes the cursor's line when you scroll
 (use-package beacon
-:ensure t
+  :ensure t
+  :defer t
 :config
 (beacon-mode 1)
 ; this color looks good for the zenburn theme but not for the one
@@ -598,20 +610,23 @@ d: delete"
 
 ; deletes all the whitespace when you hit backspace or delete
 (use-package hungry-delete
-:ensure t
-:config
+  :ensure t
+  :defer t
+  :config
 (global-hungry-delete-mode))
 
 
 ; expand the marked region in semantic increments (negative prefix to reduce region)
 (use-package expand-region
-:ensure t
+  :ensure t
+  :defer t
 :config
 (global-set-key (kbd "C-=") 'er/expand-region))
 
 ;; tags for code navigation
 (use-package ggtags
   :ensure t
+  :defer t
   :config
   (add-hook 'c-mode-common-hook
 	    (lambda ()
@@ -622,14 +637,11 @@ d: delete"
 
 ;; Theme
 (use-package color-theme
-  :ensure t)
+  :ensure t
+  :defer t)
 ;; (use-package moe-theme
 ;;   :ensure t)
 ;; (moe-light)
-
-
-
-
 
 
 
@@ -643,14 +655,14 @@ d: delete"
  '(flycheck-c/c++-clang-executable "clang-3.5")
  '(package-selected-packages
    (quote
-    (company-yasnippet company-irony color-theme moe-theme ggtags expand-region hungry-delete beacon elpy undo-tree company-statistics company-math helm-company company-anaconda helm-swoop magit cmake-mode with-editor magit-popup
-		       (\, git-commit)
-		       (\, general)
-		       (\, company-auctex)
-		       (\, cmake-mode)
-		       (\, undo-tree)
-		       (\, ace-window)
-		       try tabbar which-key helm-ag ag helm-projectile projectile ws-butler yaml-mode use-package markdown-mode hydra helm flycheck auto-complete-auctex auctex))))
+    (url-handlers company-c-headers company-yasnippet company-irony color-theme moe-theme ggtags expand-region hungry-delete beacon elpy undo-tree company-statistics company-math helm-company company-anaconda helm-swoop magit cmake-mode with-editor magit-popup
+		  (\, git-commit)
+		  (\, general)
+		  (\, company-auctex)
+		  (\, cmake-mode)
+		  (\, undo-tree)
+		  (\, ace-window)
+		  try tabbar which-key helm-ag ag helm-projectile projectile ws-butler yaml-mode use-package markdown-mode hydra helm flycheck auto-complete-auctex auctex))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -659,7 +671,3 @@ d: delete"
  '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0)))))
 
 					;(provide '.emacs);;;
-
-
-
-;;TODO: lern about flycheck, yasnippet, ac, helm
