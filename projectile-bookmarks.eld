@@ -1,0 +1,1 @@
+("~/github/drive_ros_config/" "~/github/emacs/" "~/.emacs.d/lisp/yasnippet/yasmate/bundles/ruby-tmbundle/")
