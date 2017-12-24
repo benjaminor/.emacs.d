@@ -1,1 +1,0 @@
-("~/.emacs.d/" "/home/shared/TUM/ArtificialIntelligence/Practical/Part1_1/" "~/github/drive_ros_config/" "~/github/emacs/" "~/.emacs.d/lisp/yasnippet/yasmate/bundles/ruby-tmbundle/")
