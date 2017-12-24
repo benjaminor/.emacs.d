@@ -1,0 +1,31 @@
+;; -*- mode: emacs-lisp; coding: emacs-mule; -*-
+;; --------------------------------------------------------------------------
+;; Desktop File for Emacs
+;; --------------------------------------------------------------------------
+;; Created Sat Dec 23 20:45:08 2017
+;; Desktop file format version 208
+;; Emacs version 25.3.2
+
+;; Global section:
+(setq desktop-saved-frameset [frameset 1 (23103 1700 913665 163000) (desktop . "208") "benjamin@benjamin-W840SU-Series" nil nil ((((font-backend xft x) (font . "-DAMA-Ubuntu Mono-normal-normal-normal-*-17-*-*-*-m-0-iso10646-1") (font-parameter . "Ubuntu Mono 13") (border-width . 0) (internal-border-width . 0) (right-divider-width . 0) (bottom-divider-width . 0) (vertical-scroll-bars . right) (horizontal-scroll-bars) (foreground-color . "#657b83") (background-color . "#fdf6e3") (mouse-color . "black") (border-color . "black") (screen-gamma) (line-spacing) (left-fringe . 8) (right-fringe . 8) (scroll-bar-foreground) (scroll-bar-background) (menu-bar-lines . 1) (tool-bar-lines . 1) (title) (wait-for-wm . t) (tool-bar-position . top) (icon-type . t) (auto-raise) (auto-lower) (cursor-type . box) (scroll-bar-width . 10) (scroll-bar-height . 0) (alpha) (fullscreen . maximized) (display-type . color) (background-mode . light) (cursor-color . "#657b83") (sticky) (environment) (frameset--id . "EF2C-6AAF-046C-2438") (frameset--mini t . t) (height . 57) (width . 203) (modeline . t) (minibuffer . t) (unsplittable) (left . 65) (top . 24) (icon-name) (visibility . t) (display . ":0") (explicit-name)) ((min-height . 4) (min-width . 10) (min-height-ignore . 4) (min-width-ignore . 10) (min-height-safe . 1) (min-width-safe . 2) (min-pixel-height . 68) (min-pixel-width . 90) (min-pixel-height-ignore . 68) (min-pixel-width-ignore . 90) (min-pixel-height-safe . 17) (min-pixel-width-safe . 18)) leaf (pixel-width . 1855) (pixel-height . 968) (total-width . 206) (total-height . 57) (normal-height . 1.0) (normal-width . 1.0) (buffer "base.el" (selected . t) (hscroll . 0) (fringes 8 8 nil) (margins 5) (scroll-bars nil 2 t nil 0 t) (vscroll . 0) (dedicated) (point . 4470) (start . 3378))))])
+(setq desktop-missing-file-warning nil)
+(setq tags-file-name nil)
+(setq tags-table-list nil)
+(setq search-ring nil)
+(setq regexp-search-ring nil)
+(setq register-alist nil)
+(setq file-name-history '("~/.emacs.d/elisp/base.el" "~/.emacs.d/elisp/base-extensions.el" "~/.emacs.d/elpa/zenburn-theme-2.5/zenburn-theme-autoloads.el" "~/.emacs.d/elpa/solarized-theme-1.2.2/solarized-theme-autoloads.el" "~/.emacs.d/elpa/hlinum-1.0/hlinum-autoloads.el" "~/.emacs.d/elpa/auto-package-update-1.6.1/auto-package-update-autoloads.el" "~/.emacs.d/init.el" "~/.bash_aliases" "~/.emacs.d/elpa/wgrep-2.1.10/wgrep-autoloads.el" "~/.emacs.d/elpa/smex-3.0/smex-autoloads.el"))
+
+;; Buffer section -- buffers listed in same order as in buffer list:
+(desktop-create-buffer 208
+  "/home/benjamin/.emacs.d/elisp/base.el"
+  "base.el"
+  'emacs-lisp-mode
+  '(override-global-mode global-auto-revert-mode company-mode flycheck-mode helm-mode projectile-mode linum-mode undo-tree-mode which-key-mode ws-butler-mode yas-minor-mode pyenv-mode)
+  4470
+  '(4449 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . prefer-utf-8-unix))
+  '((mark-ring (4553 4513 5407 5397 4550 4432))))
+
