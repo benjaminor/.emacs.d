@@ -15,7 +15,7 @@
 ;;(load-library "url-handlers")
 
 ;;(add-to-list 'load-path "~/.emacs.d/lisp/autopair")
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/aribas")
+
 (require 'package)
 (package-initialize)
 
@@ -25,10 +25,11 @@
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
 			 ("marmalade" . "http://marmalade-repo.org/packages/")
-			 ("melpa-stable" . "http://stable.melpa.org/packages/")
+			 ("melpa" . "http://melpa.org/packages/")
 			 ("org" . "http://orgmode.org/elpa/")))
 
-
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/aribas")
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/aribas")
 
 ;;;set PATH variable
 (setenv "PATH" (concat (getenv "PATH") ":/usr/texbin"))

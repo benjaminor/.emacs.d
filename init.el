@@ -606,6 +606,8 @@
 
 ;;(add-hook 'python-mode-hook 'my/python-mode-hook)
 
+
+
 (use-package elpy
 :ensure t
 :config
@@ -622,7 +624,7 @@
 	    (company-mode)
 	    (add-to-list 'company-backends
 			 (company-mode/backend-with-yas 'elpy-company-backend))))
-(pyenv-mode)
+;;(pyenv-mode)
 )
 
 (use-package anaconda-mode
