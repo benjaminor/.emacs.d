@@ -12,3 +12,9 @@
 
 #recent files
 recentf*
+
+#session files
+session.*
+
+#elpa packages folder
+**/elpa
