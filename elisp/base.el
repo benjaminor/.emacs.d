@@ -14,8 +14,6 @@
 
 ;;(load-library "url-handlers")
 
-;;(add-to-list 'load-path "~/.emacs.d/lisp/autopair")
-
 (require 'package)
 (package-initialize)
 
@@ -29,7 +27,7 @@
 			 ("org" . "http://orgmode.org/elpa/")))
 
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/aribas")
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/aribas")
+
 
 ;;;set PATH variable
 (setenv "PATH" (concat (getenv "PATH") ":/usr/texbin"))
@@ -67,7 +65,7 @@
 
 (defconst private-dir  (expand-file-name "private" user-emacs-directory))
 (defconst temp-dir (format "%s/cache" private-dir)
-  "Hostname-based elisp temp directories")
+  "Hostname-based elisp temp directories.")
 
 ;; Core settings
 ;; UTF-8 please
@@ -100,7 +98,7 @@
       indent-tabs-mode                   nil
       inhibit-startup-message            t
       fringes-outside-margins            t
-      x-select-enable-clipboard          t
+      select-enable-clipboard          t
       use-package-always-ensure          t)
 
 ;; Bookmarks

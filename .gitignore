@@ -25,6 +25,7 @@ session.*
 network-security.data
 projectile-bookmarks.eld
 /games/
+.emacs.desktop
 
 #ignore eshell
 /eshell/
