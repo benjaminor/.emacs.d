@@ -17,4 +17,14 @@ recentf*
 session.*
 
 #elpa packages folder
-**/elpa
+/elpa/*
+
+#private files like security, session data etc.
+.emacs_old
+.last-package-update-day
+network-security.data
+projectile-bookmarks.eld
+/games/
+
+#ignore eshell
+/eshell/
