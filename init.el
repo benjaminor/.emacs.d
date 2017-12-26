@@ -56,87 +56,58 @@
 
 (require 'base)
 
+(require 'base-theme)
+
 (require 'base-extensions)
 
+(require 'base-functions)
 
+(require 'text-completion)
 
-;;;;; Key bindings ;;;;;;
+(require 'lisp-setup)
 
-(global-set-key "\C-x/" 'point-to-register)
-(global-set-key "\C-xj" 'jump-to-register)
-;;(global-set-key "\C-xc" 'compile)
-
-
-;;;;Open certain directories easy
-(global-set-key "\C-xä" 'my-find-file)
-(defun my-find-file ()
-  "force a starting path"
-  (interactive)
-  (let ((default-directory "~/Documents/Latex/"))
-    (call-interactively 'helm-find-files)))
-
-(global-set-key "\C-xü" 'my-find-cfiles)
-	(defun my-find-cfiles ()
-  "force a starting path"
-  (interactive)
-  (let ((default-directory "~/Documents/c-files/"))
-    (call-interactively 'helm-find-files)))
-
-(global-set-key "\C-xp" 'my-find-pythonfile)
-(defun my-find-pythonfile ()
-  "force a starting path"
-  (interactive)
-  (let ((default-directory "~/Documents/Python/"))
-    (call-interactively 'helm-find-files)))
-
-
-;;
-;; Aliases
-;;
-(defalias 'sh 'shell)
-(defalias 'indr 'indent-region)
-
-(setq tab-always-indent 'complete)
+(require 'latex)
 
 
 
-;;;;;;;;;;;;;;;;
-;;; Autosave hook
-;;;;;;;;;;;;;;;;
+;; ;;;;; Key bindings ;;;;;;
+
+;; (global-set-key "\C-x/" 'point-to-register)
+;; (global-set-key "\C-xj" 'jump-to-register)
+;; ;;(global-set-key "\C-xc" 'compile)
 
 
+;; ;;;;Open certain directories easy
+;; (global-set-key "\C-xä" 'my-find-texfiles)
+;; (defun my-find-texfiles ()
+;;   "force a starting path"
+;;   (interactive)
+;;   (let ((default-directory "~/Documents/Latex/"))
+;;     (call-interactively 'helm-find-files)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;Packages from emacs bootstrap
-;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;
+;; (global-set-key "\C-xü" 'my-find-cfiles)
+;;	(defun my-find-cfiles ()
+;;   "force a starting path"
+;;   (interactive)
+;;   (let ((default-directory "~/Documents/c-files/"))
+;;     (call-interactively 'helm-find-files)))
+
+;; (global-set-key "\C-xp" 'my-find-pythonfile)
+;; (defun my-find-pythonfile ()
+;;   "force a starting path"
+;;   (interactive)
+;;   (let ((default-directory "~/Documents/Python/"))
+;;     (call-interactively 'helm-find-files)))
 
 
+;; ;;
+;; ;; Aliases
+;; ;;
+;; (defalias 'sh 'shell)
+;; (defalias 'indr 'indent-region)
 
+;; (setq tab-always-indent 'complete)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Package configuration
-;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Autorun ARIBAS
-(autoload 'run-aribas "aribas" "Run ARIBAS." t)
-
-
-;;;;;;;;;;;
-;;;;Lisp;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (use-package emacs-lisp-mode					   ;;
-;;    :ensure nil						   ;;
-;;    :delight emacs-lisp-mode "Emacs Lisp"			   ;;
-;;    :config (delight 'lisp-interaction-mode "Lisp Interaction")) ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package ielm
-   :init (add-hook 'ielm-mode-hook '(lambda () (setq-local scroll-margin 0))))
-
-(use-package lisp-mode
-  :ensure nil
-  :delight lisp-mode "Lisp")
 
 
 
@@ -294,39 +265,6 @@
 ;;;;;;For Auctex < 11.82 exchange ";;" in the following 2 lines
 ;;(require ’tex-site)
 ;; == LaTex / AucTeX ==
-(use-package tex
-  :defer t
-  :ensure auctex
-  :config
-  (setq TeX-auto-save t)
-  (setq TeX-parse-self t)
-  (setq-default TeX-master nil)
-  (add-hook 'LaTeX-mode-hook 'visual-line-mode)
-  (add-hook 'LaTeX-mode-hook 'flyspell-mode)
-  (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
-  (setq reftex-plug-into-AUCTeX t)
-  (setq TeX-PDF-mode t)
-  (setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
-
-
-  ;; (defun my-latex-mode-setup ()
-  ;;   (progn(setq-local company-backends
-  ;;                  (append '((company-math-symbols-latex company-latex-commands))
-  ;;			company-backends)))
-  ;;  (company-auctex-init))
-  (add-hook 'TeX-mode-hook  (lambda ()
-			       (add-to-list 'company-backends
-;;                                          '(company-auctex company-math :with company-yasnippet))))
-		    '(company-auctex-labels company-auctex-bibs company-auctex-macros company-auctex-symbols company-auctex-environments company-math-symbols-latex company-latex-commands company-dabbrev-code :with company-yasnippet))))
-
-
-  ;; Don't use Helm for the reftex-citation lookup
-  (eval-after-load 'helm-mode
-    '(add-to-list 'helm-completing-read-handlers-alist '(reftex-citation . nil))
-    )
-
-  )
 
 
 
@@ -600,42 +538,6 @@
 ;;;;;;;;;;;;;;;;
 
 
-;;;;;;;;;;;;;;;;;;;;;
-;;;python
-;;;;;;;;;;;;;;;;
-;; (defun my/python-mode-hook ()
-;;	(add-to-list 'company-backends 'company-jedi))
-
-;;(add-hook 'python-mode-hook 'my/python-mode-hook)
-
-
-
-(use-package elpy
-:ensure t
-:config
-(setq elpy-modules (delq 'elpy-module-company elpy-modules))
-(elpy-enable)
-
-  (setq elpy-rpc-python-command "/home/data/anaconda3/bin/python")
-  (setq python-shell-interpreter "/home/data/anaconda3/bin/python")
-
-(add-hook 'python-mode-hook
-	  (lambda ()
-	    ;; explicitly load company for the occasion when the deferred
-	    ;; loading with use-package hasn't kicked in yet
-	    (company-mode)
-	    (add-to-list 'company-backends
-			 (company-mode/backend-with-yas 'elpy-company-backend))))
-;;(pyenv-mode)
-)
-
-(use-package anaconda-mode
-  :ensure t
-  :config
-  (add-hook 'python-mode-hook 'anaconda-mode)
-  (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
-  (add-to-list 'company-backends 'company-anaconda)
-)
 
 
 ;;; Commentary:
@@ -696,10 +598,6 @@
   )
 
 
-;; Theme
-(use-package color-theme
-  :ensure t
-  :defer t)
 ;; (use-package moe-theme
 ;;   :ensure t)
 ;; (moe-light)

@@ -27,7 +27,8 @@
 			 ("org" . "http://orgmode.org/elpa/")))
 
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/aribas")
-
+;;; Autorun ARIBAS
+(autoload 'run-aribas "aribas" "Run ARIBAS." t)
 
 ;;;set PATH variable
 (setenv "PATH" (concat (getenv "PATH") ":/usr/texbin"))
@@ -49,7 +50,7 @@
 
 
 ;;; Install every package that is used but not already installed
-(setq use-package-always-ensure t)
+;; (setq use-package-always-ensure t)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -98,7 +99,7 @@
       indent-tabs-mode                   nil
       inhibit-startup-message            t
       fringes-outside-margins            t
-      select-enable-clipboard          t
+      select-enable-clipboard            t
       use-package-always-ensure          t)
 
 ;; Bookmarks
@@ -107,12 +108,14 @@
  bookmark-save-flag                      t
  bookmark-default-file              (concat temp-dir "/bookmarks"))
 
+
 ;; Backups enabled, use nil to disable
 (setq
  history-length                     1000
  backup-inhibited                   nil
  make-backup-files                  t
  auto-save-default                  t
+ auto-save-interval                 1000
  auto-save-list-file-name           (concat temp-dir "/autosave")
  make-backup-files                  t
  create-lockfiles                   nil
@@ -132,46 +135,14 @@
 (show-paren-mode 1)
 
 ;; Delete trailing whitespace before save
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+;; The whitespace-cleanup-mode does this now
+;;(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Delete unnecessary whitespace before save
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
 ;; Save session
 (desktop-save-mode 1)
-
-;; Use nice theme for emacs
-(use-package solarized-theme
-  :ensure t
-  :config
-  ;; make the fringe stand out from the background
-(setq solarized-distinct-fringe-background t)
-
-;; Don't change the font for some headings and titles
-(setq solarized-use-variable-pitch nil)
-
-;; make the modeline high contrast
-(setq solarized-high-contrast-mode-line t)
-
-;; Use less bolding
-(setq solarized-use-less-bold t)
-
-;; Use more italics
-(setq solarized-use-more-italic t)
-
-;; Use less colors for indicators such as git:gutter, flycheck and similar
-(setq solarized-emphasize-indicators nil)
-
-;; Don't change size of org-mode headlines (but keep other size-changes)
-(setq solarized-scale-org-headlines nil)
-
-;; Avoid all font-size changes
-(setq solarized-height-minus-1 1.0)
-(setq solarized-height-plus-1 1.0)
-(setq solarized-height-plus-2 1.0)
-(setq solarized-height-plus-3 1.0)
-(setq solarized-height-plus-4 1.0)
-  (load-theme 'solarized-light t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

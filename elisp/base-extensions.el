@@ -47,74 +47,9 @@
 
 ;;; Company and yasnippet setup
 ;; == YASnippet ==
-(use-package company-math
-  :ensure t
-  :defer t)
-(use-package company-auctex
-  :ensure t
-  :defer t)
-(use-package company-irony
-  :ensure t
-  :defer t)
-(use-package company-anaconda
-  :ensure t
-  :defer t)
-(use-package company-c-headers
-  :ensure t
-  :defer t)
 
 
-(use-package  company-statistics
-  :ensure t
-  :defer t
-  :config
-  (company-statistics-mode))
-
-
-(use-package company
-  :ensure t
-  :diminish company-mode
-  :init
-  (global-company-mode 1)
-  (bind-key "C-<tab>" #'company-complete)
-  ;; (general-define-key
-  ;;  :keymaps 'company-active-map
-  ;;  "C-j" 'company-select-next
-  ;;  "C-k" 'company-select-previous
-  ;;  "C-l" 'company-complete-selection)
-  :config
-  (setq company-idle-delay              0.1
-	company-minimum-prefix-length   2
-	company-show-numbers            t
-	company-tooltip-limit           20
-	company-dabbrev-downcase        nil
-	)
-  (add-to-list 'company-backends 'company-c-headers)
-;;  (add-to-list 'company-backends 'company-math-symbols-unicode)
- ;; (add-to-list 'company-backends 'company-dabbrev-code)
-;; (add-to-list 'company-backends 'company-yasnippet)
-  (add-to-list 'company-backends 'company-irony)
-  )
-
-(use-package yasnippet
-  :ensure t
-  :defer t
-  :config (yas-global-mode t)
-  )
-
-(defvar company-mode/enable-yas t
-  "Enable yasnippet for all backends.")
-
-(defun company-mode/backend-with-yas (backend)
-  (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
-      backend
-    (append (if (consp backend) backend (list backend))
-	    '(:with company-yasnippet))))
-
-(setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
-
-
-;; disabled until I've set up org sufficiently
+;; disabled until I've set up org in a working way
 ;; (use-package dashboard
 ;;   :config
 ;;   (dashboard-setup-startup-hook))
@@ -494,7 +429,12 @@ _~_: modified
   :ensure t
   :defer t
   :config
-(global-hungry-delete-mode))
+  (global-hungry-delete-mode))
+
+(use-package whitespace-cleanup-mode
+  :ensure t
+  :config
+  (global-whitespace-cleanup-mode))
 
 
 (provide 'base-extensions)
