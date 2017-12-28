@@ -61,12 +61,12 @@
   (setq ediff-diff-options "-w"))
 
 (use-package exec-path-from-shell
+  :if (memq window-system '(mac ns))
   :config
   ;; Add GOPATH to shell
-  (when (memq window-system '(mac ns))
-    (exec-path-from-shell-copy-env "GOPATH")
-    (exec-path-from-shell-copy-env "PYTHONPATH")
-    (exec-path-from-shell-initialize)))
+  (exec-path-from-shell-copy-env "GOPATH")
+  (exec-path-from-shell-copy-env "PYTHONPATH")
+  (exec-path-from-shell-initialize))
 
 (use-package expand-region
   :bind
@@ -75,8 +75,21 @@
 (use-package flycheck
   :diminish flycheck-mode
   :config
-  (global-flycheck-mode))
+  (global-flycheck-mode)
+  ;; This is old stuff specifically for c++, don't know what to do with it
+  ;; (if (string-equal system-type "gnu/linux")
+  ;;     (progn
+  ;;	(custom-set-variables
+  ;;	 '(flycheck-c/c++-clang-executable "clang-3.5")
+  ;;	 )))
+  ;; (add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-language-standard "c++11")))
+  ;; (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-gcc))
+  )
 
+(use-package flycheck-vale
+  :ensure t
+  :config
+  (flycheck-vale-setup))
 
 (use-package helm
   :init
@@ -437,4 +450,12 @@ _~_: modified
   (global-whitespace-cleanup-mode))
 
 
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/aribas")
+;;; Autorun ARIBAS
+ (autoload 'run-aribas "aribas" "Run ARIBAS." t)
+ ;; (use-package aribas
+;;   :load-path ")
+
+
 (provide 'base-extensions)
+;;; base-extensions.el ends here

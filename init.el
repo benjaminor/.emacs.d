@@ -68,6 +68,8 @@
 
 (require 'latex)
 
+(require 'lang-python)
+
 
 
 ;; ;;;;; Key bindings ;;;;;;
@@ -516,20 +518,7 @@
 ;; == flycheck ==
 
 ;; TODO: create proper flycheck setup in base-extensions.el
-(use-package flycheck
-  :ensure t
-  :diminish flycheck-mode
-  :init
-  (add-hook 'after-init-hook #'global-flycheck-mode)
-  ;; check OS type
-  (if (string-equal system-type "gnu/linux")
-      (progn
-	(custom-set-variables
-	 '(flycheck-c/c++-clang-executable "clang-3.5")
-	 )))
-  (add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-language-standard "c++11")))
-  (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-gcc))
-  )
+
 
 ;;;; Flycheck;;;;;
 ;; (use-package flycheck
@@ -629,4 +618,5 @@
  ;; If there is more than one, they won't work right.
  '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0)))))
 
-					;(provide '.emacs);;;
+(provide 'init)
+;;; init.el ends here

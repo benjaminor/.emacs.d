@@ -26,9 +26,7 @@
 			 ("melpa" . "http://melpa.org/packages/")
 			 ("org" . "http://orgmode.org/elpa/")))
 
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/aribas")
-;;; Autorun ARIBAS
-(autoload 'run-aribas "aribas" "Run ARIBAS." t)
+
 
 ;;;set PATH variable
 (setenv "PATH" (concat (getenv "PATH") ":/usr/texbin"))
@@ -138,12 +136,11 @@
 ;; The whitespace-cleanup-mode does this now
 ;;(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-;; Delete unnecessary whitespace before save
-(add-hook 'before-save-hook 'whitespace-cleanup)
-
 ;; Save session
 (desktop-save-mode 1)
 
+;; Garbage collection
+(add-hook 'focus-out-hook #'garbage-collect)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;write over marked code

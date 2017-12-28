@@ -3,9 +3,17 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(flycheck-c/c++-clang-executable "clang-3.5")
  '(package-selected-packages
    (quote
-    (latex-preview-pane highlight-defined yaml-mode ws-butler whitespace-cleanup-mode which-key wgrep use-package undo-tree try tabbar solarized-theme smex page-break-lines org-projectile org-bullets multiple-cursors markdown-mode magit hydra hungry-delete hlinum helm-swoop helm-projectile helm-git-grep helm-ag ggtags general flycheck expand-region exec-path-from-shell elpy delight company-statistics company-math company-irony company-c-headers company-auctex company-anaconda color-theme cmake-mode beacon autopair auto-package-update ag ace-window ace-jump-mode))))
+    (flycheck-vale pyenv-mode url-handlers company-c-headers company-yasnippet company-irony color-theme moe-theme ggtags expand-region hungry-delete beacon elpy undo-tree company-statistics company-math helm-company company-anaconda helm-swoop magit cmake-mode with-editor magit-popup
+		   (\, git-commit)
+		   (\, general)
+		   (\, company-auctex)
+		   (\, cmake-mode)
+		   (\, undo-tree)
+		   (\, ace-window)
+		   try tabbar which-key helm-ag ag helm-projectile projectile ws-butler yaml-mode use-package markdown-mode hydra helm flycheck auto-complete-auctex auctex))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
