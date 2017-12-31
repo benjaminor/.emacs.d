@@ -20,5 +20,12 @@
   :ensure nil
   :delight lisp-mode "Lisp")
 
+(use-package slime
+  :ensure t
+  :config
+  (setq inferior-lisp-program "/usr/bin/sbcl")
+  (setq slime-contribs '(slime-fancy)))
+
+
 (provide 'lisp-setup)
 ;;; lisp-setup.el ends here

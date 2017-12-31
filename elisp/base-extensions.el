@@ -31,9 +31,11 @@
 
 (use-package ace-window
   :ensure t
+  :defer t
   :init
   (progn
-   (global-set-key [remap other-window] 'ace-window)
+    (global-set-key [remap other-window] 'ace-window)
+    (global-unset-key (kbd "C-x o"))
     (custom-set-faces
      '(aw-leading-char-face
        ((t (:inherit ace-jump-face-foreground :height 3.0)))))
@@ -61,35 +63,21 @@
   (setq ediff-diff-options "-w"))
 
 (use-package exec-path-from-shell
-  :if (memq window-system '(mac ns))
+  :if (memq window-system '(mac ns x))
   :config
   ;; Add GOPATH to shell
+  (setq exec-path-from-shell-check-startup-files nil)
   (exec-path-from-shell-copy-env "GOPATH")
   (exec-path-from-shell-copy-env "PYTHONPATH")
   (exec-path-from-shell-initialize))
 
 (use-package expand-region
+  :defer t
   :bind
   ("C-=" . er/expand-region))
 
-(use-package flycheck
-  :diminish flycheck-mode
-  :config
-  (global-flycheck-mode)
-  ;; This is old stuff specifically for c++, don't know what to do with it
-  ;; (if (string-equal system-type "gnu/linux")
-  ;;     (progn
-  ;;	(custom-set-variables
-  ;;	 '(flycheck-c/c++-clang-executable "clang-3.5")
-  ;;	 )))
-  ;; (add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-language-standard "c++11")))
-  ;; (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-gcc))
-  )
-
-(use-package flycheck-vale
-  :ensure t
-  :config
-  (flycheck-vale-setup))
+(use-package dash
+  :ensure t)
 
 (use-package helm
   :init
@@ -98,7 +86,9 @@
   (require 'helm-config)
   (global-set-key (kbd "C-c h") 'helm-command-prefix)
   (global-unset-key (kbd "C-x c"))
+  (global-set-key (kbd "C-x C-r") 'helm-recentf)
   :diminish helm-mode
+  :defer 2
   :config
    (setq helm-split-window-in-side-p          t
 	helm-idle-delay                       0.0
@@ -149,8 +139,6 @@ _~_: modified
   ("v" Buffer-menu-select "select" :color blue)
   ("o" Buffer-menu-other-window "other-window" :color blue)
   ("q" quit-window "quit" :color blue))
-
-  (define-key helm-map "<f2>" 'hydra-helm-menu/body)
 
   (defun spacemacs//hide-cursor-in-helm-buffer ()
     "Hide the cursor in helm buffers."
@@ -209,6 +197,7 @@ _~_: modified
   :ensure t
   :defer t
   :after helm
+					;TODO: define keybinding
   :config
   (general-define-key :keymaps 'helm-ag-map
 		      "C-c C-e" 'helm-ag-edit)
@@ -217,6 +206,13 @@ _~_: modified
 
 
 (use-package helm-git-grep)
+
+
+(use-package helm-flycheck
+  :after (helm flycheck)
+  :config
+  (define-key flycheck-mode-map (kbd "C-c ! l") nil)
+  (define-key flycheck-mode-map (kbd "C-c ! l") 'helm-flycheck))
 
 (use-package projectile
   :ensure t
@@ -303,13 +299,15 @@ _~_: modified
   (setq linum-format " %3d ")
   (global-linum-mode nil))
 
-(use-package hlinum)
+(use-package hlinum
+  :config
+  (hlinum-activate))
 
 
 
 (use-package magit
   :config
-
+  :defer t
   :bind
   ;; Magic
   ("C-x g s" . magit-status)
@@ -331,6 +329,7 @@ _~_: modified
 
 
 (use-package org
+  :defer t
   :config
   (setq org-directory "~/org-files"
 	org-default-notes-file (concat org-directory "/todo.org"))
@@ -368,12 +367,10 @@ _~_: modified
 ;;; Already using autopair
 ;;; (use-package smartparens)
 
-(use-package smex)
-
 ;; == undo-tree ==
 (use-package undo-tree
   :ensure t
-;;  :defer t
+  :defer t
   :diminish undo-tree-mode
   :config
   (progn
@@ -392,6 +389,7 @@ _~_: modified
 ;;   (global-undo-tree-mode 1))
 
 (use-package which-key
+  :defer t
   :config
   (which-key-mode))
 
@@ -423,38 +421,40 @@ _~_: modified
 (use-package beacon
   :ensure t
   :defer t
-:config
-(beacon-mode 1)
+  :config
+  (beacon-mode 1)
 ; this color looks good for the zenburn theme but not for the one
 ; I'm using for the videos
 ; (setq beacon-color "#666600")
 )
-
 ; expand the marked region in semantic increments (negative prefix to reduce region)
 (use-package expand-region
   :ensure t
   :defer t
-:config
-(global-set-key (kbd "C-=") 'er/expand-region))
+  :config
+  (global-set-key (kbd "C-=") 'er/expand-region))
 
 ; deletes all the whitespace when you hit backspace or delete
 (use-package hungry-delete
   :ensure t
   :defer t
   :config
-  (global-hungry-delete-mode))
+  (global-hungry-delete-mode 1))
 
 (use-package whitespace-cleanup-mode
   :ensure t
   :config
   (global-whitespace-cleanup-mode))
 
-
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/aribas")
-;;; Autorun ARIBAS
- (autoload 'run-aribas "aribas" "Run ARIBAS." t)
- ;; (use-package aribas
-;;   :load-path ")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ARIBAS is an interactive interpreter for big integer arithmetic and multi-precision floating point arithmetic with a Pascal/Modula like syntax. ;;
+;; https://www.mathematik.uni-muenchen.de/~forster/sw/aribas.html										   ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package aribas
+  :ensure nil
+  :load-path "/usr/share/emacs/site-lisp/aribas"
+  :config
+  (autoload 'run-aribas "aribas" "Run ARIBAS." t))
 
 
 (provide 'base-extensions)

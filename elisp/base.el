@@ -22,15 +22,15 @@
 
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-			 ("marmalade" . "http://marmalade-repo.org/packages/")
-			 ("melpa" . "http://melpa.org/packages/")
-			 ("org" . "http://orgmode.org/elpa/")))
+             ("marmalade" . "http://marmalade-repo.org/packages/")
+             ("melpa" . "http://melpa.org/packages/")
+             ("org" . "http://orgmode.org/elpa/")))
 
 
 
 ;;;set PATH variable
-(setenv "PATH" (concat (getenv "PATH") ":/usr/texbin"))
-(setq exec-path (append exec-path '("/usr/texbin")))
+;; (setenv "PATH" (concat (getenv "PATH") ":/usr/texbin"))
+;; (setq exec-path (append exec-path '("/usr/texbin")))
 
 (when (not package-archive-contents)
   (package-refresh-contents))
@@ -95,9 +95,11 @@
       ;; PATH
       exec-path                          (append exec-path '("/usr/local/bin/"))
       indent-tabs-mode                   nil
+      tab-width                          4
       inhibit-startup-message            t
       fringes-outside-margins            t
       select-enable-clipboard            t
+      delete-selection-mode              1
       use-package-always-ensure          t)
 
 ;; Bookmarks
@@ -143,8 +145,6 @@
 (add-hook 'focus-out-hook #'garbage-collect)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;write over marked code
-(delete-selection-mode 1)
 ;; mark line where cursor is
 (global-hl-line-mode t)
 

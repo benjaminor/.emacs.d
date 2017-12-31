@@ -48,7 +48,8 @@
 ;;   (require 'use-package))                                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; load the packaged named xyz.
-
+(let ((file-name-handler-alist nil))
+(setf gc-cons-threshold 100000000)
 
 ;;;;;Code from emacs-bootstrap
 (add-to-list 'load-path (concat user-emacs-directory "elisp"))
@@ -62,11 +63,13 @@
 
 (require 'base-functions)
 
+(require 'flycheck-setup)
+
 (require 'text-completion)
 
 (require 'lisp-setup)
 
-(require 'latex)
+(require 'lang-latex)
 
 (require 'lang-python)
 
@@ -618,5 +621,7 @@
  ;; If there is more than one, they won't work right.
  '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0)))))
 
-(provide 'init)
+
+(setf gc-cons-threshold 800000)
+(provide 'init))
 ;;; init.el ends here

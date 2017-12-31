@@ -8,6 +8,7 @@
 
 (use-package tex
   :ensure auctex
+  :defer t
   :config
   (setq TeX-auto-save t)
   (setq TeX-parse-self t)
@@ -39,5 +40,5 @@
   :after auctex
   :hook (LaTeX-mode . reftex-mode))
 
-(provide 'latex)
+(provide 'lang-latex)
 ;;; latex.el ends here

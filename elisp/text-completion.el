@@ -36,10 +36,12 @@
 (use-package company-anaconda
   :ensure t
   :config
-  (add-to-list 'company-backends (company-mode/backend-with-yas '(elpy-company-backend company-anaconda))))
+  (add-to-list 'company-backends (company-mode/backend-with-yas '(;; elpy-company-backend
+								  company-anaconda))))
 
 (use-package company-jedi
   :ensure t
+  :disabled
   :config
   (add-hook 'python-mode-hook 'jedi:setup)
   (setq jedi:complete-on-dot t)
@@ -70,13 +72,14 @@
     :ensure t)
   (company-quickhelp-mode 1))
 
+
 (use-package company
   :ensure t
   :diminish company-mode
   :init
   (global-company-mode 1)
   ;;TODO: replace (bind-key with :bind)
-(bind-key "C-<tab>" #'company-complete)
+  (bind-key "C-<tab>" #'company-complete)
   ;; (general-define-key
   ;;  :keymaps 'company-active-map
   ;;  "C-j" 'company-select-next
@@ -94,12 +97,12 @@
 ;;  (add-to-list 'company-backends 'company-math-symbols-unicode)
  ;; (add-to-list 'company-backends 'company-dabbrev-code)
 ;; (add-to-list 'company-backends 'company-yasnippet)
-  (add-to-list 'company-backends 'company-irony)
-  )
+  (add-to-list 'company-backends 'company-irony))
+
 
 (use-package yasnippet
   :ensure t
-  :defer t
+  :defer 5
   :config (yas-global-mode t)
   )
 

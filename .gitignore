@@ -19,6 +19,12 @@ session.*
 #elpa packages folder
 /elpa/*
 
+#anaconda folder
+/anaconda-mode/*
+
+#python-environments
+/.python-environments/*
+
 #private files like security, session data etc.
 .emacs_old
 .last-package-update-day
@@ -26,6 +32,8 @@ network-security.data
 projectile-bookmarks.eld
 /games/
 .emacs.desktop
+.emacs.desktop.lock
+
 
 #ignore eshell
 /eshell/
