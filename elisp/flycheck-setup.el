@@ -15,11 +15,11 @@
   :command ("proselint" source-inplace)
   :error-patterns
   ((warning line-start (file-name) ":" line ":" column ": "
-	    (id (one-or-more (not (any " "))))
-	    " "
-	    (message (one-or-more not-newline)
-		     (zero-or-more "\n" (any " ") (one-or-more not-newline)))
-	    line-end))
+		(id (one-or-more (not (any " "))))
+		" "
+		(message (one-or-more not-newline)
+			 (zero-or-more "\n" (any " ") (one-or-more not-newline)))
+		line-end))
   :modes (text-mode markdown-mode gfm-mode message-mode))
 
 ;;;###autoload
@@ -76,8 +76,8 @@
   (rw-hunspell-setup)
   (setq ispell-dictionary "en_US_hunspell")
   (defun fd-switch-dictionary()
-      (interactive)
-      (let* ((dic ispell-current-dictionary)
+	  (interactive)
+	  (let* ((dic ispell-current-dictionary)
 	 (change (if (string= dic "de_DE_hunspell") "en_US_hunspell" "de_DE_hunspell")))
 	(ispell-change-dictionary change)
 	(message "Dictionary switched from %s to %s" dic change)
@@ -94,7 +94,7 @@
   :ensure nil
   :config
   (dolist (hook '(text-mode-hook))
-    (add-hook hook (lambda () (flyspell-mode 1))))
+	(add-hook hook (lambda () (flyspell-mode 1))))
 
   (dolist (mode '(emacs-lisp-mode-hook
 		inferior-lisp-mode-hook
@@ -103,15 +103,15 @@
 		js-mode-hook
 		R-mode-hook))
   (add-hook mode
-	    '(lambda ()
-	       (flyspell-prog-mode))))
+		'(lambda ()
+		   (flyspell-prog-mode))))
 
   (global-set-key (kbd "<f6>") 'ispell-word)
   (defun flyspell-check-next-highlighted-word ()
-    "Custom function to spell check next highlighted word"
-    (interactive)
-    (flyspell-goto-next-error)
-    (ispell-word))
+	"Custom function to spell check next highlighted word"
+	(interactive)
+	(flyspell-goto-next-error)
+	(ispell-word))
   (global-set-key (kbd "M-<f6>") 'flyspell-check-next-highlighted-word))
 
 
@@ -122,6 +122,30 @@
   :ensure t
   :config
   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; https://github.com/mhayashi1120/Emacs-langtool ;;
+;; Languagetool setup				  ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package langtool
+  :ensure t
+  :config
+  (setq langtool-language-tool-jar "/home/benjamin/LanguageTool-4.0/languagetool-commandline.jar")
+  (defun langtool-autoshow-detail-popup (overlays)
+	(when (require 'popup nil t)
+	  ;; Do not interrupt current popup
+	  (unless (or popup-instances
+		  ;; suppress popup after type `C-g` .
+		  (memq last-command '(keyboard-quit)))
+	  (let ((msg (langtool-details-error-message overlays)))
+		(popup-tip msg)))))
+
+  (setq langtool-autoshow-message-function
+	'langtool-autoshow-detail-popup)
+  )
+
 
 (provide 'flycheck-setup)
 ;;; flycheck-setup.el ends here

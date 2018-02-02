@@ -45,7 +45,8 @@
 (use-package autopair
   :ensure t
   :config
-  (electric-pair-mode 1))
+  ;; (electric-pair-mode 1)
+  )
 
 ;;; Company and yasnippet setup
 ;; == YASnippet ==
@@ -331,11 +332,14 @@ _~_: modified
 (use-package org
   :defer t
   :config
-  (setq org-directory "~/org-files"
+  (setq org-directory "~/org"
 	org-default-notes-file (concat org-directory "/todo.org"))
+ (setq org-agenda-files (directory-files "~/org/" t ".org$" t))
   :bind
   ("C-c l" . org-store-link)
   ("C-c a" . org-agenda))
+
+(use-package org-projectile-helm)
 
 (use-package org-projectile
   :config
@@ -437,6 +441,7 @@ _~_: modified
 ; deletes all the whitespace when you hit backspace or delete
 (use-package hungry-delete
   :ensure t
+  :disabled
   :defer t
   :config
   (global-hungry-delete-mode 1))

@@ -25,12 +25,13 @@
   :ensure t
   :config
   (setq company-math-allow-latex-symbols-in-faces t)
-  (add-to-list 'company-backends (company-mode/backend-with-yas '(company-math-symbols-latex company-math-symbols-unicode)))
-  (add-to-list 'company-backends (company-mode/backend-with-yas 'company-latex-commands)))
+  )
+;;  (add-to-list 'company-backends (company-mode/backend-with-yas ')))
 (use-package company-auctex
   :ensure t
   :config
-  (company-auctex-init))
+ ;;; (company-auctex-init)
+  (add-to-list 'company-backends (company-mode/backend-with-yas '(company-math-symbols-latex company-math-symbols-unicode company-latex-commands company-auctex-labels company-auctex-bibs company-auctex-macros company-auctex-symbols company-auctex-environments))))
 (use-package company-irony
   :ensure t)
 (use-package company-anaconda
@@ -104,7 +105,11 @@
   :ensure t
   :defer 5
   :config (yas-global-mode t)
+  (use-package yasnippet-snippets
+    :ensure t)
   )
+
+
 
 
 

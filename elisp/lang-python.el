@@ -16,9 +16,7 @@
   :ensure t
   :config
   (add-hook 'python-mode-hook 'anaconda-mode)
-  (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
-
-  )
+  (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -42,25 +40,33 @@
   ;;	python-shell-interpreter-args "--simple-prompt --pprint")
 					;TODO: Setup ipython integration
   (when (executable-find "ipython")
-    (setq-default
-     python-shell-interpreter "ipython"
-     python-shell-interpreter-args "--colors=Linux --profile=default"
-     python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
-     python-shell-prompt-regexp "In \\[[0-9]+\\]: "
-     python-shell-completion-setup-code
-     "from IPython.core.completerlib import module_completion"
-     python-shell-completion-module-string-code
-     "';'.join(module_completion('''%s'''))\n"
-     python-shell-completion-string-code
-     "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")))
+	(setq-default
+	 python-shell-interpreter "ipython"
+	 python-shell-interpreter-args "--simple-prompt -i"
+	 ;; python-shell-interpreter-args "--colors=Linux --profile=default"
+	 ;; python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
+	 ;; python-shell-prompt-regexp "In \\[[0-9]+\\]: "
+	 ;; python-shell-completion-setup-code
+	 ;; "from IPython.core.completerlib import module_completion"
+	 ;; python-shell-completion-module-string-code
+	 ;; "';'.join(module_completion('''%s'''))\n"
+	 ;; python-shell-completion-string-code
+	 ;; "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"
+	 )))
 
 (use-package pip-requirements
   :delight pip-requirements-mode "PyPA Requirements"
   :preface
   (defun me/pip-requirements-ignore-case ()
-    (setq-local completion-ignore-case t))
+	(setq-local completion-ignore-case t))
   :init (add-hook 'pip-requirements-mode-hook #'me/pip-requirements-ignore-case))
 
+
+(use-package ein
+  :ensure t
+  :config
+  (setq ein:completion-backend "use-company-backend")
+  (setq ein:jupyter-default-notebook-directory "/home/benjamin/Python_Notebooks/"))
 
 (provide 'lang-python)
 ;;; lang-python.el ends here

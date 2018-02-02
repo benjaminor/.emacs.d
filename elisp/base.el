@@ -43,9 +43,13 @@
 
 (eval-when-compile
   (require 'use-package))
-(require 'diminish)                ;; if you use :diminish
-(require 'bind-key)                ;; if you use any :bind variant
 
+(use-package diminish
+  :ensure t)
+;;(require 'diminish)                ;; if you use :diminish
+(require 'bind-key)                ;; if you use any :bind variant
+(use-package bind-key
+  :ensure t)
 
 ;;; Install every package that is used but not already installed
 ;; (setq use-package-always-ensure t)
@@ -56,6 +60,7 @@
 ;;; Auto-update packages every 7 days
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package auto-package-update
+  :ensure t
   :config
   (auto-package-update-maybe))
 
@@ -99,7 +104,7 @@
       inhibit-startup-message            t
       fringes-outside-margins            t
       select-enable-clipboard            t
-      delete-selection-mode              1
+      delete-selection-mode              t
       use-package-always-ensure          t)
 
 ;; Bookmarks

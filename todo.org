@@ -1,0 +1,1 @@
+This file exists only to satisfy org-projectile, so that org-agenda doesn't complain about my missing ~/.emacs.d/todo.org anymore.
