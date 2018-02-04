@@ -47,3 +47,4 @@
 ;;    (do-something))
 
 (provide 'base-functions)
+;;; base-functions.el ends here

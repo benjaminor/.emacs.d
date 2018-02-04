@@ -52,7 +52,7 @@
   :ensure t)
 
 ;;; Install every package that is used but not already installed
-;; (setq use-package-always-ensure t)
+(setq use-package-always-ensure t)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -103,9 +103,8 @@
       tab-width                          4
       inhibit-startup-message            t
       fringes-outside-margins            t
-      select-enable-clipboard            t
-      delete-selection-mode              t
-      use-package-always-ensure          t)
+      select-enable-clipboard            t)
+(delete-selection-mode 1)
 
 ;; Bookmarks
 (setq
@@ -130,7 +129,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-auto-revert-mode t)
 
-;; Disable toolbar & menubar
+;; Enable toolbar & menubar
 (menu-bar-mode 1)
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode 1))
@@ -152,6 +151,9 @@
 
 ;; mark line where cursor is
 (global-hl-line-mode t)
+
+;; start an emacs server so that I can send file directly to emacs without having to restart it every time
+(server-start)
 
 
 (provide 'base)

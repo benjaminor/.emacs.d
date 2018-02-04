@@ -26,19 +26,22 @@
   :config
   (setq company-math-allow-latex-symbols-in-faces t)
   )
-;;  (add-to-list 'company-backends (company-mode/backend-with-yas ')))
+
 (use-package company-auctex
   :ensure t
   :config
  ;;; (company-auctex-init)
   (add-to-list 'company-backends (company-mode/backend-with-yas '(company-math-symbols-latex company-math-symbols-unicode company-latex-commands company-auctex-labels company-auctex-bibs company-auctex-macros company-auctex-symbols company-auctex-environments))))
+
 (use-package company-irony
-  :ensure t)
+  :ensure t
+  :config
+  (add-to-list 'company-backends 'company-irony))
+
 (use-package company-anaconda
   :ensure t
   :config
-  (add-to-list 'company-backends (company-mode/backend-with-yas '(;; elpy-company-backend
-								  company-anaconda))))
+  (add-to-list 'company-backends (company-mode/backend-with-yas '(company-anaconda))))
 
 (use-package company-jedi
   :ensure t
@@ -50,7 +53,9 @@
   (add-to-list 'company-backends 'company-jedi))
 
 (use-package company-c-headers
-  :ensure t)
+  :ensure t
+  :config
+  (add-to-list 'company-backends 'company-c-headers))
 
 
 (use-package  company-statistics
@@ -81,11 +86,11 @@
   (global-company-mode 1)
   ;;TODO: replace (bind-key with :bind)
   (bind-key "C-<tab>" #'company-complete)
-  ;; (general-define-key
-  ;;  :keymaps 'company-active-map
-  ;;  "C-j" 'company-select-next
-  ;;  "C-k" 'company-select-previous
-  ;;  "C-l" 'company-complete-selection)
+  (general-define-key
+   :keymaps 'company-active-map
+   "C-j" 'company-select-next
+   "C-k" 'company-select-previous
+   "C-l" 'company-complete-selection)
   :config
   (setq company-idle-delay              0.1
 	company-minimum-prefix-length   2
@@ -94,12 +99,7 @@
 	company-dabbrev-downcase        nil
 	completion-styles               '(basic substring partial-completion)
 	)
-  (add-to-list 'company-backends 'company-c-headers)
-;;  (add-to-list 'company-backends 'company-math-symbols-unicode)
- ;; (add-to-list 'company-backends 'company-dabbrev-code)
-;; (add-to-list 'company-backends 'company-yasnippet)
-  (add-to-list 'company-backends 'company-irony))
-
+  (add-to-list 'company-backends (company-mode/backend-with-yas '(company-irony))))
 
 (use-package yasnippet
   :ensure t

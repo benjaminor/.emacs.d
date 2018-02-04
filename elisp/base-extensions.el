@@ -181,10 +181,7 @@ _~_: modified
 	 ("C-h" . helm-find-files-up-one-level)
 	 :map helm-read-file-map
 	 ("C-l" . helm-execute-persistent-action)
-	 ("C-h" . helm-find-files-up-one-level)
-
-	 )
-)
+	 ("C-h" . helm-find-files-up-one-level)))
 
 ;; == ag ==
 ;; Note that 'ag' (the silver searcher) needs to be installed.
@@ -217,32 +214,17 @@ _~_: modified
 
 (use-package projectile
   :ensure t
-  :defer t
   :diminish projectile-mode
   :init
   (projectile-mode)
   (use-package helm-projectile
     :ensure t
-    :defer t
     :after helm
     :config
-    (helm-projectile-on)
-     ;;(general-define-key
-     ;; :prefix gjs-leader-key
-     ;; :states '(normal motion)
-     ;; ;; Ensure (leader p) maps to the projectile bindings
-     ;; "p" '(:keymap projectile-command-map :which-key "Projectile")
-     ;; "s" '(helm-projectile-ag :which-key "projectile ag")
-     ;; "p/" '(helm-projectile-ag)
-     ;; )
-    )
-  )
+    (helm-projectile-on)))
 
-;; (use-package helm-projectile)
 
-;; (use-package helm-swoop
-;;   :bind
-;;   ("C-x c s" . helm-swoop))
+
 (use-package helm-swoop
   :ensure t
   :config
@@ -377,13 +359,11 @@ _~_: modified
   :defer t
   :diminish undo-tree-mode
   :config
-  (progn
-    (global-undo-tree-mode 1)
-    (setq undo-tree-visualizer-timestamps t)
-    (setq undo-tree-visualizer-diff t)
-    (setq undo-tree-auto-save-history nil)
-    (setq undo-tree-history-directory-alist `(("." . ,(concat temp-dir "/undo/")))))
-  )
+  (global-undo-tree-mode 1)
+  (setq undo-tree-visualizer-timestamps t)
+  (setq undo-tree-visualizer-diff t)
+  (setq undo-tree-auto-save-history nil)
+  (setq undo-tree-history-directory-alist `(("." . ,(concat temp-dir "/undo/")))))
 
 ;; (use-package undo-tree
 ;;   :config
