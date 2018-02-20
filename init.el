@@ -73,6 +73,7 @@
 
 (require 'lang-python)
 
+(require 'debugging)
 ;; ;;;;; Key bindings ;;;;;;
 
 
