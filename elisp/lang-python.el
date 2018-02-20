@@ -61,12 +61,22 @@
 	(setq-local completion-ignore-case t))
   :init (add-hook 'pip-requirements-mode-hook #'me/pip-requirements-ignore-case))
 
+(use-package conda
+  :ensure t
+  :config
+  ;; if you want interactive shell support, include:
+  (conda-env-initialize-interactive-shells)
+  ;; if you want eshell support, include:
+  (conda-env-initialize-eshell)
+  ;; if you want auto-activation (see below for details), include:
+  (conda-env-autoactivate-mode t)
+  (custom-set-variables
+ '(conda-anaconda-home "/home/benjamin/anaconda3")))
 
 (use-package ein
   :ensure t
   :config
   (setq ein:completion-backend "use-company-backend")
   (setq ein:jupyter-default-notebook-directory "/home/benjamin/Python_Notebooks/"))
-
 (provide 'lang-python)
 ;;; lang-python.el ends here
