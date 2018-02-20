@@ -19,6 +19,12 @@
     (add-hook 'flycheck-mode-hook #'flycheck-pycheckers-setup))
   (setq flycheck-pycheckers-checkers '(pylint mypy2 mypy3 flake8 pep8)))
 
+;; https://github.com/jyp/attrap
+;; Fix the flycheck-error at point (currently for Lisp and Haskell ;;
+(use-package attrap
+  :ensure t
+  :bind (("C-x /" . attrap-attrap)))
+
 ;;;###autoload
 (defun flycheck-proselint-setup ()
   "Add proselist to list of flycheck checkers."
@@ -147,7 +153,6 @@
   (setq langtool-autoshow-message-function
 	'langtool-autoshow-detail-popup)
   )
-
 
 (provide 'flycheck-setup)
 ;;; flycheck-setup.el ends here
