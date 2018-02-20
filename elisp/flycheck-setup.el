@@ -9,7 +9,19 @@
 (use-package flycheck
   :diminish flycheck-mode
   :config
-  (global-flycheck-mode)
+  (global-flycheck-mode))
+
+(use-package flycheck-pycheckers
+  :ensure t
+  :after flycheck
+  :config
+  (with-eval-after-load 'flycheck
+    (add-hook 'flycheck-mode-hook #'flycheck-pycheckers-setup))
+  (setq flycheck-pycheckers-checkers '(pylint mypy2 mypy3 flake8 pep8)))
+
+;;;###autoload
+(defun flycheck-proselint-setup ()
+  "Add proselist to list of flycheck checkers."
   (flycheck-define-checker proselint
   "A linter for prose."
   :command ("proselint" source-inplace)
@@ -20,11 +32,7 @@
 		(message (one-or-more not-newline)
 			 (zero-or-more "\n" (any " ") (one-or-more not-newline)))
 		line-end))
-  :modes (text-mode markdown-mode gfm-mode message-mode))
-
-;;;###autoload
-(defun flycheck-proselint-setup ()
-  "Add proselist to list of flycheck checkers."
+  :modes (text-mode markdown-mode gfm-mode message-mode)
   (add-to-list 'flycheck-checkers 'proselint))
 
 (flycheck-proselint-setup))
@@ -45,15 +53,7 @@
   :config
   (flycheck-vale-setup)
   (flycheck-add-next-checker 'vale 'proselint)
-  ;; (setq flycheck-vale-executable "/usr/local/bin/vale")
   )
-
-
-
-
-
-
-
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; Spell checking ;;
@@ -132,6 +132,8 @@
 (use-package langtool
   :ensure t
   :config
+  (setq langtool-default-language "en-US")
+  (setq langtool-mother-tongue "de")
   (setq langtool-language-tool-jar "/home/benjamin/LanguageTool-4.0/languagetool-commandline.jar")
   (defun langtool-autoshow-detail-popup (overlays)
 	(when (require 'popup nil t)
