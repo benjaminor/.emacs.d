@@ -1,7 +1,7 @@
 * So many packages still to be used
 ** Debugging
 -realgud
-** Syntax/grammar checkers
+** DONE Syntax/grammar checkers
 -proselint
 -engchecker2flycheck
 -languagetool?
