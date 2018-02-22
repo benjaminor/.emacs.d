@@ -1,8 +1,5 @@
 ;;; pauckage -- base extensions
 ;;; Commentary:
-;;; This are extensions, code that is commented has to be deleted in two weeks
-
-
 ;;; Code:
 
 (use-package general
@@ -42,20 +39,12 @@
     )
   :bind* ("M-p" . ace-window))
 
-(use-package autopair
-  :ensure t
-  :config
-  ;; (electric-pair-mode 1)
-  )
-
-;;; Company and yasnippet setup
-;; == YASnippet ==
-
-
-;; disabled until I've set up org in a working way
-;; (use-package dashboard
+;; (use-package autopair
+;;   :ensure t
 ;;   :config
-;;   (dashboard-setup-startup-hook))
+;;   (autopair-global-mode)
+;;   ;; (electric-pair-mode 1)
+;;   )
 
 (use-package ediff
   :config
@@ -91,7 +80,7 @@
   :diminish helm-mode
   :defer 2
   :config
-   (setq helm-split-window-in-side-p          t
+  (setq helm-split-window-in-side-p          t
 	helm-idle-delay                       0.0
 	helm-input-idle-delay                 0.01
 	helm-yas-display-key-on-candidate     t
@@ -105,8 +94,8 @@
 	helm-ff-skip-boring-files             t)
   (helm-mode 1)
   (with-eval-after-load 'company
-  (define-key company-mode-map (kbd "C-:") 'helm-company)
-  (define-key company-active-map (kbd "C-:") 'helm-company))
+    (define-key company-mode-map (kbd "C-:") 'helm-company)
+    (define-key company-active-map (kbd "C-:") 'helm-company))
 
 
   ;;; does not work right now, how ot look over it later
@@ -122,24 +111,24 @@ _d_: delete        ^ ^                _g_: refresh       _O_: multi-occur
 _D_: delete up     ^ ^                _T_: files only: % -28`Buffer-menu-files-only
 _~_: modified
 "
-  ("m" Buffer-menu-mark)
-  ("u" Buffer-menu-unmark)
-  ("U" Buffer-menu-backup-unmark)
-  ("d" Buffer-menu-delete)
-  ("D" Buffer-menu-delete-backwards)
-  ("s" Buffer-menu-save)
-  ("~" Buffer-menu-not-modified)
-  ("x" Buffer-menu-execute)
-  ("b" Buffer-menu-bury)
-  ("g" revert-buffer)
-  ("T" Buffer-menu-toggle-files-only)
-  ("O" Buffer-menu-multi-occur :color blue)
-  ("I" Buffer-menu-isearch-buffers :color blue)
-  ("R" Buffer-menu-isearch-buffers-regexp :color blue)
-  ("c" nil "cancel")
-  ("v" Buffer-menu-select "select" :color blue)
-  ("o" Buffer-menu-other-window "other-window" :color blue)
-  ("q" quit-window "quit" :color blue))
+    ("m" Buffer-menu-mark)
+    ("u" Buffer-menu-unmark)
+    ("U" Buffer-menu-backup-unmark)
+    ("d" Buffer-menu-delete)
+    ("D" Buffer-menu-delete-backwards)
+    ("s" Buffer-menu-save)
+    ("~" Buffer-menu-not-modified)
+    ("x" Buffer-menu-execute)
+    ("b" Buffer-menu-bury)
+    ("g" revert-buffer)
+    ("T" Buffer-menu-toggle-files-only)
+    ("O" Buffer-menu-multi-occur :color blue)
+    ("I" Buffer-menu-isearch-buffers :color blue)
+    ("R" Buffer-menu-isearch-buffers-regexp :color blue)
+    ("c" nil "cancel")
+    ("v" Buffer-menu-select "select" :color blue)
+    ("o" Buffer-menu-other-window "other-window" :color blue)
+    ("q" quit-window "quit" :color blue))
 
   (defun spacemacs//hide-cursor-in-helm-buffer ()
     "Hide the cursor in helm buffers."
@@ -147,27 +136,18 @@ _~_: modified
       (setq cursor-in-non-selected-windows nil)))
   (add-hook 'helm-after-initialize-hook 'spacemacs//hide-cursor-in-helm-buffer)
 
- (if (string-equal system-type "gnu/linux")
+  (if (string-equal system-type "gnu/linux")
       (setq helm-grep-default-command
 	    "grep --color=always -d skip %e -n%cH -e %p %f"
 	    helm-grep-default-recurse-command
 	    "grep --color=always -d recurse %e -n%cH -e %p %f"))
 
-
-  ;; :bind (("M-x" . helm-M-x)
-  ;;	 ("C-x C-m" . helm-M-x)
-  ;;	 ("C-x C-f" . helm-find-files)
-  ;;	 ("C-x v" . helm-projectile)
-  ;;	 ("C-x c o" . helm-occur)
-  ;;	 ("C-x c p" . helm-projectile-ag)
-  ;;	 ("C-x c k" . helm-show-kill-ring)
-  ;;	 :map helm-map
-  ;;	 ("<tab>" . helm-execute-persistent-action)))
- :bind (("C-x b" . helm-mini)
+  :bind (("C-x b" . helm-mini)
 	 ("C-x C-f" . helm-find-files)
 	 ("M-x" . helm-M-x)
 	 ("C-h a" . helm-apropos)
 	 ("M-y" . helm-show-kill-ring)
+	 ("C-x c p" . helm-projectile-ag)
 	 :map helm-map
 	 ("C-i" . helm-execute-persistent-action)
 	 ("C-z" . helm-select-action)
@@ -261,7 +241,7 @@ _~_: modified
     (setq helm-swoop-split-direction 'split-window-vertically)
 
     ;; If nil, you can slightly boost invoke speed in exchange for text color
-;;    (setq helm-swoop-speed-or-color nil)
+    ;;    (setq helm-swoop-speed-or-color nil)
 
     ;; ;; Go to the opposite side of line from the end or beginning of line
     (setq helm-swoop-move-to-line-cycle t)
@@ -271,7 +251,7 @@ _~_: modified
     (setq helm-swoop-use-line-number-face t)
 
     ;; If you prefer fuzzy matching
-;;    (setq helm-swoop-use-fuzzy-match t)
+    ;;    (setq helm-swoop-use-fuzzy-match t)
 
     ;; Disable pre-input
     (setq helm-swoop-pre-input-function
@@ -316,7 +296,7 @@ _~_: modified
   :config
   (setq org-directory "~/org"
 	org-default-notes-file (concat org-directory "/todo.org"))
- (setq org-agenda-files (directory-files "~/org/" t ".org$" t))
+  (setq org-agenda-files (directory-files "~/org/" t ".org$" t))
   :bind
   ("C-c l" . org-store-link)
   ("C-c a" . org-agenda))
@@ -350,13 +330,19 @@ _~_: modified
   (setq recentf-save-file (recentf-expand-file-name "~/.emacs.d/private/cache/recentf"))
   (recentf-mode 1))
 
-;;; Already using autopair
-;;; (use-package smartparens)
-
+;; Use smartparens instead of autopair
+(use-package smartparens
+  :ensure t)
+(use-package smartparens-config
+    :ensure smartparens
+    :config
+    (progn
+      (show-smartparens-global-mode t))
+    (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
+    (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode))
 ;; == undo-tree ==
 (use-package undo-tree
   :ensure t
-  :defer t
   :diminish undo-tree-mode
   :config
   (global-undo-tree-mode 1)
@@ -364,13 +350,6 @@ _~_: modified
   (setq undo-tree-visualizer-diff t)
   (setq undo-tree-auto-save-history nil)
   (setq undo-tree-history-directory-alist `(("." . ,(concat temp-dir "/undo/")))))
-
-;; (use-package undo-tree
-;;   :config
-;;   ;; Remember undo history
-
-;;    )
-;;   (global-undo-tree-mode 1))
 
 (use-package which-key
   :defer t
@@ -407,18 +386,18 @@ _~_: modified
   :defer t
   :config
   (beacon-mode 1)
-; this color looks good for the zenburn theme but not for the one
-; I'm using for the videos
-; (setq beacon-color "#666600")
-)
-; expand the marked region in semantic increments (negative prefix to reduce region)
+					; this color looks good for the zenburn theme but not for the one
+					; I'm using for the videos
+					; (setq beacon-color "#666600")
+  )
+					; expand the marked region in semantic increments (negative prefix to reduce region)
 (use-package expand-region
   :ensure t
   :defer t
   :config
   (global-set-key (kbd "C-=") 'er/expand-region))
 
-; deletes all the whitespace when you hit backspace or delete
+					; deletes all the whitespace when you hit backspace or delete
 (use-package hungry-delete
   :ensure t
   :disabled
