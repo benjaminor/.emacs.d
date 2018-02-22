@@ -1,20 +1,19 @@
 # emacs
 * My emacs configuration
 ** inspiration by
-*** Mike Zamansky
-*** other people
+   Mike Zamansky
+   awesome-emacs repository
 
 * This repository is for private use
-** I want to clone my emacs settings as quick as possible
+ I want to clone my emacs settings as quick as possible
 
 * Used packages
 ** Company together with yasnippet
-** Auctex,
-** A lot of little packages, like ws-butler, try, expand-region etc
+** Auctex
 ** Flycheck
 ** Helm
 ** Org-mode, although I have no idea yet how to use it
-
+** Python: elpy, and I have replaced anaconda with python-lsp
 * TODOs
 ** Establish proper python support (especially ipython)
-** rewrite parts of init.el to make it more readable
+** DONE rewrite parts of init.el to make it more readable
