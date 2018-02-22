@@ -1,53 +1,7 @@
 ;;; package --- summary
 ;;; My emacs configuration file;;;;;;;;;;;;;;;;;;
 
-;;; ouf of use as of 2017-12-22
-;;; because outsourced in base.el
-;;; stays commented for two weeks, the gets deleted
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (setq inhibit-startup-message t)                                           ;;
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;                                ;;
-;;                                                                            ;;
-;; ;;;write over marked code                                                  ;;
-;; (delete-selection-mode 1)                                                  ;;
-;;                                                                            ;;
-;; (global-hl-line-mode t)                                                    ;;
-;;                                                                            ;;
-;; ;(require 'iso-transl)                                                     ;;
-;; ;; Tell emacs where is your personal elisp lib dir                         ;;
-;;                                                                            ;;
-;; (load-library "url-handlers")                                              ;;
-;;                                                                            ;;
-;; (add-to-list 'load-path "~/.emacs.d/lisp/autopair")                        ;;
-;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/aribas")               ;;
-;; (require 'package)                                                         ;;
-;;                                                                            ;;
-;;                                                                            ;;
-;; ;;;;;;;;;;;;;;;; ELPA Sources ;;;;;;;;;;;;;;;;                             ;;
-;;                                                                            ;;
-;; (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")        ;;
-;;                       ("melpa" . "https://melpa.org/packages/")            ;;
-;;                       ))                                                   ;;
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;                                                 ;;
-;; (package-initialize)                                                       ;;
-;;                                                                            ;;
-;;                                                                            ;;
-;; ;;;set PATH variable                                                       ;;
-;; (setenv "PATH" (concat (getenv "PATH") ":/usr/texbin"))                    ;;
-;; (setq exec-path (append exec-path '("/usr/texbin")))                       ;;
-;;                                                                            ;;
-;;                                                                            ;;
-;;                                                                            ;;
-;; ;; Bootstrap `use-package'                                                 ;;
-;; (unless (package-installed-p 'use-package)                                 ;;
-;;   (package-refresh-contents)                                               ;;
-;;   (package-install 'use-package))                                          ;;
-;;                                                                            ;;
-;;                                                                            ;;
-;; (eval-when-compile                                                         ;;
-;;   (require 'use-package))                                                  ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; load the packaged named xyz.
+;; Improve startup time.
 (let ((file-name-handler-alist nil))
 (setf gc-cons-threshold 100000000)
 
@@ -73,44 +27,13 @@
 
 (require 'lang-python)
 
+(require 'lang-cc)
+
 (require 'debugging)
 
 (require 'lsp-mode-setup)
-;; ;;;;; Key bindings ;;;;;;
-
-
-
-
-
-
-
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;, C-MODE ;;;;;;;;;;;;;;;;;;;;;;
-(use-package cc-mode
-  :defer t
-  :config
-  (setq-default c-basic-offset 4 c-default-style "linux")
-  (setq-default tab-width 4 indent-tabs-mode t)
-  (define-key c-mode-base-map (kbd "RET") 'newline-and-indent))
-
-
-
-
-(use-package cmake-mode
-  :ensure t
-  :defer t
-  :init
-					; Add cmake listfile names to the mode list.
-  (setq auto-mode-alist
-	(append
-	 '(("CMakeLists\\.txt\\'" . cmake-mode))
-	 '(("\\.cmake\\'" . cmake-mode))
-	 auto-mode-alist))
-  )
 
 
 ;; == Markdown ==
@@ -122,22 +45,9 @@
 	 ("\\.md\\'" . markdown-mode))
   )
 
-
-;;; Should be replaced by flycheck
-;; (use-package flyspell
-;;   :defer t
-;;   :diminish (flyspell-mode . " φ"))
-
-
-
-
-
-
-
-
 ;;; Commentary:
 ;; The Robot Operating System (ROS) requires a number of different disambiguated
-;; tools for emacs editing. This file has some of the hooks and modes for
+;; tools for Emacs editing.  This file has some of the hooks and modes for
 ;; working with the various files.
 ;;; Code:
 
@@ -164,17 +74,7 @@
   (add-hook 'c-mode-common-hook
 	    (lambda ()
 	      (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-		(ggtags-mode 1))))
-  )
-
-
-;; (use-package moe-theme
-;;   :ensure t)
-;; (moe-light)
-
-
-
-
+		(ggtags-mode 1)))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -191,7 +91,7 @@
 		(\, cmake-mode)
 		(\, undo-tree)
 		(\, ace-window)
-		try tabbar which-key helm-ag ag helm-projectile projectile ws-butler yaml-mode use-package markdown-mode hydra helm flycheck auto-complete-auctex auctex))))
+		try tabbar which-key helm-ag ag helm-projectile projectile ws-butler yaml-mode use-package markdown-mode hydra helm flycheck auto-complete-auctex auctex yasnippet-snippets whitespace-cleanup-mode wgrep websocket test-simple solarized-theme smartparens slime skewer-mode simple-httpd rw-language-and-country-codes rw-ispell rw-hunspell request-deferred request realgud pos-tip pip-requirements page-break-lines org-projectile-helm org-projectile org-category-capture org-bullets org multiple-cursors macrostep lsp-ui lsp-python lsp-mode loc-changes load-relative latex-preview-pane langtool js2-mode hlinum highlight-defined helm-git-grep helm-flycheck general flyspell-correct-helm flyspell-correct flycheck-vale flycheck-pycheckers exec-path-from-shell ein diminish delight deferred conda company-quickhelp company-lsp company-auctex bug-hunter avy autopair auto-package-update auto-complete attrap ace-window ace-jump-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
