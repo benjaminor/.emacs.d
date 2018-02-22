@@ -5,9 +5,6 @@
 ;;; Code:
 
 
-;;;;;;;;;;;
-;;;;Lisp;;;
-
 (use-package highlight-defined
   :ensure t
   :config

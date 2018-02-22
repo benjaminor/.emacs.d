@@ -65,8 +65,6 @@
   (auto-package-update-maybe))
 
 
-
-
 (defconst private-dir  (expand-file-name "private" user-emacs-directory))
 (defconst temp-dir (format "%s/cache" private-dir)
   "Hostname-based elisp temp directories.")
@@ -137,10 +135,6 @@
   (scroll-bar-mode 1))
 
 (show-paren-mode 1)
-
-;; Delete trailing whitespace before save
-;; The whitespace-cleanup-mode does this now
-;;(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Save session
 (desktop-save-mode 1)

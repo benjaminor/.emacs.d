@@ -17,6 +17,7 @@
   :config
   (with-eval-after-load 'flycheck
     (add-hook 'flycheck-mode-hook #'flycheck-pycheckers-setup))
+  ;;TODO change mypy2/mypy3 dependent on python2/python3 environment
   (setq flycheck-pycheckers-checkers '(pylint mypy2 mypy3 flake8 pep8)))
 
 ;; https://github.com/jyp/attrap
@@ -151,8 +152,7 @@
 		(popup-tip msg)))))
 
   (setq langtool-autoshow-message-function
-	'langtool-autoshow-detail-popup)
-  )
+	'langtool-autoshow-detail-popup))
 
 (provide 'flycheck-setup)
 ;;; flycheck-setup.el ends here
