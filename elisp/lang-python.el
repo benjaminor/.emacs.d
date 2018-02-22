@@ -8,15 +8,11 @@
 ;;;;;;;;;;;;;;;;;;;;;
 ;;;python
 ;;;;;;;;;;;;;;;;
-;; (defun my/python-mode-hook ()
-;;	(add-to-list 'company-backends 'company-jedi))
-
-;;(add-hook 'python-mode-hook 'my/python-mode-hook)
-(use-package anaconda-mode
-  :ensure t
-  :config
-  (add-hook 'python-mode-hook 'anaconda-mode)
-  (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
+;; (use-package anaconda-mode
+;;   :ensure t
+;;   :config
+;;   (add-hook 'python-mode-hook 'anaconda-mode)
+;;   (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -36,23 +32,10 @@
   :ensure nil
   :delight python-mode "Python"
   :config
-  ;; (setq python-shell-interpreter "/home/data/anaconda3/bin/python"
-  ;;	python-shell-interpreter-args "--simple-prompt --pprint")
-					;TODO: Setup ipython integration
   (when (executable-find "ipython")
 	(setq-default
 	 python-shell-interpreter "ipython"
-	 python-shell-interpreter-args "--simple-prompt -i"
-	 ;; python-shell-interpreter-args "--colors=Linux --profile=default"
-	 ;; python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
-	 ;; python-shell-prompt-regexp "In \\[[0-9]+\\]: "
-	 ;; python-shell-completion-setup-code
-	 ;; "from IPython.core.completerlib import module_completion"
-	 ;; python-shell-completion-module-string-code
-	 ;; "';'.join(module_completion('''%s'''))\n"
-	 ;; python-shell-completion-string-code
-	 ;; "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"
-	 )))
+	 python-shell-interpreter-args "--simple-prompt -i")))
 
 (use-package pip-requirements
   :delight pip-requirements-mode "PyPA Requirements"
@@ -61,17 +44,19 @@
 	(setq-local completion-ignore-case t))
   :init (add-hook 'pip-requirements-mode-hook #'me/pip-requirements-ignore-case))
 
-(use-package conda
-  :ensure t
-  :config
-  ;; if you want interactive shell support, include:
-  (conda-env-initialize-interactive-shells)
-  ;; if you want eshell support, include:
-  (conda-env-initialize-eshell)
-  ;; if you want auto-activation (see below for details), include:
-  (conda-env-autoactivate-mode t)
-  (custom-set-variables
- '(conda-anaconda-home "/home/benjamin/anaconda3")))
+
+;; Commented as I do not have the time to start with conda and because I am happy with elpy.
+;; (use-package conda
+;;   :ensure t
+;;   :config
+;;   ;; if you want interactive shell support, include:
+;;   (conda-env-initialize-interactive-shells)
+;;   ;; if you want eshell support, include:
+;;   (conda-env-initialize-eshell)
+;;   ;; if you want auto-activation (see below for details), include:
+;;   (conda-env-autoactivate-mode t)
+;;   (custom-set-variables
+;;  '(conda-anaconda-home "/home/benjamin/anaconda3")))
 
 (use-package ein
   :ensure t

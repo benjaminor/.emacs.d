@@ -74,6 +74,8 @@
 (require 'lang-python)
 
 (require 'debugging)
+
+(require 'lsp-mode-setup)
 ;; ;;;;; Key bindings ;;;;;;
 
 

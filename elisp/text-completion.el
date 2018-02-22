@@ -57,6 +57,12 @@
   :config
   (add-to-list 'company-backends 'company-c-headers))
 
+(use-package company-lsp
+  :ensure t
+  :after lsp-mode
+  :config
+  (push 'company-lsp company-backends))
+
 
 (use-package  company-statistics
   :ensure t
