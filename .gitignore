@@ -34,6 +34,8 @@ projectile-bookmarks.eld
 .emacs.desktop
 .emacs.desktop.lock
 
-
 #ignore eshell
 /eshell/
+
+#ignore the private folder
+/private/
