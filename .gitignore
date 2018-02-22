@@ -33,9 +33,14 @@ projectile-bookmarks.eld
 /games/
 .emacs.desktop
 .emacs.desktop.lock
+ac-comphist.dat
+tramp
 
 #ignore eshell
 /eshell/
 
 #ignore the private folder
 /private/
+/.custom.el
+/.dir-locals.el
+/request/curl-cookie-jar
