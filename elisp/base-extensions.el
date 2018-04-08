@@ -1,9 +1,10 @@
-;;; pauckage -- base extensions
+;;; package -- base extensions
 ;;; Commentary:
 ;;; Code:
 
 (use-package general
   :ensure t
+  :defer t
   )
 
 (use-package hydra
@@ -47,6 +48,8 @@
 ;;   )
 
 (use-package ediff
+  :ensure t
+  :defer t
   :config
   (setq ediff-window-setup-function 'ediff-setup-windows-plain)
   (setq-default ediff-highlight-all-diffs 'nil)
@@ -71,7 +74,6 @@
 
 (use-package helm
   :init
-  (require 'helm)
   (require 'helm-files)
   (require 'helm-config)
   (global-set-key (kbd "C-c h") 'helm-command-prefix)
@@ -80,7 +82,7 @@
   :diminish helm-mode
   :defer 2
   :config
-  (setq helm-split-window-in-side-p          t
+  (setq helm-split-window-inside-p          t
 	helm-idle-delay                       0.0
 	helm-input-idle-delay                 0.01
 	helm-yas-display-key-on-candidate     t
@@ -92,10 +94,11 @@
 	helm-ff-file-name-history-use-recentf t
 	helm-split-window-default-side        'below
 	helm-ff-skip-boring-files             t)
+  (helm-adaptive-mode 1)
   (helm-mode 1)
-  (with-eval-after-load 'company
-    (define-key company-mode-map (kbd "C-:") 'helm-company)
-    (define-key company-active-map (kbd "C-:") 'helm-company))
+  ;; (with-eval-after-load 'company
+  ;;   (define-key company-mode-map (kbd "C-:") 'helm-company)
+  ;;   (define-key company-active-map (kbd "C-:") 'helm-company))
 
 
   ;;; does not work right now, how ot look over it later
@@ -162,6 +165,13 @@ _~_: modified
 	 :map helm-read-file-map
 	 ("C-l" . helm-execute-persistent-action)
 	 ("C-h" . helm-find-files-up-one-level)))
+
+(use-package helm-google
+  :ensure t
+  :config
+  (global-set-key (kbd "C-h C--") 'helm-google))
+
+
 
 ;; == ag ==
 ;; Note that 'ag' (the silver searcher) needs to be installed.
@@ -283,6 +293,13 @@ _~_: modified
 
 (use-package magit-popup)
 
+(use-package magithub
+  :after magit
+  :defer t
+  :config
+  (magithub-feature-autoinject t))
+
+
 (use-package multiple-cursors
   :bind
   ("C-S-c C-S-c" . mc/edit-lines)
@@ -316,16 +333,25 @@ _~_: modified
 	    (lambda ()
 	      (org-bullets-mode t))))
 
-(use-package page-break-lines)
+(use-package page-break-lines
+  :ensure t
+  :defer t
+  :config
+  (global-page-break-lines-mode))
 
 (use-package projectile
   :config
   (setq projectile-known-projects-file
 	(expand-file-name "projectile-bookmarks.eld" temp-dir))
 
-  (projectile-global-mode))
+  (projectile-mode))
 
 (use-package recentf
+  :ensure t
+  :defer 10
+  :commands (recentf-mode
+             recentf-add-file
+	     recentf-apply-filename-handlers)
   :config
   (setq recentf-save-file (recentf-expand-file-name "~/.emacs.d/private/cache/recentf"))
   (recentf-mode 1))
@@ -334,12 +360,13 @@ _~_: modified
 (use-package smartparens
   :ensure t)
 (use-package smartparens-config
-    :ensure smartparens
-    :config
-    (progn
-      (show-smartparens-global-mode t))
-    (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
-    (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode))
+  :ensure nil
+  :after smartparens
+  :config
+  (add-hook 'after-init-hook
+	    (lambda () (smartparens-global-mode))))
+;; (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
+;; (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 ;; == undo-tree ==
 (use-package undo-tree
   :ensure t

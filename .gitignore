@@ -44,3 +44,6 @@ tramp
 /.custom.el
 /.dir-locals.el
 /request/curl-cookie-jar
+/magithub/cache
+/helm-adaptive-history
+/.cache/treemacs-persist
