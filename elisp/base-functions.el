@@ -42,7 +42,6 @@
 (defalias 'sh 'shell)
 (defalias 'indr 'indent-region)
 
-(setq tab-always-indent 'complete)
 
 (provide 'base-functions)
 ;;; base-functions.el ends here

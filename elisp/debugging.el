@@ -11,7 +11,9 @@
 
 ;; * Find bugs in config files
 
-(use-package bug-hunter :ensure t :defer t)
+(use-package bug-hunter
+  :ensure t
+  :defer t)
 
 
 (use-package realgud

@@ -7,11 +7,14 @@
 
 (use-package highlight-defined
   :ensure t
+  :defer t
   :config
   (add-hook 'emacs-lisp-mode-hook 'highlight-defined-mode))
 
 (use-package ielm
-   :init (add-hook 'ielm-mode-hook '(lambda () (setq-local scroll-margin 0))))
+  :ensure t
+  :defer t
+  :init (add-hook 'ielm-mode-hook '(lambda () (setq-local scroll-margin 0))))
 
 (use-package lisp-mode
   :ensure nil
@@ -19,6 +22,8 @@
 
 (use-package slime
   :ensure t
+  :disabled t
+  :defer t
   :config
   (setq inferior-lisp-program "/usr/bin/sbcl")
   (setq slime-contribs '(slime-fancy)))

@@ -22,13 +22,10 @@
   (setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
 
   ;; company and yasnippet setup is handled in text-completion
-
+  (add-hook 'TeX-mode-hook 'prettify-symbols-mode)
   ;; Don't use Helm for the reftex-citation lookup
   (eval-after-load 'helm-mode
-    '(add-to-list 'helm-completing-read-handlers-alist '(reftex-citation . nil))
-    )
-
-  )
+    '(add-to-list 'helm-completing-read-handlers-alist '(reftex-citation . nil))))
 
 (use-package latex-preview-pane
   :ensure t
