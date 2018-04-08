@@ -1,12 +1,54 @@
 ;;; package --- summary
 ;;; My emacs configuration file;;;;;;;;;;;;;;;;;;
 
-;; Improve startup time.
-(let ((file-name-handler-alist nil))
-(setf gc-cons-threshold 100000000)
+;; -*- lexical-binding: t -*-
+(setq debug-on-error t)
+
+;;; This file bootstraps the configuration, which is divided into
+;;; a number of other files.
+
+(let ((minver "25.3"))
+  (when (version< emacs-version minver)
+    (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
+
+;; ;; Added by Package.el.  This must come before configurations of
+;; ;; installed packages.  Don't delete this line.  If you don't want it,
+;; ;; just comment it out by adding a semicolon to the start of the line.
+;; ;; You may delete these explanatory comments.
+;; (package-initialize)
+
+(defconst emacs-start-time (current-time))
+
+(defvar file-name-handler-alist-old file-name-handler-alist)
+
+;;----------------------------------------------------------------------------
+;; Adjust garbage collection thresholds during startup, and thereafter
+;;----------------------------------------------------------------------------
+(setq package-enable-at-startup nil
+      file-name-handler-alist nil
+      message-log-max 16384
+      gc-cons-threshold 402653184
+      gc-cons-percentage 0.6)
+
+(add-hook 'after-init-hook
+	  `(lambda ()
+	     (setq file-name-handler-alist file-name-handler-alist-old
+		   gc-cons-threshold 800000
+		   gc-cons-percentage 0.1)
+	     (garbage-collect)) t)
+
+;; (let ((file-name-handler-alist nil)))
+
+;; (let ((normal-gc-cons-threshold 800000)
+;;       (init-gc-cons-threshold most-positive-fixnum))
+;;   (setq gc-cons-threshold most-positive-fixnum)
+;;   (add-hook 'after-init-hook
+;;	    (lambda () (setq gc-cons-threshold 800000))))
 
 ;;;;;Code from emacs-bootstrap
 (add-to-list 'load-path (concat user-emacs-directory "elisp"))
+(let ((default-directory "~/.emacs.d/lisp/"))
+  (normal-top-level-add-subdirs-to-load-path))
 
 
 (require 'base)
@@ -61,8 +103,7 @@
   :defer t
   :init
   (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-  (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
-  )
+  (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode)))
 
 
 
@@ -75,6 +116,72 @@
 	    (lambda ()
 	      (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
 		(ggtags-mode 1)))))
+
+;; Add more functionality to dired
+;; https://github.com/purcell/emacs.d/blob/master/lisp/init-dired.el
+(setq-default dired-dwim-target t)
+(use-package diredfl
+  :ensure t
+  :defer 4
+  :config
+  (diredfl-global-mode))
+
+(use-package helpful
+  :ensure t
+  :defer 5
+  :config
+  (global-set-key (kbd "C-h f") #'helpful-callable)
+  (global-set-key (kbd "C-h v") #'helpful-variable)
+  (global-set-key (kbd "C-h k") #'helpful-key)
+  (global-set-key (kbd "C-c C-d") #'helpful-at-point))
+
+(use-package json-mode
+  :mode "\\.json\\'")
+
+(use-package json-reformat
+  :after json-mode)
+
+(use-package json-snatcher
+  :after json-mode)
+
+(use-package treemacs
+  :ensure t
+  :commands treemacs)
+
+(use-package rainbow-delimiters
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+
+(use-package dumb-jump
+  :ensure t
+  :config
+  (global-set-key (kbd "C-M-p")
+		  (defhydra dumb-jump-hydra (:color blue :columns 3 global-map )
+		    "Dumb Jump"
+		    ("j" dumb-jump-go "Go")
+		    ("o" dumb-jump-go-other-window "Other (when )indow")
+		    ("e" dumb-jump-go-prefer-external "Go external")
+		    ("x" dumb-jump-go-prefer-external-other-window "Go external other window")
+		    ("i" dumb-jump-go-prompt "Prompt")
+		    ("l" dumb-jump-quick-look "Quick look")
+		    ("b" dumb-jump-back "Back"))))
+
+(global-set-key
+ (kbd "C-n")
+ (defhydra hydra-move
+   (:body-pre (next-line))
+   "move"
+   ("n" next-line)
+   ("p" previous-line)
+   ("f" forward-char)
+   ("b" backward-char)
+   ("a" beginning-of-line)
+   ("e" move-end-of-line)
+   ("v" scroll-up-command)
+   ;; Converting M-v to V here by analogy.
+   ("V" scroll-down-command)
+   ("l" recenter-top-bottom)))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -99,7 +206,5 @@
  ;; If there is more than one, they won't work right.
  '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0)))))
 
-
-(setf gc-cons-threshold 800000)
-(provide 'init))
+(provide 'init)
 ;;; init.el ends here
