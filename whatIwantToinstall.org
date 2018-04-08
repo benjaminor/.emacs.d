@@ -1,5 +1,5 @@
 * So many packages still to be used
-** Debugging
+** DONE Debugging
 -realgud
 ** DONE Syntax/grammar checkers
 -proselint
@@ -7,9 +7,9 @@
 -languagetool?
 
 * So many packages still to be configured
--elpy
--ipython integration
--text completion key bindings
--projectile
--maybe try out evil?
--magit
+** DONE -elpy
+ -ipython integration
+ -text completion key bindings
+ -projectile
+ -maybe try out evil?
+ -magit
