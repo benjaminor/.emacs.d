@@ -21,47 +21,48 @@
 
 
 (use-package elpy
-:ensure t
-:config
-(setq elpy-modules (delq 'elpy-module-company elpy-modules))
-(elpy-enable)
-(setq elpy-rpc-python-command "/home/benjamin/anaconda3/bin/python")
-(with-eval-after-load 'elpy (remove-hook 'elpy-modules 'elpy-module-flymake)))
+  :ensure t
+  :defer t
+  :config
+  (setq elpy-modules (delq 'elpy-module-company elpy-modules))
+  (elpy-enable)
+  (setq elpy-rpc-python-command "/home/benjamin/anaconda3/bin/python")
+  (with-eval-after-load 'elpy (remove-hook 'elpy-modules 'elpy-module-flymake)))
 
 (use-package python
   :ensure nil
   :delight python-mode "Python"
   :config
   (when (executable-find "ipython")
-	(setq-default
-	 python-shell-interpreter "ipython"
-	 python-shell-interpreter-args "--simple-prompt -i")))
+    (setq-default
+     python-shell-interpreter "ipython"
+     python-shell-interpreter-args "--simple-prompt -i")))
 
 (use-package pip-requirements
   :delight pip-requirements-mode "PyPA Requirements"
   :preface
   (defun me/pip-requirements-ignore-case ()
-	(setq-local completion-ignore-case t))
+    (setq-local completion-ignore-case t))
   :init (add-hook 'pip-requirements-mode-hook #'me/pip-requirements-ignore-case))
 
 
-;; Commented as I do not have the time to start with conda and because I am happy with elpy.
-;; (use-package conda
-;;   :ensure t
-;;   :config
-;;   ;; if you want interactive shell support, include:
-;;   (conda-env-initialize-interactive-shells)
-;;   ;; if you want eshell support, include:
-;;   (conda-env-initialize-eshell)
-;;   ;; if you want auto-activation (see below for details), include:
-;;   (conda-env-autoactivate-mode t)
-;;   (custom-set-variables
-;;  '(conda-anaconda-home "/home/benjamin/anaconda3")))
+(use-package conda
+  :ensure t
+  :config
+  ;; if you want interactive shell support, include:
+  (conda-env-initialize-interactive-shells)
+  ;; if you want eshell support, include:
+  (conda-env-initialize-eshell)
+  ;; if you want auto-activation (see below for details), include:
+  (conda-env-autoactivate-mode nil)
+  (custom-set-variables
+ '(conda-anaconda-home "/home/benjamin/anaconda3")))
 
 (use-package ein
   :ensure t
   :config
   (setq ein:completion-backend "use-company-backend")
   (setq ein:jupyter-default-notebook-directory "/home/benjamin/Python_Notebooks/"))
+
 (provide 'lang-python)
 ;;; lang-python.el ends here
