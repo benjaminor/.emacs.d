@@ -21,10 +21,10 @@
 
 
 
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-             ("marmalade" . "http://marmalade-repo.org/packages/")
-             ("melpa" . "http://melpa.org/packages/")
-             ("org" . "http://orgmode.org/elpa/")))
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+             ("marmalade" . "https://marmalade-repo.org/packages/")
+             ("melpa" . "https://melpa.org/packages/")
+             ("org" . "https://orgmode.org/elpa/")))
 
 
 
@@ -47,7 +47,8 @@
 (use-package diminish
   :ensure t)
 ;;(require 'diminish)                ;; if you use :diminish
-(require 'bind-key)                ;; if you use any :bind variant
+;; (require 'bind-key)
+;; if you use any :bind variant
 (use-package bind-key
   :ensure t)
 
@@ -64,6 +65,11 @@
   :config
   (auto-package-update-maybe))
 
+(use-package benchmark-init
+  :ensure t
+  :config
+  ;; To disable collection of benchmark data after init is done.
+  (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 (defconst private-dir  (expand-file-name "private" user-emacs-directory))
 (defconst temp-dir (format "%s/cache" private-dir)
@@ -131,12 +137,17 @@
 (menu-bar-mode 1)
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode 1))
-(when (  fboundp 'scroll-bar-mode)
+(when (fboundp 'scroll-bar-mode)
   (scroll-bar-mode 1))
 
 (show-paren-mode 1)
 
+;;;Maximize on startup
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
+
 ;; Save session
+(setq desktop-restore-frames nil)
+(setq desktop-restore-eager 1)
 (desktop-save-mode 1)
 
 ;; Garbage collection
