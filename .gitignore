@@ -47,4 +47,4 @@ tramp
 /magithub/cache
 /helm-adaptive-history
 /.cache/treemacs-persist
-elisp/.emacs.desktop
+/elisp/.emacs.desktop

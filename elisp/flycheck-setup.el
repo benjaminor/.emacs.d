@@ -11,6 +11,13 @@
   :config
   (global-flycheck-mode))
 
+(use-package flycheck-color-mode-line
+  :ensure t
+  :after flycheck
+  :config
+  '(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode))
+
+
 (use-package flycheck-pycheckers
   :ensure t
   :after flycheck
@@ -24,6 +31,7 @@
 ;; Fix the flycheck-error at point (currently for Lisp and Haskell ;;
 (use-package attrap
   :ensure t
+  :defer t
   :bind (("C-x /" . attrap-attrap)))
 
 ;;;###autoload
@@ -44,18 +52,9 @@
 
 (flycheck-proselint-setup))
 
-
-  ;; This is old stuff specifically for c++, don't know what to do with it
-  ;; (if (string-equal system-type "gnu/linux")
-  ;;     (progn
-  ;;	(custom-set-variables
-  ;;	 '(flycheck-c/c++-clang-executable "clang-3.5")
-  ;;	 )))
-  ;; (add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-language-standard "c++11")))
-  ;; (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-gcc))
-
 (use-package flycheck-vale
   :ensure t
+  :defer t
   :after flycheck
   :config
   (flycheck-vale-setup)
@@ -94,8 +93,7 @@
 
 
 
-
-			;TODO: maybe implement automatic switching with wiki mode
+;TODO: maybe implement automatic switching with wiki mode
 
 (use-package flyspell
   :ensure nil
@@ -112,7 +110,7 @@
   (add-hook mode
 		'(lambda ()
 		   (flyspell-prog-mode))))
-
+  (define-key flyspell-mode-map (kbd "C-;") nil)
   (global-set-key (kbd "<f6>") 'ispell-word)
   (defun flyspell-check-next-highlighted-word ()
 	"Custom function to spell check next highlighted word"
@@ -138,6 +136,7 @@
 
 (use-package langtool
   :ensure t
+  :defer t
   :config
   (setq langtool-default-language "en-US")
   (setq langtool-mother-tongue "de")

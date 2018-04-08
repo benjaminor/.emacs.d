@@ -9,6 +9,8 @@
 
 ;; Add yasnippet support for all company backends
 ;; https://github.com/syl20bnr/spacemacs/pull/179
+(setq tab-always-indent 'complete)
+
 (defvar company-mode/enable-yas t
   "Enable yasnippet for all backends.")
 
@@ -19,7 +21,11 @@
     (append (if (consp backend) backend (list backend))
 	    '(:with company-yasnippet))))
 
-
+(use-package company-elisp
+  :ensure nil
+  :after company
+  :config
+  (add-to-list 'company-backends (company-mode/backend-with-yas '(company-elisp))))
 
 (use-package company-math
   :ensure t
@@ -29,6 +35,7 @@
 
 (use-package company-auctex
   :ensure t
+  :defer t
   :config
  ;;; (company-auctex-init)
   (add-to-list 'company-backends (company-mode/backend-with-yas '(company-math-symbols-latex company-math-symbols-unicode company-latex-commands company-auctex-labels company-auctex-bibs company-auctex-macros company-auctex-symbols company-auctex-environments))))
@@ -61,7 +68,7 @@
   :ensure t
   :after lsp-mode
   :config
-  (push 'company-lsp company-backends))
+  (add-to-list 'company-backends (company-mode/backend-with-yas '(company-lsp))))
 
 
 (use-package  company-statistics
@@ -107,18 +114,15 @@
 	)
   (add-to-list 'company-backends (company-mode/backend-with-yas '(company-irony))))
 
+
 (use-package yasnippet
   :ensure t
-  :defer 5
-  :config (yas-global-mode t)
+  :config
+  (yas-global-mode t)
   (use-package yasnippet-snippets
     :ensure t)
-  )
-
-
-
-
-
+  :bind
+  ("C-<return>" . yas-expand-from-trigger-key))
 
 (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
 
