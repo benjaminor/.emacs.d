@@ -185,7 +185,6 @@ _~_: modified
   :ensure t
   :defer t
   :after helm
-					;TODO: define keybinding
   :config
   (general-define-key :keymaps 'helm-ag-map
 		      "C-c C-e" 'helm-ag-edit)
@@ -350,7 +349,7 @@ _~_: modified
   :ensure t
   :defer 10
   :commands (recentf-mode
-             recentf-add-file
+	     recentf-add-file
 	     recentf-apply-filename-handlers)
   :config
   (setq recentf-save-file (recentf-expand-file-name "~/.emacs.d/private/cache/recentf"))
@@ -379,7 +378,7 @@ _~_: modified
   (setq undo-tree-history-directory-alist `(("." . ,(concat temp-dir "/undo/")))))
 
 (use-package which-key
-  :defer t
+  :ensure t
   :config
   (which-key-mode))
 
@@ -439,13 +438,35 @@ _~_: modified
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ARIBAS is an interactive interpreter for big integer arithmetic and multi-precision floating point arithmetic with a Pascal/Modula like syntax. ;;
-;; https://www.mathematik.uni-muenchen.de/~forster/sw/aribas.html										   ;;
+;; https://www.mathematik.uni-muenchen.de/~forster/sw/aribas.html                                                                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package aribas
   :ensure nil
   :load-path "/usr/share/emacs/site-lisp/aribas"
   :config
   (autoload 'run-aribas "aribas" "Run ARIBAS." t))
+
+
+(use-package crux
+  :ensure t
+  :config
+  (crux-with-region-or-buffer indent-region)
+  (crux-with-region-or-buffer untabify)
+  (crux-with-region-or-line comment-or-uncomment-region)
+  :bind
+  ("C-c o" . crux-open-with)
+  ("C-c u" . crux-view-url)
+  ("C-c t" . crux-visit-term-buffer)
+  ("C-c r" . crux-rename-file-and-buffer)
+  ("C-c k" . crux-kill-other-buffers)
+  ("C-c I" . crux-find-user-init-file)
+  ("C-c S" . crux-find-shell-init-file)
+  ("C-c D" . crux-delete-file-and-buffer)
+  ("C-c n" . crux-cleanup-buffer-or-region))
+
+;; TODO: complete bindings
+
+
 
 
 (provide 'base-extensions)

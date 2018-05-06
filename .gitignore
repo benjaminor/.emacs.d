@@ -48,3 +48,4 @@ tramp
 /helm-adaptive-history
 /.cache/treemacs-persist
 /elisp/.emacs.desktop
+/projectile.cache

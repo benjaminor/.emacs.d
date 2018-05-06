@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: unnumbered-equation
+# key: $$
+# --
+\begin{equation*}
+
+$0
+
+\end{equation*}
