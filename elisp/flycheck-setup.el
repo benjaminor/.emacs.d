@@ -80,7 +80,7 @@
   (setq ispell-program-name "hunspell")
   (setenv "DICPATH" "/usr/share/hunspell/")
   (rw-hunspell-setup)
-  (setq ispell-dictionary "en_US_hunspell")
+  (setq ispell-dictionary "de_DE_hunspell")
   (defun fd-switch-dictionary()
 	  (interactive)
 	  (let* ((dic ispell-current-dictionary)
@@ -126,7 +126,8 @@
 (use-package flyspell-correct-helm
   :ensure t
   :config
-  (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic))
+  ;;(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
+  )
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

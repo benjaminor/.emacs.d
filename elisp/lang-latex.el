@@ -8,7 +8,6 @@
 
 (use-package tex
   :ensure auctex
-  :defer t
   :config
   (setq TeX-auto-save t)
   (setq TeX-parse-self t)
@@ -21,6 +20,12 @@
   (setq TeX-PDF-mode t)
   (setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
 
+
+  (add-hook 'TeX-mode-hook '(lambda () (setq TeX-engine 'luatex)))
+
+;; " expands into csquotes macros
+  (setq LaTeX-csquotes-close-quote "}"
+	LaTeX-csquotes-open-quote "\\enquote{")
   ;; company and yasnippet setup is handled in text-completion
   (add-hook 'TeX-mode-hook 'prettify-symbols-mode)
   ;; Don't use Helm for the reftex-citation lookup

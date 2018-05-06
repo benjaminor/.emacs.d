@@ -147,7 +147,7 @@
 
 ;; Save session
 (setq desktop-restore-frames nil)
-(setq desktop-restore-eager 1)
+(setq desktop-restore-eager 3)
 (desktop-save-mode 1)
 
 ;; Garbage collection

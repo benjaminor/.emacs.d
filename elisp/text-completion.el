@@ -3,8 +3,6 @@
 ;;; Commentary:
 ;; Combined use of yasnippet with company with company-mode/backend-with-yas function
 
-;;TODO: change keys for autoCOMPLETION: tab, c-tab or enter but not all of them!
-
 ;;; Code:
 
 ;; Add yasnippet support for all company backends
@@ -91,6 +89,9 @@
     :ensure t)
   (company-quickhelp-mode 1))
 
+;; (use-package company-box
+;;   :ensure t
+;;   :hook (company-mode . company-box-mode))
 
 (use-package company
   :ensure t
@@ -98,7 +99,7 @@
   :init
   (global-company-mode 1)
   ;;TODO: replace (bind-key with :bind)
-  (bind-key "C-<tab>" #'company-complete)
+  ;;(bind-key "C-<tab>" #'company-complete)
   (general-define-key
    :keymaps 'company-active-map
    "C-j" 'company-select-next
@@ -112,7 +113,9 @@
 	company-dabbrev-downcase        nil
 	completion-styles               '(basic substring partial-completion)
 	)
-  (add-to-list 'company-backends (company-mode/backend-with-yas '(company-irony))))
+  (add-to-list 'company-backends (company-mode/backend-with-yas '(company-irony)))
+  :bind
+  ("C-<tab>" . #'company-complete))
 
 
 (use-package yasnippet
