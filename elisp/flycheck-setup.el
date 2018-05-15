@@ -80,7 +80,7 @@
   (setq ispell-program-name "hunspell")
   (setenv "DICPATH" "/usr/share/hunspell/")
   (rw-hunspell-setup)
-  (setq ispell-dictionary "de_DE_hunspell")
+  (setq ispell-dictionary "en_US_hunspell")
   (defun fd-switch-dictionary()
 	  (interactive)
 	  (let* ((dic ispell-current-dictionary)
