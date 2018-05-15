@@ -26,7 +26,7 @@
   :config
   (setq elpy-modules (delq 'elpy-module-company elpy-modules))
   (elpy-enable)
-  (setq elpy-rpc-python-command "/home/benjamin/anaconda3/bin/python")
+  (setq elpy-rpc-python-command "$HOME/anaconda3/bin/python")
   (with-eval-after-load 'elpy (remove-hook 'elpy-modules 'elpy-module-flymake)))
 
 (use-package python
@@ -56,13 +56,13 @@
   ;; if you want auto-activation (see below for details), include:
   (conda-env-autoactivate-mode nil)
   (custom-set-variables
- '(conda-anaconda-home "/home/benjamin/anaconda3")))
+ '(conda-anaconda-home "$HOME/anaconda3")))
 
 (use-package ein
   :ensure t
   :config
   (setq ein:completion-backend "use-company-backend")
-  (setq ein:jupyter-default-notebook-directory "/home/benjamin/Python_Notebooks/"))
+  (setq ein:jupyter-default-notebook-directory "$HOME/Python_Notebooks/"))
 
 (provide 'lang-python)
 ;;; lang-python.el ends here
