@@ -37,13 +37,6 @@
 		   gc-cons-percentage 0.1)
 	     (garbage-collect)) t)
 
-;; (let ((file-name-handler-alist nil)))
-
-;; (let ((normal-gc-cons-threshold 800000)
-;;       (init-gc-cons-threshold most-positive-fixnum))
-;;   (setq gc-cons-threshold most-positive-fixnum)
-;;   (add-hook 'after-init-hook
-;;	    (lambda () (setq gc-cons-threshold 800000))))
 
 ;;;;;Code from emacs-bootstrap
 (add-to-list 'load-path (concat user-emacs-directory "elisp"))

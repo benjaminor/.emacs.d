@@ -80,7 +80,7 @@
   (setq ispell-program-name "hunspell")
   (setenv "DICPATH" "/usr/share/hunspell/")
   (rw-hunspell-setup)
-  (setq ispell-dictionary "de_DE_hunspell")
+  (setq ispell-dictionary "en_US_hunspell")
   (defun fd-switch-dictionary()
 	  (interactive)
 	  (let* ((dic ispell-current-dictionary)
@@ -141,7 +141,7 @@
   :config
   (setq langtool-default-language "en-US")
   (setq langtool-mother-tongue "de")
-  (setq langtool-language-tool-jar "/home/benjamin/LanguageTool-4.0/languagetool-commandline.jar")
+  (setq langtool-language-tool-jar "$HOME/LanguageTool-4.0/languagetool-commandline.jar")
   (defun langtool-autoshow-detail-popup (overlays)
 	(when (require 'popup nil t)
 	  ;; Do not interrupt current popup
