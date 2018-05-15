@@ -9,8 +9,6 @@
 
 
 
-;(require 'iso-transl)
-;; Tell emacs where is your personal elisp lib dir
 
 ;;(load-library "url-handlers")
 
@@ -122,10 +120,10 @@
  history-length                     1000
  backup-inhibited                   nil
  make-backup-files                  t
- auto-save-default                  t
+ auto-save-default                  nil
  auto-save-interval                 1000
  auto-save-list-file-name           (concat temp-dir "/autosave")
- make-backup-files                  t
+ make-backup-files                  nil
  create-lockfiles                   nil
  backup-directory-alist            `((".*" . ,(concat temp-dir "/backup/")))
  auto-save-file-name-transforms    `((".*" ,(concat temp-dir "/auto-save-list/") t)))
