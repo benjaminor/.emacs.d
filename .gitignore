@@ -49,3 +49,4 @@ tramp
 /.cache/treemacs-persist
 /elisp/.emacs.desktop
 /projectile.cache
+*.org
