@@ -3,7 +3,8 @@
 ;;; Code:
 
 (use-package lsp-mode
-  :ensure t
+  :ensure nil
+  :load-path "$~/.emacs.d/lisp/lsp-mode"
   :config
   (use-package lsp-imenu
     :ensure f
