@@ -50,3 +50,4 @@ tramp
 /elisp/.emacs.desktop
 /projectile.cache
 /company-statistics-cache.el
+*.org
