@@ -73,15 +73,6 @@
   :ensure t)
 
 
-(use-package linum
-  :config
-  (setq linum-format " %3d ")
-  (global-linum-mode nil))
-
-(use-package hlinum
-  :config
-  (hlinum-activate))
-
 
 
 (use-package magit

@@ -80,7 +80,7 @@
       (setq ein:completion-backend "use-company-backend")
       (setq ein:jupyter-default-notebook-directory "$HOME/Python_Notebooks/"))
 
-<<<<<<< HEAD
+
 (use-package blacken
   :ensure nil
   :load-path "~/.emacs.d/lisp/blacken"
@@ -88,7 +88,4 @@
   (add-hook 'python-mode-hook 'blacken-mode-hook))
 
 (provide 'lang-python)
-=======
-    (provide 'lang-python)
->>>>>>> dfeb8c592dc00819e42fe318b0fa0a9ee202fbf0
 ;;; lang-python.el ends here
