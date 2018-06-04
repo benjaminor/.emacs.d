@@ -26,7 +26,7 @@
   :config
   (setq elpy-modules (delq 'elpy-module-company elpy-modules))
   (elpy-enable)
-  (setq elpy-rpc-python-command "$HOME/anaconda3/bin/python")
+  (setq elpy-rpc-python-command "python3")
   (with-eval-after-load 'elpy (remove-hook 'elpy-modules 'elpy-module-flymake)))
 
 (use-package python
