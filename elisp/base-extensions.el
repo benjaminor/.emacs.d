@@ -266,7 +266,6 @@
 
 (use-package helpful
   :ensure t
-  :defer 5
   :config
   (global-set-key (kbd "C-h f") #'helpful-callable)
   (global-set-key (kbd "C-h v") #'helpful-variable)

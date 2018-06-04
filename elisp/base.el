@@ -42,9 +42,7 @@
 
 (use-package diminish
   :ensure t)
-;;(require 'diminish)                ;; if you use :diminish
-;; (require 'bind-key)
-;; if you use any :bind variant
+
 (use-package bind-key
   :ensure t)
 

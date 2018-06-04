@@ -2,10 +2,20 @@
 ;;; Commentary:
 ;;; Code:
 
+
+;; -----------------------------
+;; trying out eglot
+;; -----------------------------
+
+;; (use-package eglot
+;;   :ensure t)
+
+
 (use-package lsp-mode
-  :ensure nil
-  :load-path "$~/.emacs.d/lisp/lsp-mode"
+  :ensure t
+  ;; :load-path "$~/.emacs.d/lisp/lsp-mode"
   :config
+  (setq lsp-message-project-root-warning t)
   (use-package lsp-imenu
     :ensure f
     :config
@@ -29,8 +39,9 @@
   :ensure t
   :after lsp-mode
   :config
-  (add-hook 'python-mode-hook #'lsp-python-enable))
+  ;; (add-hook 'python-mode-hook #'lsp-python-enable)
+  )
 
 
-(provide 'lsp-mode-setup)
-;;; lsp-mode-setup.el ends here
+(provide 'language-server-setup)
+;;; language-server-setup.el ends here

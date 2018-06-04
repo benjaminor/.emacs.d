@@ -70,7 +70,7 @@
 
 (require 'debugging)
 
-(require 'lsp-mode-setup)
+(require 'language-server-setup)
 
 
 

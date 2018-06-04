@@ -36,6 +36,11 @@
 ;; Reload buffer with F5
 (global-set-key (kbd "<f5>") 'revert-buffer)
 
+
+(defun connect-remote ()
+  (interactive)
+  (dired "/ssh:ben@172.16.23.106:/home/ben/Projects/CVE"))
+(global-set-key "\C-xo" 'connect-remote)
 ;;
 ;; Aliases
 ;;

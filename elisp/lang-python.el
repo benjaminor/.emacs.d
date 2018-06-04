@@ -33,10 +33,6 @@
   :ensure nil
   :delight python-mode "Python"
   :config
-  ;; (when (executable-find "ipython")
-  ;;   (setq-default
-  ;;    python-shell-interpreter "ipython"
-  ;;    python-shell-interpreter-args "--simple-prompt -i"))
 
   (defun python-switch-interpreter()
     (interactive)
@@ -85,7 +81,7 @@
   :ensure nil
   :load-path "~/.emacs.d/lisp/blacken"
   :config
-  (add-hook 'python-mode-hook 'blacken-mode-hook))
+  (add-hook 'python-mode-hook 'blacken-mode))
 
 (provide 'lang-python)
 ;;; lang-python.el ends here

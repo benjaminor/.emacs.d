@@ -37,6 +37,9 @@
   (setq solarized-height-plus-4 1.0)
   (load-theme 'solarized-light t))
 
+(use-package all-the-icons
+  :ensure t)
+
 
 (provide 'base-theme)
 ;;; base-theme.el ends here
