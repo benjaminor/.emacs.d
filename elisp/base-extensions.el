@@ -18,10 +18,10 @@
   :ensure t
   :defer t
   :config (progn
-	    (defun my/ansi-colorize-buffer ()
-	      (let ((buffer-read-only nil))
-		(ansi-color-apply-on-region (point-min) (point-max))))
-	    (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)))
+			(defun my/ansi-colorize-buffer ()
+			  (let ((buffer-read-only nil))
+				(ansi-color-apply-on-region (point-min) (point-max))))
+			(add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)))
 
 (use-package ace-jump-mode
   :bind
@@ -73,8 +73,6 @@
   :ensure t)
 
 
-
-
 (use-package magit
   :config
   :defer t
@@ -109,7 +107,7 @@
   :defer t
   :config
   (setq org-directory "~/org"
-	org-default-notes-file (concat org-directory "/todo.org"))
+		org-default-notes-file (concat org-directory "/todo.org"))
   (setq org-agenda-files (directory-files "~/org/" t ".org$" t))
   :bind
   ("C-c l" . org-store-link)
@@ -121,14 +119,14 @@
   :config
   (org-projectile-per-project)
   (setq org-projectile-per-project-filepath "todo.org"
-	org-agenda-files (append org-agenda-files (org-projectile-todo-files))))
+		org-agenda-files (append org-agenda-files (org-projectile-todo-files))))
 
 (use-package org-bullets
   :config
   (setq org-hide-leading-stars t)
   (add-hook 'org-mode-hook
-	    (lambda ()
-	      (org-bullets-mode t))))
+			(lambda ()
+			  (org-bullets-mode t))))
 
 (use-package page-break-lines
   :ensure t
@@ -139,7 +137,7 @@
 (use-package projectile
   :config
   (setq projectile-known-projects-file
-	(expand-file-name "projectile-bookmarks.eld" temp-dir))
+		(expand-file-name "projectile-bookmarks.eld" temp-dir))
 
   (projectile-mode))
 
@@ -147,8 +145,8 @@
   :ensure t
   :defer 10
   :commands (recentf-mode
-	     recentf-add-file
-	     recentf-apply-filename-handlers)
+			 recentf-add-file
+			 recentf-apply-filename-handlers)
   :config
   (setq recentf-save-file (recentf-expand-file-name "~/.emacs.d/private/cache/recentf"))
   (recentf-mode 1))
@@ -161,7 +159,7 @@
   :after smartparens
   :config
   (add-hook 'after-init-hook
-	    (lambda () (smartparens-global-mode))))
+			(lambda () (smartparens-global-mode))))
 ;; (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
 ;; (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 ;; == undo-tree ==
@@ -209,18 +207,18 @@
   :defer t
   :config
   (beacon-mode 1)
-					; this color looks good for the zenburn theme but not for the one
-					; I'm using for the videos
-					; (setq beacon-color "#666600")
+										; this color looks good for the zenburn theme but not for the one
+										; I'm using for the videos
+										; (setq beacon-color "#666600")
   )
-					; expand the marked region in semantic increments (negative prefix to reduce region)
+										; expand the marked region in semantic increments (negative prefix to reduce region)
 (use-package expand-region
   :ensure t
   :defer t
   :config
   (global-set-key (kbd "C-=") 'er/expand-region))
 
-					; deletes all the whitespace when you hit backspace or delete
+										; deletes all the whitespace when you hit backspace or delete
 (use-package hungry-delete
   :ensure t
   :disabled
@@ -237,11 +235,13 @@
 ;;ARIBAS is an interactive interpreter for big integer arithmetic and multi-precision floating point arithmetic with a Pascal/Modula like syntax. ;;
 ;; https://www.mathematik.uni-muenchen.de/~forster/sw/aribas.html                                                                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (use-package aribas
   :ensure nil
   :load-path "~/.emacs.d/aribas"
   :config
   (autoload 'run-aribas "aribas" "Run ARIBAS." t))
+
 
 
 (use-package crux
