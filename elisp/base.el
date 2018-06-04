@@ -27,8 +27,6 @@
 
 
 ;;;set PATH variable
-;; (setenv "PATH" (concat (getenv "PATH") ":/usr/texbin"))
-;; (setq exec-path (append exec-path '("/usr/texbin")))
 
 (when (not package-archive-contents)
   (package-refresh-contents))
@@ -103,6 +101,7 @@
       exec-path                          (append exec-path '("/usr/local/bin/"))
       indent-tabs-mode                   nil
       tab-width                          4
+      display-line-numbers               'relative
       inhibit-startup-message            t
       fringes-outside-margins            t
       select-enable-clipboard            t)
