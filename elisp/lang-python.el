@@ -22,7 +22,7 @@
 
 (use-package elpy
   :ensure t
-  :defer t
+  :defer nil
   :config
   (setq elpy-modules (delq 'elpy-module-company elpy-modules))
   (elpy-enable)

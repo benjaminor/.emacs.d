@@ -39,7 +39,7 @@
   :ensure t
   :after lsp-mode
   :config
-  ;; (add-hook 'python-mode-hook #'lsp-python-enable)
+  (add-hook 'python-mode-hook #'lsp-python-enable)
   )
 
 
