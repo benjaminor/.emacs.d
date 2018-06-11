@@ -1,6 +1,7 @@
 ;;; package --- summary
 ;;; My emacs configuration file;;;;;;;;;;;;;;;;;;
-
+;;; Commentary:
+;;; Code:
 ;; -*- lexical-binding: t -*-
 (setq debug-on-error t)
 
