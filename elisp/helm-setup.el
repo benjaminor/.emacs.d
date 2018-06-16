@@ -81,7 +81,6 @@ _~_: modified
 	 ("M-x" . helm-M-x)
 	 ("C-h a" . helm-apropos)
 	 ("M-y" . helm-show-kill-ring)
-	 ("C-x c p" . helm-projectile-ag)
 	 :map helm-map
 	 ("C-i" . helm-execute-persistent-action)
 	 ("C-z" . helm-select-action)

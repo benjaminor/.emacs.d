@@ -40,6 +40,14 @@
 (use-package all-the-icons
   :ensure t)
 
+;; (use-package all-the-icons-dired
+;;   :ensure t
+;;   :config
+;;   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+
+;; (use-package icons-in-terminal
+;;   :load-path "~/.emacs.d/lisp/icons-in-terminal/")
+
 
 (provide 'base-theme)
 ;;; base-theme.el ends here

@@ -238,7 +238,7 @@
 
 (use-package aribas
   :ensure nil
-  :load-path "~/.emacs.d/aribas"
+  :load-path "~/.emacs.d/lisp/aribas"
   :config
   (autoload 'run-aribas "aribas" "Run ARIBAS." t))
 

@@ -1,0 +1,3 @@
+[submodule "lisp/icons-in-terminal"]
+	path = lisp/icons-in-terminal
+	url = https://github.com/sebastiencs/icons-in-terminal.git
