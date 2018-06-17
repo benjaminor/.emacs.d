@@ -33,14 +33,8 @@
      '(aw-leading-char-face
        ((t (:inherit ace-jump-face-foreground :height 3.0)))))
     )
-  :bind* ("M-p" . ace-window))
-
-;; (use-package autopair
-;;   :ensure t
-;;   :config
-;;   (autopair-global-mode)
-;;   ;; (electric-pair-mode 1)
-;;   )
+  :bind* ("M-p" . ace-window)
+  )
 
 (use-package ediff
   :defer t

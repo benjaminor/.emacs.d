@@ -61,7 +61,7 @@
 
 (require 'flycheck-setup)
 
-;;(require 'text-completion)
+(require 'text-completion)
 
 (require 'lisp-setup)
 

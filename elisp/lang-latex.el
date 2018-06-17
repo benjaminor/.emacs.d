@@ -6,7 +6,8 @@
 
 
 
-(use-package auxtex
+(use-package tex
+  :straight auctex
   :mode ("\\.tex\\'" . TeX-latex-mode)
   ;; :ensure auctex TODO: how to replace with straight?
   :config

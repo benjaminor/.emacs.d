@@ -40,7 +40,7 @@
 (defun connect-remote ()
   (interactive)
   (dired "/ssh:ben@172.16.23.106:/home/ben/Projects/CVE"))
-(global-set-key "\C-xo" 'connect-remote)
+;; (global-set-key "\C-xo" 'connect-remote)
 ;;
 ;; Aliases
 ;;

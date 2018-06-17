@@ -74,7 +74,7 @@
 
 
 (use-package blacken
-  :load-path "~/.emacs.d/lisp/blacken"
+  :straight (:type git :host github :repo "proofit404/blacken")
   :config
   (add-hook 'python-mode-hook 'blacken-mode))
 

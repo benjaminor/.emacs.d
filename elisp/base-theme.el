@@ -36,14 +36,18 @@
   (setq solarized-height-plus-4 1.0)
   (load-theme 'solarized-light t))
 
-;; (use-package all-the-icons)
+(use-package all-the-icons)
 
-;; (use-package all-the-icons-dired
-;;   :config
-;;   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+(use-package all-the-icons-dired
+  :config
+  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
-;; (use-package icons-in-terminal
-;;   :load-path "~/.emacs.d/lisp/icons-in-terminal/")
+(use-package font-lock+)
+
+(use-package icons-in-terminal
+  :after font-lock+
+  :straight (:local-repo "~/.emacs.d/lisp/icons-in-terminal/"))
+;;   :load-path "")
 
 
 (provide 'base-theme)
