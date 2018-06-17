@@ -7,9 +7,8 @@
 
 
 (use-package tex
-  :straight auctex
+  :straight (auctex :host github :repo "emacsmirror/auctex")
   :mode ("\\.tex\\'" . TeX-latex-mode)
-  ;; :ensure auctex TODO: how to replace with straight?
   :config
   (setq TeX-auto-save t)
   (setq TeX-parse-self t)
@@ -25,7 +24,7 @@
 
   (add-hook 'TeX-mode-hook '(lambda () (setq TeX-engine 'luatex)))
 
-;; " expands into csquotes macros
+  ;; " expands into csquotes macros
   (setq LaTeX-csquotes-close-quote "}"
 	LaTeX-csquotes-open-quote "\\enquote{")
   ;; company and yasnippet setup is handled in text-completion

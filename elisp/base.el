@@ -21,33 +21,10 @@
   (load bootstrap-file nil 'nomessage))
 
 (setq straight-use-package-by-default t)
-;; (require 'package)
-;; (package-initialize)
-
-;;;;;;;;;;;;;;;; ELPA Sources ;;;;;;;;;;;;;;;;
-
-
-
-;; (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-;;              ("marmalade" . "https://marmalade-repo.org/packages/")
-;;              ("melpa" . "https://melpa.org/packages/")
-;;              ("org" . "https://orgmode.org/elpa/")))
-
-
-
-;;;set PATH variable
-
-;; (when (not package-archive-contents)
-;;   (package-refresh-contents))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;; Bootstrap `use-package';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (straight-use-package 'use-package)
-
-;; (unless (package-installed-p 'use-package)
-;;   (package-refresh-contents)
-;;   (package-install 'use-package))
-
 (eval-when-compile
   (require 'use-package))
 
@@ -55,8 +32,6 @@
 
 (use-package bind-key)
 
-;;; Install every package that is used but not already installed
-;; (setq use-package-always-ensure t)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -111,7 +86,8 @@
       display-line-numbers               'relative
       inhibit-startup-message            t
       fringes-outside-margins            t
-      select-enable-clipboard            t)
+      select-enable-clipboard            t
+      vc-follow-symlinks                 nil)
 (delete-selection-mode 1)
 
 ;; Bookmarks
