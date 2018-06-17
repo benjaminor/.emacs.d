@@ -55,11 +55,13 @@
 
 (require 'helm-setup)
 
+(require 'org-setup)
+
 (require 'file-handler)
 
 (require 'flycheck-setup)
 
-(require 'text-completion)
+;;(require 'text-completion)
 
 (require 'lisp-setup)
 
