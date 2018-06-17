@@ -108,11 +108,9 @@ _~_: modified
 ;; Ubuntu: sudo apt-get install silversearcher-ag
 ;; OSX: brew install ag
 (use-package ag
-  :ensure t
   :defer t
   )
 (use-package helm-ag
-  :ensure t
   :defer t
   :after helm
   :config
@@ -132,12 +130,10 @@ _~_: modified
   (define-key flycheck-mode-map (kbd "C-c ! l") 'helm-flycheck))
 
 (use-package projectile
-  :ensure t
   :diminish projectile-mode
   :init
   (projectile-mode)
   (use-package helm-projectile
-    :ensure t
     :after helm
     :config
     (helm-projectile-on)))
@@ -145,7 +141,6 @@ _~_: modified
 
 
 (use-package helm-swoop
-  :ensure t
   :config
   (progn
 					; Change the keybinds to whatever you like :)

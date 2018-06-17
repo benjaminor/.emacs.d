@@ -39,6 +39,9 @@ tramp
 #ignore eshell
 /eshell/
 
+#ignore straight folder
+straight/
+
 #ignore the private folder
 /private/
 /.custom.el

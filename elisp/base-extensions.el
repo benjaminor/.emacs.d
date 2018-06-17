@@ -118,6 +118,7 @@
 ;; Use smartparens instead of autopair
 (use-package smartparens)
 (use-package smartparens-config
+  :straight nil
   :after smartparens
   :config
   (add-hook 'after-init-hook
@@ -191,7 +192,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package aribas
-  :load-path "~/.emacs.d/lisp/aribas"
+  :straight (:local-repo "~/.emacs.d/lisp/aribas")
   :config
   (autoload 'run-aribas "aribas" "Run ARIBAS." t))
 
