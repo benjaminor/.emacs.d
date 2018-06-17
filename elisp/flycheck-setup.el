@@ -12,14 +12,12 @@
   (global-flycheck-mode))
 
 (use-package flycheck-color-mode-line
-  :ensure t
   :after flycheck
   :config
   '(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode))
 
 
 (use-package flycheck-pycheckers
-  :ensure t
   :after flycheck
   :config
   (with-eval-after-load 'flycheck
@@ -30,7 +28,6 @@
 ;; https://github.com/jyp/attrap
 ;; Fix the flycheck-error at point (currently for Lisp and Haskell ;;
 (use-package attrap
-  :ensure t
   :defer t
   :bind (("C-x /" . attrap-attrap)))
 
@@ -53,7 +50,6 @@
 (flycheck-proselint-setup))
 
 (use-package flycheck-vale
-  :ensure t
   :defer t
   :after flycheck
   :config
@@ -68,14 +64,11 @@
 (use-package ispell
   :ensure nil)
 
-(use-package rw-language-and-country-codes
-  :ensure t)
+(use-package rw-language-and-country-codes)
 
-(use-package rw-ispell
-  :ensure t)
+(use-package rw-ispell)
 
 (use-package rw-hunspell
-  :ensure t
   :config
   (setq ispell-program-name "hunspell")
   (setenv "DICPATH" "/usr/share/hunspell/")
@@ -96,7 +89,6 @@
 ;TODO: maybe implement automatic switching with wiki mode
 
 (use-package flyspell
-  :ensure nil
   :config
   (dolist (hook '(text-mode-hook))
 	(add-hook hook (lambda () (flyspell-mode 1))))
@@ -124,7 +116,6 @@
 ;; https://github.com/d12frosted/flyspell-correct ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package flyspell-correct-helm
-  :ensure t
   :config
   ;;(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
   )
@@ -136,7 +127,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package langtool
-  :ensure t
   :defer t
   :config
   (setq langtool-default-language "en-US")

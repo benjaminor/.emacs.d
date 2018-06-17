@@ -3,48 +3,57 @@
 
 ;;; Commentary:
 
-;;; Maybe add ledger
+;;; TODO: Maybe add ledger
 
 ;;; Code:
 
+;; use straight.el as package manager
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 4))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-
-
-;;(load-library "url-handlers")
-
-(require 'package)
-(package-initialize)
+(setq straight-use-package-by-default t)
+;; (require 'package)
+;; (package-initialize)
 
 ;;;;;;;;;;;;;;;; ELPA Sources ;;;;;;;;;;;;;;;;
 
 
 
-(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-             ("marmalade" . "https://marmalade-repo.org/packages/")
-             ("melpa" . "https://melpa.org/packages/")
-             ("org" . "https://orgmode.org/elpa/")))
+;; (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+;;              ("marmalade" . "https://marmalade-repo.org/packages/")
+;;              ("melpa" . "https://melpa.org/packages/")
+;;              ("org" . "https://orgmode.org/elpa/")))
 
 
 
 ;;;set PATH variable
 
-(when (not package-archive-contents)
-  (package-refresh-contents))
+;; (when (not package-archive-contents)
+;;   (package-refresh-contents))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;; Bootstrap `use-package';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+(straight-use-package 'use-package)
+
+;; (unless (package-installed-p 'use-package)
+;;   (package-refresh-contents)
+;;   (package-install 'use-package))
 
 (eval-when-compile
   (require 'use-package))
 
-(use-package diminish
-  :ensure t)
+(use-package diminish)
 
-(use-package bind-key
-  :ensure t)
+(use-package bind-key)
 
 ;;; Install every package that is used but not already installed
 ;; (setq use-package-always-ensure t)
@@ -54,13 +63,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Auto-update packages every 7 days
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package auto-package-update
-  :ensure t
-  :config
-  (auto-package-update-maybe))
+
+;; (use-package auto-package-update
+;;   :ensure t
+;;   :config
+;;   (auto-package-update-maybe))
 
 (use-package benchmark-init
-  :ensure t
   :config
   ;; To disable collection of benchmark data after init is done.
   (add-hook 'after-init-hook 'benchmark-init/deactivate))

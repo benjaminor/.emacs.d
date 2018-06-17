@@ -11,8 +11,7 @@
   ("C-c l" . org-store-link)
   ("C-c a" . org-agenda))
 
-(use-package org-projectile-helm
-  :ensure t)
+(use-package org-projectile-helm)
 
 (use-package org-projectile
   :config

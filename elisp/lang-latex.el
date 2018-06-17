@@ -7,7 +7,7 @@
 
 
 (use-package tex
-  :ensure auctex
+  ;; :ensure auctex TODO: how to replace with straight?
   :config
   (setq TeX-auto-save t)
   (setq TeX-parse-self t)
@@ -33,7 +33,6 @@
     '(add-to-list 'helm-completing-read-handlers-alist '(reftex-citation . nil))))
 
 (use-package latex-preview-pane
-  :ensure t
   :config
   (latex-preview-pane-enable))
 

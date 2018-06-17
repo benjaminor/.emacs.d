@@ -97,7 +97,7 @@ _~_: modified
 	 ("C-h" . helm-find-files-up-one-level)))
 
 (use-package helm-google
-  :ensure t
+  :after helm
   :config
   (global-set-key (kbd "C-h C--") 'helm-google))
 

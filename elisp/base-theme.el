@@ -6,7 +6,6 @@
 ;;; Code:
 ;; Use nice theme for emacs
 (use-package solarized-theme
-  :ensure t
   :config
   ;; make the fringe stand out from the background
   (setq solarized-distinct-fringe-background t)
@@ -37,11 +36,9 @@
   (setq solarized-height-plus-4 1.0)
   (load-theme 'solarized-light t))
 
-;; (use-package all-the-icons
-;;   :ensure t)
+;; (use-package all-the-icons)
 
 ;; (use-package all-the-icons-dired
-;;   :ensure t
 ;;   :config
 ;;   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 

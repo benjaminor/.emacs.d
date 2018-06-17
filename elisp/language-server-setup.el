@@ -12,7 +12,6 @@
 
 
 (use-package lsp-mode
-  :ensure t
   ;; :load-path "$~/.emacs.d/lisp/lsp-mode"
   :config
   (setq lsp-message-project-root-warning t)
@@ -22,7 +21,6 @@
     (add-hook 'lsp-after-open-hook 'lsp-enable-imenu)))
 
 (use-package lsp-ui
-  :ensure t
   :after lsp-mode
   :config
   (use-package lsp-ui-flycheck
@@ -36,7 +34,6 @@
   (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))
 
 (use-package lsp-python
-  :ensure t
   :after lsp-mode
   :config
   (add-hook 'python-mode-hook #'lsp-python-enable)

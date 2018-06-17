@@ -3,19 +3,15 @@
 ;;; Code:
 
 (use-package general
-  :ensure t
   :defer t
   )
 
-(use-package hydra
-  :ensure t)
+(use-package hydra)
 
-(use-package delight
-  :ensure t)
+(use-package delight)
 
 ;; https://emacs.stackexchange.com/questions/8135/why-does-compilation-buffer-show-control-characters
 (use-package ansi-color
-  :ensure t
   :defer t
   :config (progn
 			(defun my/ansi-colorize-buffer ()
@@ -28,7 +24,6 @@
   ("C-c SPC" . ace-jump-mode))
 
 (use-package ace-window
-  :ensure t
   :defer t
   :init
   (progn
@@ -48,7 +43,6 @@
 ;;   )
 
 (use-package ediff
-  :ensure t
   :defer t
   :config
   (setq ediff-window-setup-function 'ediff-setup-windows-plain)
@@ -64,13 +58,9 @@
   (exec-path-from-shell-copy-env "PYTHONPATH")
   (exec-path-from-shell-initialize))
 
-(use-package expand-region
-  :defer t
-  :bind
-  ("C-=" . er/expand-region))
 
-(use-package dash
-  :ensure t)
+
+(use-package dash)
 
 
 (use-package magit
@@ -105,7 +95,6 @@
 
 
 (use-package page-break-lines
-  :ensure t
   :defer t
   :config
   (global-page-break-lines-mode))
@@ -118,7 +107,6 @@
   (projectile-mode))
 
 (use-package recentf
-  :ensure t
   :defer 10
   :commands (recentf-mode
 			 recentf-add-file
@@ -128,10 +116,8 @@
   (recentf-mode 1))
 
 ;; Use smartparens instead of autopair
-(use-package smartparens
-  :ensure t)
+(use-package smartparens)
 (use-package smartparens-config
-  :ensure nil
   :after smartparens
   :config
   (add-hook 'after-init-hook
@@ -140,7 +126,6 @@
 ;; (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 ;; == undo-tree ==
 (use-package undo-tree
-  :ensure t
   :diminish undo-tree-mode
   :config
   (global-undo-tree-mode 1)
@@ -150,22 +135,18 @@
   (setq undo-tree-history-directory-alist `(("." . ,(concat temp-dir "/undo/")))))
 
 (use-package which-key
-  :ensure t
   :config
   (which-key-mode))
 
 (use-package ws-butler
-  :ensure t
   :init
   (ws-butler-global-mode)
   :diminish ws-butler-mode)
 
 (use-package try
-  :ensure t
   :defer t)
 
 (use-package tabbar
-  :ensure t
   :config
   (tabbar-mode 1))
 
@@ -179,7 +160,6 @@
 (use-package wgrep)
 
 (use-package beacon
-  :ensure t
   :defer t
   :config
   (beacon-mode 1)
@@ -187,23 +167,21 @@
 										; I'm using for the videos
 										; (setq beacon-color "#666600")
   )
-										; expand the marked region in semantic increments (negative prefix to reduce region)
-(use-package expand-region
-  :ensure t
-  :defer t
-  :config
-  (global-set-key (kbd "C-=") 'er/expand-region))
 
-										; deletes all the whitespace when you hit backspace or delete
+; expand the marked region in semantic increments (negative prefix to reduce region)
+; deletes all the whitespace when you hit backspace or delete
+(use-package expand-region
+  :defer 15
+  :bind
+  ("C-=" . er/expand-region))
+										
 (use-package hungry-delete
-  :ensure t
   :disabled
   :defer t
   :config
   (global-hungry-delete-mode 1))
 
 (use-package whitespace-cleanup-mode
-  :ensure t
   :config
   (global-whitespace-cleanup-mode))
 
@@ -213,7 +191,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package aribas
-  :ensure nil
   :load-path "~/.emacs.d/lisp/aribas"
   :config
   (autoload 'run-aribas "aribas" "Run ARIBAS." t))
@@ -221,7 +198,6 @@
 
 
 (use-package crux
-  :ensure t
   :config
   (crux-with-region-or-buffer indent-region)
   (crux-with-region-or-buffer untabify)
@@ -241,7 +217,6 @@
 
 
 (use-package helpful
-  :ensure t
   :config
   (global-set-key (kbd "C-h f") #'helpful-callable)
   (global-set-key (kbd "C-h v") #'helpful-variable)
@@ -250,11 +225,9 @@
 
 
 (use-package treemacs
-  :ensure t
   :commands treemacs)
 
 (use-package rainbow-delimiters
-  :ensure t
   :config
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
@@ -262,14 +235,12 @@
 ;; https://github.com/purcell/emacs.d/blob/master/lisp/init-dired.el
 (setq-default dired-dwim-target t)
 (use-package diredfl
-  :ensure t
   :defer 4
   :config
   (diredfl-global-mode))
 
 ;; tags for code navigation
 (use-package ggtags
-  :ensure t
   :defer t
   :config
   (add-hook 'c-mode-common-hook
@@ -281,7 +252,6 @@
 
 
 (use-package dumb-jump
-  :ensure t
   :config
   (global-set-key (kbd "C-M-p")
 		  (defhydra dumb-jump-hydra (:color blue :columns 3 global-map )
@@ -294,8 +264,7 @@
 		    ("l" dumb-jump-quick-look "Quick look")
 		    ("b" dumb-jump-back "Back"))))
 
-(use-package iedit
-  :ensure t)
+(use-package iedit)
 
 
 (provide 'base-extensions)

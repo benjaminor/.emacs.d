@@ -10,7 +10,6 @@
 
 ;; == YAML Mode ==
 (use-package yaml-mode
-  :ensure t
   :defer t
   :init
   (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
@@ -19,7 +18,6 @@
 
 ;; == Markdown ==
 (use-package markdown-mode
-  :ensure t
   :defer t
   :mode (("\\.text\\'" . markdown-mode)
 	 ("\\.markdown\\'" . markdown-mode)
@@ -44,6 +42,8 @@
 (setq auto-mode-alist (cons '("\\.page$" . nxml-mode) auto-mode-alist))
 
 (autoload 'xml-mode "nxml" "XML editing mode" t)
+
+;; TODO: install cvs-mode
 
 (provide 'file-handler)
 ;;; file-handler.el ends here
