@@ -43,7 +43,8 @@
 
 (autoload 'xml-mode "nxml" "XML editing mode" t)
 
-;; TODO: install cvs-mode
+(use-package csv-mode
+  :ensure t)
 
 (provide 'file-handler)
 ;;; file-handler.el ends here

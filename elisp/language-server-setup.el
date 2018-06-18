@@ -12,7 +12,6 @@
 
 
 (use-package lsp-mode
-  ;; :load-path "$~/.emacs.d/lisp/lsp-mode"
   :config
   (setq lsp-message-project-root-warning t)
   (use-package lsp-imenu
