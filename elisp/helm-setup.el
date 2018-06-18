@@ -81,7 +81,6 @@ _~_: modified
 	 ("M-x" . helm-M-x)
 	 ("C-h a" . helm-apropos)
 	 ("M-y" . helm-show-kill-ring)
-	 ("C-x c p" . helm-projectile-ag)
 	 :map helm-map
 	 ("C-i" . helm-execute-persistent-action)
 	 ("C-z" . helm-select-action)
@@ -98,7 +97,7 @@ _~_: modified
 	 ("C-h" . helm-find-files-up-one-level)))
 
 (use-package helm-google
-  :ensure t
+  :after helm
   :config
   (global-set-key (kbd "C-h C--") 'helm-google))
 
@@ -109,11 +108,9 @@ _~_: modified
 ;; Ubuntu: sudo apt-get install silversearcher-ag
 ;; OSX: brew install ag
 (use-package ag
-  :ensure t
   :defer t
   )
 (use-package helm-ag
-  :ensure t
   :defer t
   :after helm
   :config
@@ -133,12 +130,10 @@ _~_: modified
   (define-key flycheck-mode-map (kbd "C-c ! l") 'helm-flycheck))
 
 (use-package projectile
-  :ensure t
   :diminish projectile-mode
   :init
   (projectile-mode)
   (use-package helm-projectile
-    :ensure t
     :after helm
     :config
     (helm-projectile-on)))
@@ -146,7 +141,6 @@ _~_: modified
 
 
 (use-package helm-swoop
-  :ensure t
   :config
   (progn
 					; Change the keybinds to whatever you like :)

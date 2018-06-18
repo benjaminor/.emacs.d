@@ -12,12 +12,10 @@
 ;; * Find bugs in config files
 
 (use-package bug-hunter
-  :ensure t
   :defer t)
 
 
 (use-package realgud
-  :ensure t
   :defer t
   :config
   ;; (load-library realgud)

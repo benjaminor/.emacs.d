@@ -21,7 +21,6 @@
 
 
 (use-package elpy
-  :ensure t
   :defer nil
   :config
   ;; (setq elpy-modules (delq 'elpy-module-company elpy-modules))
@@ -30,7 +29,6 @@
   (with-eval-after-load 'elpy (remove-hook 'elpy-modules 'elpy-module-flymake)))
 
 (use-package python
-  :ensure nil
   :delight python-mode "Python"
   :config
 
@@ -59,7 +57,6 @@
 
 
     (use-package conda
-      :ensure t
       :config
       ;; if you want interactive shell support, include:
       (conda-env-initialize-interactive-shells)
@@ -71,15 +68,13 @@
        '(conda-anaconda-home "$HOME/anaconda3")))
 
     (use-package ein
-      :ensure t
       :config
       (setq ein:completion-backend "use-company-backend")
       (setq ein:jupyter-default-notebook-directory "$HOME/Python_Notebooks/"))
 
 
 (use-package blacken
-  :ensure nil
-  :load-path "~/.emacs.d/lisp/blacken"
+  :straight (:type git :host github :repo "proofit404/blacken")
   :config
   (add-hook 'python-mode-hook 'blacken-mode))
 

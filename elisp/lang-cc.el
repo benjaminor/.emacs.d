@@ -13,7 +13,6 @@
 
 
 (use-package cmake-mode
-  :ensure t
   :defer t
   :init				; Add cmake listfile names to the mode list.
   (setq auto-mode-alist

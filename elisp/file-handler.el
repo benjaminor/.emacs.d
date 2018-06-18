@@ -10,7 +10,6 @@
 
 ;; == YAML Mode ==
 (use-package yaml-mode
-  :ensure t
   :defer t
   :init
   (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
@@ -19,7 +18,6 @@
 
 ;; == Markdown ==
 (use-package markdown-mode
-  :ensure t
   :defer t
   :mode (("\\.text\\'" . markdown-mode)
 	 ("\\.markdown\\'" . markdown-mode)

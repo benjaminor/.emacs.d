@@ -19,37 +19,26 @@
     (append (if (consp backend) backend (list backend))
 	    '(:with company-yasnippet))))
 
-(use-package company-elisp
-  :ensure nil
-  :after company
-  :config
-  (add-to-list 'company-backends (company-mode/backend-with-yas '(company-elisp))))
-
 (use-package company-math
-  :ensure t
   :config
   (setq company-math-allow-latex-symbols-in-faces t)
   )
 
 (use-package company-auctex
-  :ensure t
   :defer t
   :config
  ;;; (company-auctex-init)
   (add-to-list 'company-backends (company-mode/backend-with-yas '(company-math-symbols-latex company-math-symbols-unicode company-latex-commands company-auctex-labels company-auctex-bibs company-auctex-macros company-auctex-symbols company-auctex-environments))))
 
 (use-package company-irony
-  :ensure t
   :config
   (add-to-list 'company-backends 'company-irony))
 
 (use-package company-anaconda
-  :ensure t
   :config
   (add-to-list 'company-backends (company-mode/backend-with-yas '(company-anaconda))))
 
 (use-package company-jedi
-  :ensure t
   :disabled
   :config
   (add-hook 'python-mode-hook 'jedi:setup)
@@ -58,43 +47,74 @@
   (add-to-list 'company-backends 'company-jedi))
 
 (use-package company-c-headers
-  :ensure t
   :config
   (add-to-list 'company-backends 'company-c-headers))
 
 (use-package company-lsp
-  :ensure t
   :after lsp-mode
   :config
   (add-to-list 'company-backends (company-mode/backend-with-yas '(company-lsp))))
 
 
 (use-package  company-statistics
-  :ensure t
   :defer t
   :config
   (company-statistics-mode))
 
 (use-package helm-company
-  :ensure t
   :after helm
   :config
   (define-key company-mode-map (kbd "C-:") 'helm-company)
   (define-key company-active-map (kbd "C-:") 'helm-company))
 
 (use-package company-quickhelp
-  :ensure t
   :config
-  (use-package pos-tip
-    :ensure t)
+  (use-package pos-tip)
   (company-quickhelp-mode 1))
 
 (use-package company-box
-  :ensure t
-  :hook (company-mode . company-box-mode))
+  :hook (company-mode . company-box-mode)
+  :after icons-in-terminal
+  :config
+  (setq company-box-icons-unknown 'fa_question_circle)
+
+  (setq company-box-icons-elisp
+	'((fa_tag :face font-lock-function-name-face) ;; Function
+	  (fa_cog :face font-lock-variable-name-face) ;; Variable
+	  (fa_cube :face font-lock-constant-face) ;; Feature
+	  (md_color_lens :face font-lock-doc-face))) ;; Face
+
+  (setq company-box-icons-yasnippet 'fa_bookmark)
+
+  (setq company-box-icons-lsp
+	'((1 . fa_text_height) ;; Text
+	  (2 . (fa_tags :face font-lock-function-name-face)) ;; Method
+	  (3 . (fa_tag :face font-lock-function-name-face)) ;; Function
+	  (4 . (fa_tag :face font-lock-function-name-face)) ;; Constructor
+	  (5 . (fa_cog :foreground "#FF9800")) ;; Field
+	  (6 . (fa_cog :foreground "#FF9800")) ;; Variable
+	  (7 . (fa_cube :foreground "#7C4DFF")) ;; Class
+	  (8 . (fa_cube :foreground "#7C4DFF")) ;; Interface
+	  (9 . (fa_cube :foreground "#7C4DFF")) ;; Module
+	  (10 . (fa_cog :foreground "#FF9800")) ;; Property
+	  (11 . md_settings_system_daydream) ;; Unit
+	  (12 . (fa_cog :foreground "#FF9800")) ;; Value
+	  (13 . (md_storage :face font-lock-type-face)) ;; Enum
+	  (14 . (md_closed_caption :foreground "#009688")) ;; Keyword
+	  (15 . md_closed_caption) ;; Snippet
+	  (16 . (md_color_lens :face font-lock-doc-face)) ;; Color
+	  (17 . fa_file_text_o) ;; File
+	  (18 . md_refresh) ;; Reference
+	  (19 . fa_folder_open) ;; Folder
+	  (20 . (md_closed_caption :foreground "#009688")) ;; EnumMember
+	  (21 . (fa_square :face font-lock-constant-face)) ;; Constant
+	  (22 . (fa_cube :face font-lock-type-face)) ;; Struct
+	  (23 . fa_calendar) ;; Event
+	  (24 . fa_square_o) ;; Operator
+	  (25 . fa_arrows)) ;; TypeParameter
+	))
 
 (use-package company
-  :ensure t
   :diminish company-mode
   :init
   (global-company-mode 1)
@@ -114,16 +134,15 @@
 	completion-styles               '(basic substring partial-completion)
 	)
   (add-to-list 'company-backends (company-mode/backend-with-yas '(company-irony)))
+  (add-to-list 'company-backends (company-mode/backend-with-yas '(company-elisp)))
   :bind
   ("C-<tab>" . #'company-complete))
 
 
 (use-package yasnippet
-  :ensure t
   :config
   (yas-global-mode t)
-  (use-package yasnippet-snippets
-    :ensure t)
+  (use-package yasnippet-snippets)
   :bind
   ("C-<return>" . yas-expand-from-trigger-key))
 
@@ -132,7 +151,7 @@
 ;; Auctex completion::
 ;; (add-to-list 'company-backends (company-mode/backend-with-yas '()))
 
-  ;; (add-to-list 'company-backends (company-mode/backend-with-yas '(company-math-symbols-latex comany-math-symbols-unicode company-latex-commands)))
+;; (add-to-list 'company-backends (company-mode/backend-with-yas '(company-math-symbols-latex comany-math-symbols-unicode company-latex-commands)))
 
 
 

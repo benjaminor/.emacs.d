@@ -7,7 +7,8 @@
 
 
 (use-package tex
-  :ensure auctex
+  :straight (auctex :host github :repo "emacsmirror/auctex")
+  :mode ("\\.tex\\'" . TeX-latex-mode)
   :config
   (setq TeX-auto-save t)
   (setq TeX-parse-self t)
@@ -23,7 +24,7 @@
 
   (add-hook 'TeX-mode-hook '(lambda () (setq TeX-engine 'luatex)))
 
-;; " expands into csquotes macros
+  ;; " expands into csquotes macros
   (setq LaTeX-csquotes-close-quote "}"
 	LaTeX-csquotes-open-quote "\\enquote{")
   ;; company and yasnippet setup is handled in text-completion
@@ -33,7 +34,6 @@
     '(add-to-list 'helm-completing-read-handlers-alist '(reftex-citation . nil))))
 
 (use-package latex-preview-pane
-  :ensure t
   :config
   (latex-preview-pane-enable))
 
