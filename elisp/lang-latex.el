@@ -7,7 +7,7 @@
 
 
 (use-package tex
-  :straight (auctex :host github :repo "emacsmirror/auctex")
+  :straight auctex
   :mode ("\\.tex\\'" . TeX-latex-mode)
   :config
   (setq TeX-auto-save t)
