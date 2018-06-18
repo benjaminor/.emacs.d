@@ -45,5 +45,8 @@
 
 (autoload 'xml-mode "nxml" "XML editing mode" t)
 
+(use-package csv-mode
+  :ensure t)
+
 (provide 'file-handler)
 ;;; file-handler.el ends here
