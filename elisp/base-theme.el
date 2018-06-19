@@ -47,7 +47,6 @@
 (use-package icons-in-terminal
   :after font-lock+
   :straight (:local-repo "~/.emacs.d/lisp/icons-in-terminal/"))
-;;   :load-path "")
 
 
 (provide 'base-theme)

@@ -116,10 +116,9 @@
 ;; https://github.com/d12frosted/flyspell-correct ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package flyspell-correct-helm
-  :config
+  ;; :config
   ;;(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
   )
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; https://github.com/mhayashi1120/Emacs-langtool ;;
