@@ -54,3 +54,4 @@ straight/
 /projectile.cache
 /company-statistics-cache.el
 *.org
+/lisp/auctex/
