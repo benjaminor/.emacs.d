@@ -44,9 +44,10 @@
 
 (use-package font-lock+)
 
-(use-package icons-in-terminal
-  :after font-lock+
-  :straight (:local-repo "~/.emacs.d/lisp/icons-in-terminal/"))
+
+;; (use-package icons-in-terminal
+;;   :after font-lock+
+;;   :straight (:type git :host github :repo "sebastiencs/icons-in-terminal"))
 
 
 (provide 'base-theme)

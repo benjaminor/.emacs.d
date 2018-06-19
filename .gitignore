@@ -55,3 +55,4 @@ straight/
 /company-statistics-cache.el
 *.org
 .mc-lists.el
+/lisp/
