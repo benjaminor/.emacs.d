@@ -8,25 +8,50 @@
 ;;; Code:
 
 ;; use straight.el as package manager
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 4))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+;; (let ((bootstrap-file
+;;        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+;;       (bootstrap-version 4))
+;;   (unless (file-exists-p bootstrap-file)
+;;     (with-current-buffer
+;;         (url-retrieve-synchronously
+;;          "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+;;          'silent 'inhibit-cookies)
+;;       (goto-char (point-max))
+;;       (eval-print-last-sexp)))
+;;   (load bootstrap-file nil 'nomessage))
 
-(setq straight-use-package-by-default t)
+;; (setq straight-use-package-by-default t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;; Bootstrap `use-package';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(straight-use-package 'use-package)
+;;;;;;;; Bootstrap `quelpa';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(package-initialize)
+(setq quelpa-update-melpa-p nil)
+(unless (require 'quelpa nil t)
+  (with-temp-buffer
+    (url-insert-file-contents "https://framagit.org/steckerhalter/quelpa/raw/master/bootstrap.el")
+    (eval-buffer)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;; Bootstrap `use-package' and `quelpa-use-package' ;;;;;;;;;;;;;
+(quelpa
+ '(quelpa-use-package
+   :fetcher git
+   :url "https://framagit.org/steckerhalter/quelpa-use-package.git"))
+
+(quelpa
+ '(use-package))
+
+(when (string= (substring (current-time-string) 0 3) "Mon")
+               (setq quelpa-upgrade-p t))
+
 (eval-when-compile
-  (require 'use-package))
+  (require 'quelpa)
+  (require 'quelpa-use-package)
+  (require 'use-package)
+  (setq use-package-ensure-function 'quelpa)
+  (setq use-package-always-ensure t)
+  (quelpa-use-package-activate-advice))
 
 (use-package diminish)
 

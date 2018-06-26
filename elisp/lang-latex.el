@@ -7,7 +7,7 @@
 
 
 (use-package tex
-  :straight (auctex :local-repo "~/.emacs.d/lisp/auctex")
+  :quelpa (auctex)
   :mode ("\\.tex\\'" . TeX-latex-mode)
   :config
   (setq TeX-auto-save t)

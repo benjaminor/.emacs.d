@@ -15,7 +15,7 @@
   :config
   (setq lsp-message-project-root-warning t)
   (use-package lsp-imenu
-    :straight nil
+    :ensure nil
     :config
     (add-hook 'lsp-after-open-hook 'lsp-enable-imenu)))
 
@@ -23,7 +23,7 @@
   :after lsp-mode
   :config
   (use-package lsp-ui-flycheck
-    :straight nil
+    :ensure nil
     :after (flycheck lsp-mode)
     :config
     (with-eval-after-load 'lsp-mode

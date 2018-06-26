@@ -38,17 +38,14 @@
 
 (use-package all-the-icons)
 
-(use-package all-the-icons-dired
-  :config
-  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+;; Unnecessary
+;; (use-package all-the-icons-dired
+;;   :config
+;;   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
-(use-package font-lock+)
-
-
-;; (use-package icons-in-terminal
-;;   :after font-lock+
-;;   :straight (:type git :host github :repo "sebastiencs/icons-in-terminal"))
-
+(use-package font-lock+
+  :quelpa
+  (font-lock+ :repo "emacsmirror/font-lock-plus" :fetcher github))
 
 (provide 'base-theme)
 ;;; base-theme.el ends here

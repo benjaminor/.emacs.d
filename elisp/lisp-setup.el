@@ -15,7 +15,7 @@
   :init (add-hook 'ielm-mode-hook '(lambda () (setq-local scroll-margin 0))))
 
 (use-package lisp-mode
-  :straight nil
+  :ensure nil
   :delight lisp-mode "Lisp")
 
 (use-package slime

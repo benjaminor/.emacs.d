@@ -19,6 +19,9 @@ session.*
 #elpa packages folder
 /elpa/*
 
+#quelpa packages folder
+/quelpa/*
+
 #anaconda folder
 /anaconda-mode/*
 

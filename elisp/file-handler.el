@@ -45,5 +45,10 @@
 
 (use-package csv-mode)
 
+(use-package pdf-tools
+  :magic ("%PDF" . pdf-view-mode)
+  :config
+  (pdf-tools-install))
+
 (provide 'file-handler)
 ;;; file-handler.el ends here

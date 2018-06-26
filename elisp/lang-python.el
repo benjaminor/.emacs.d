@@ -30,6 +30,7 @@
 
 (use-package python
   :delight python-mode "Python"
+  :interpreter ("python" . python-mode)
   :config
 
   (defun python-switch-interpreter()
@@ -74,7 +75,7 @@
 
 
 (use-package blacken
-  :straight (:type git :host github :repo "proofit404/blacken")
+  :quelpa (:fetcher github :repo "proofit404/blacken")
   :config
   (add-hook 'python-mode-hook 'blacken-mode))
 

@@ -62,13 +62,7 @@
   :defer t
   :bind
   ;; Magic
-  ("C-x g s" . magit-status)
-  ("C-x g x" . magit-checkout)
-  ("C-x g c" . magit-commit)
-  ("C-x g p" . magit-push)
-  ("C-x g u" . magit-pull)
-  ("C-x g e" . magit-ediff-resolve)
-  ("C-x g r" . magit-rebase-interactive))
+  ("C-x g" . magit-status))
 
 (use-package magit-popup)
 
@@ -112,7 +106,7 @@
 ;; Use smartparens instead of autopair
 (use-package smartparens)
 (use-package smartparens-config
-  :straight nil
+  :ensure nil
   :after smartparens
   :config
   (add-hook 'after-init-hook
@@ -186,7 +180,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package aribas
-  :straight (:local-repo "~/.emacs.d/lisp/aribas")
+  :load-path "~/.emacs.d/lisp/aribas"
   :config
   (autoload 'run-aribas "aribas" "Run ARIBAS." t))
 
