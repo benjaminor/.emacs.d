@@ -7,7 +7,6 @@
 
 
 (use-package tex
-  :ensure nil
   :quelpa (auctex)
   :mode ("\\.tex\\'" . TeX-latex-mode)
   :config

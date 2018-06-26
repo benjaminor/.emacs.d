@@ -54,8 +54,8 @@
   (require 'quelpa)
   (require 'quelpa-use-package)
   (require 'use-package)
-  ;; (setq use-package-ensure-function 'quelpa)
-  (setq use-package-always-ensure t))
+  (setq use-package-always-ensure t)
+  (quelpa-use-package-activate-advice))
 
 (use-package diminish)
 

@@ -61,8 +61,7 @@
 ;; Spell checking ;;
 ;;;;;;;;;;;;;;;;;;;;
 
-(use-package ispell
-  :ensure nil)
+(use-package ispell)
 
 (use-package rw-language-and-country-codes)
 
