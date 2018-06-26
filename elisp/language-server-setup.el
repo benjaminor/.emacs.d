@@ -7,8 +7,8 @@
 ;; trying out eglot
 ;; -----------------------------
 
-;; (use-package eglot
-;;   :ensure t)
+;; (use-package eglot)
+
 
 
 (use-package lsp-mode
