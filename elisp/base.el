@@ -47,8 +47,6 @@
 (quelpa
  '(use-package))
 
-(when (string= (substring (current-time-string) 0 3) "Mon")
-               (setq quelpa-upgrade-p t))
 
 (eval-when-compile
   (require 'quelpa)
@@ -66,12 +64,15 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Auto-update packages every 7 days
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (use-package auto-package-update
-;;   :ensure t
-;;   :config
-;;   (auto-package-update-maybe))
+(use-package auto-package-update
+  :config
+  (auto-package-update-maybe))
+
+;;;; Update quelpa packages on Mondays ;;;;;;;;;;;;;;;;;;;;;;;;;;
+(when (string= (substring (current-time-string) 0 3) "Mon")
+               (setq quelpa-upgrade-p t))
 
 (use-package benchmark-init
   :config
