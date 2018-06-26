@@ -115,13 +115,15 @@
 ;; (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 ;; == undo-tree ==
 (use-package undo-tree
+  :quelpa (undo-tree :fetcher github :repo "emacsmirror/undo-tree")
   :diminish undo-tree-mode
   :config
   (global-undo-tree-mode 1)
   (setq undo-tree-visualizer-timestamps t)
   (setq undo-tree-visualizer-diff t)
   (setq undo-tree-auto-save-history nil)
-  (setq undo-tree-history-directory-alist `(("." . ,(concat temp-dir "/undo/")))))
+  ;; (setq undo-tree-history-directory-alist `(("." . ,(concat temp-dir "/undo/"))))
+  )
 
 (use-package which-key
   :config

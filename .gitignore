@@ -59,3 +59,4 @@ straight/
 *.org
 .mc-lists.el
 /lisp/
+elisp/flycheck_*.el

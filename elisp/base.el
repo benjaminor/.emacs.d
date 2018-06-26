@@ -22,6 +22,11 @@
 
 ;; (setq straight-use-package-by-default t)
 
+(require 'package)
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                         ("marmalade" . "https://marmalade-repo.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;; Bootstrap `quelpa';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (package-initialize)
@@ -49,9 +54,8 @@
   (require 'quelpa)
   (require 'quelpa-use-package)
   (require 'use-package)
-  (setq use-package-ensure-function 'quelpa)
-  (setq use-package-always-ensure t)
-  (quelpa-use-package-activate-advice))
+  ;; (setq use-package-ensure-function 'quelpa)
+  (setq use-package-always-ensure t))
 
 (use-package diminish)
 
