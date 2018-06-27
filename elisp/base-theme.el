@@ -38,11 +38,6 @@
 
 (use-package all-the-icons)
 
-;; Unnecessary
-;; (use-package all-the-icons-dired
-;;   :config
-;;   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
-
 (use-package font-lock+
   :quelpa (font-lock+ :repo "emacsmirror/font-lock-plus" :fetcher github))
 
