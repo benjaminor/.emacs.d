@@ -3,8 +3,6 @@
 
 ;;; Commentary:
 
-;;; TODO: Maybe add ledger
-
 ;;; Code:
 
 ;; use straight.el as package manager

@@ -64,6 +64,10 @@
   ;; Magic
   ("C-x g" . magit-status))
 
+(use-package magit-todos
+  :quelpa (magit-todos :fetcher github :repo "alphapapa/magit-todos")
+  :config (magit-todos-mode))
+
 (use-package magit-popup)
 
 (use-package magithub
@@ -71,6 +75,10 @@
   :defer t
   :config
   (magithub-feature-autoinject t))
+
+(use-package gitignore-mode
+  :mode ("\\.gitignore\\'" . gitignore-mode))
+
 
 
 (use-package multiple-cursors

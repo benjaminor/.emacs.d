@@ -44,8 +44,7 @@
 ;;   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
 (use-package font-lock+
-  :quelpa
-  (font-lock+ :repo "emacsmirror/font-lock-plus" :fetcher github))
+  :quelpa (font-lock+ :repo "emacsmirror/font-lock-plus" :fetcher github))
 
 (provide 'base-theme)
 ;;; base-theme.el ends here
