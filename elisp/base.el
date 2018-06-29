@@ -96,13 +96,12 @@
       exec-path                          (append exec-path '("/usr/local/bin/"))
       indent-tabs-mode                   nil
       tab-width                          4
-      display-line-numbers               'relative
       inhibit-startup-message            t
       fringes-outside-margins            t
       select-enable-clipboard            t
       vc-follow-symlinks                 nil)
 (delete-selection-mode 1)
-
+(global-display-line-numbers-mode)
 ;; Bookmarks
 (setq
  ;; persistent bookmarks

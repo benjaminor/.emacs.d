@@ -79,7 +79,10 @@
 (use-package gitignore-mode
   :mode ("\\.gitignore\\'" . gitignore-mode))
 
-
+(use-package hl-todo
+  :ensure t
+  :config
+  (global-hl-todo-mode))
 
 (use-package multiple-cursors
   :bind
