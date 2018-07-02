@@ -129,16 +129,6 @@ _~_: modified
   (define-key flycheck-mode-map (kbd "C-c ! l") nil)
   (define-key flycheck-mode-map (kbd "C-c ! l") 'helm-flycheck))
 
-(use-package projectile
-  :diminish projectile-mode
-  :init
-  (projectile-mode)
-  (use-package helm-projectile
-    :after helm
-    :config
-    (helm-projectile-on)))
-
-
 
 (use-package helm-swoop
   :config

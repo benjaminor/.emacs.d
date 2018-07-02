@@ -36,10 +36,13 @@
   :after json-mode)
 
 ;; XML-mode
-(setq auto-mode-alist (cons '("\\.xml$" . nxml-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.xsl$" . nxml-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.xhtml$" . nxml-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.page$" . nxml-mode) auto-mode-alist))
+(use-package nxml-mode
+  :ensure nil
+  :mode (("\\.xml$" . nxml-mode)
+	 ("\\.xsl$" . nxml-mode)
+	 ("\\.xhtml$" . nxml-mode)
+	 ("\\.page$" . nxml-mode)
+	 ("\\.xslt$" .  nxml-mode)))
 
 (autoload 'xml-mode "nxml" "XML editing mode" t)
 

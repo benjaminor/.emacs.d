@@ -14,10 +14,10 @@
 (use-package ansi-color
   :defer t
   :config (progn
-			(defun my/ansi-colorize-buffer ()
-			  (let ((buffer-read-only nil))
-				(ansi-color-apply-on-region (point-min) (point-max))))
-			(add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)))
+	    (defun my/ansi-colorize-buffer ()
+	      (let ((buffer-read-only nil))
+		(ansi-color-apply-on-region (point-min) (point-max))))
+	    (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)))
 
 (use-package ace-jump-mode
   :bind
@@ -99,17 +99,28 @@
   (global-page-break-lines-mode))
 
 (use-package projectile
+  :diminish projectile-mode
   :config
+  (projectile-mode)
   (setq projectile-known-projects-file
-		(expand-file-name "projectile-bookmarks.eld" temp-dir))
+	(expand-file-name "projectile-bookmarks.eld" temp-dir))
+
+  (use-package helm-projectile
+    :after helm
+    :config
+    (helm-projectile-on)))
+
+
+(use-package projectile
+  :config
 
   (projectile-mode))
 
 (use-package recentf
   :defer 10
   :commands (recentf-mode
-			 recentf-add-file
-			 recentf-apply-filename-handlers)
+	     recentf-add-file
+	     recentf-apply-filename-handlers)
   :config
   (setq recentf-save-file (recentf-expand-file-name "~/.emacs.d/private/cache/recentf"))
   (recentf-mode 1))
@@ -121,7 +132,7 @@
   :after smartparens
   :config
   (add-hook 'after-init-hook
-			(lambda () (smartparens-global-mode))))
+	    (lambda () (smartparens-global-mode))))
 ;; (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
 ;; (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 ;; == undo-tree ==
@@ -165,18 +176,18 @@
   :defer t
   :config
   (beacon-mode 1)
-										; this color looks good for the zenburn theme but not for the one
-										; I'm using for the videos
-										; (setq beacon-color "#666600")
+					; this color looks good for the zenburn theme but not for the one
+					; I'm using for the videos
+					; (setq beacon-color "#666600")
   )
 
-; expand the marked region in semantic increments (negative prefix to reduce region)
-; deletes all the whitespace when you hit backspace or delete
+					; expand the marked region in semantic increments (negative prefix to reduce region)
+					; deletes all the whitespace when you hit backspace or delete
 (use-package expand-region
   :defer 15
   :bind
   ("C-=" . er/expand-region))
-										
+
 (use-package hungry-delete
   :disabled
   :defer t
@@ -268,6 +279,13 @@
 
 (use-package iedit)
 
+(use-package dockerfile-mode
+  :quelpa (dockerfile-mode :repo "spotify/dockerfile-mode" :fetcher github)
+  :mode ("Dockerfile\\'" . dockerfile-mode))
+
+(use-package docker)
+
+(use-package docker-compose-mode)
 
 (provide 'base-extensions)
 ;;; base-extensions.el ends here
