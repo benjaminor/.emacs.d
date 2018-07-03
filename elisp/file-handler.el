@@ -53,5 +53,12 @@
   :config
   (pdf-tools-install))
 
+(use-package pandoc-mode
+  :config
+  (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
+
+(use-package ox-pandoc)
+
+
 (provide 'file-handler)
 ;;; file-handler.el ends here

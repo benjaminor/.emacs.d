@@ -26,5 +26,7 @@
 			(lambda ()
 			  (org-bullets-mode t))))
 
+(use-package htmlize)
+
 (provide 'org-setup)
 ;; org-setup.et ends here
