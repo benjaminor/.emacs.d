@@ -283,7 +283,8 @@
   :quelpa (dockerfile-mode :repo "spotify/dockerfile-mode" :fetcher github)
   :mode ("Dockerfile\\'" . dockerfile-mode))
 
-(use-package docker)
+(use-package docker
+  :quelpa (docker :repo "Silex/docker.el" :fetcher github))
 
 (use-package docker-compose-mode)
 
