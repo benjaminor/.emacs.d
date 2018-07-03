@@ -28,5 +28,8 @@
 
 (use-package htmlize)
 
+(use-package org-fs-tree
+  :quelpa (org-fs-tree :repo "ScriptDevil/org-fs-tree" :fetcher github))
+
 (provide 'org-setup)
 ;; org-setup.et ends here
