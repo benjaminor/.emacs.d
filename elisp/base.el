@@ -53,6 +53,7 @@
   :config
   (auto-package-update-maybe))
 
+; TODO: write package to support auto-update, like for package.el
 ;;;; Update quelpa packages on Mondays ;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (string= (substring (current-time-string) 0 3) "Mon")
                (setq quelpa-upgrade-p t))
