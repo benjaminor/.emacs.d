@@ -138,6 +138,11 @@
   :bind
   ("C-<tab>" . #'company-complete))
 
+(use-package prescient)
+(use-package company-prescient
+  :after prescient
+  :config
+  (company-prescient-mode))
 
 (use-package yasnippet
   :config

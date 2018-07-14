@@ -129,6 +129,13 @@ _~_: modified
   (define-key flycheck-mode-map (kbd "C-c ! l") nil)
   (define-key flycheck-mode-map (kbd "C-c ! l") 'helm-flycheck))
 
+(use-package helm-flx
+  :config
+  (helm-flx-mode +1)
+  (setq helm-flx-for-helm-find-files t ;; t by default
+	helm-flx-for-helm-locate t) ;; nil by default
+  )
+
 
 (use-package helm-swoop
   :config
