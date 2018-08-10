@@ -100,7 +100,8 @@
 (use-package projectile
   :diminish projectile-mode
   :config
-  (projectile-mode)
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (setq projectile-known-projects-file
 	(expand-file-name "projectile-bookmarks.eld" temp-dir))
 
@@ -108,12 +109,6 @@
     :after helm
     :config
     (helm-projectile-on)))
-
-
-(use-package projectile
-  :config
-
-  (projectile-mode))
 
 (use-package recentf
   :defer 10
@@ -174,12 +169,10 @@
 (use-package beacon
   :defer t
   :config
-  (beacon-mode 1)
+  (beacon-mode 1))
 					; this color looks good for the zenburn theme but not for the one
 					; I'm using for the videos
 					; (setq beacon-color "#666600")
-  )
-
 					; expand the marked region in semantic increments (negative prefix to reduce region)
 					; deletes all the whitespace when you hit backspace or delete
 (use-package expand-region
@@ -223,9 +216,12 @@
   ("C-c I" . crux-find-user-init-file)
   ("C-c S" . crux-find-shell-init-file)
   ("C-c D" . crux-delete-file-and-buffer)
-  ("C-c n" . crux-cleanup-buffer-or-region))
-
-;; TODO: complete bindings
+  ("C-c n" . crux-cleanup-buffer-or-region)
+  ("C-c e" . crux-eval-and-replace)
+  ("C-c d" . crux-duplicate-current-line-or-region)
+  ("C-S-<return>" . crux-smart-open-line-above)
+  ("S-<return>" . crux-smart-open-line)
+  ("C-k" . crux-smart-kill-line))
 
 
 (use-package helpful
