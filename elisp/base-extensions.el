@@ -65,7 +65,6 @@
   ("C-x g" . magit-status))
 
 (use-package magit-todos
-  :quelpa (magit-todos :fetcher github :repo "alphapapa/magit-todos")
   :config (magit-todos-mode))
 
 (use-package magit-popup)

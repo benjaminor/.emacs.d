@@ -101,7 +101,8 @@
       fringes-outside-margins            t
       select-enable-clipboard            t
       vc-follow-symlinks                 nil
-      term-suppress-hard-newline         t)
+      term-suppress-hard-newline         t
+      view-read-only                     t)
 (delete-selection-mode 1)
 (global-display-line-numbers-mode)
 ;; Bookmarks
