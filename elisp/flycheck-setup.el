@@ -16,6 +16,13 @@
   :config
   '(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode))
 
+(use-package flycheck-yamllint
+  :ensure t
+  :defer t
+  :init
+  (progn
+    (eval-after-load 'flycheck
+      '(add-hook 'flycheck-mode-hook 'flycheck-yamllint-setup))))
 
 (use-package flycheck-pycheckers
   :after flycheck
