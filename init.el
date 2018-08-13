@@ -47,6 +47,8 @@
 
 (require 'base-functions)
 
+(require 'evil-setup)
+
 (require 'helm-setup)
 
 (require 'org-setup)
