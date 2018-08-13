@@ -49,14 +49,14 @@
 ;;; Auto-update packages every 7 days
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package auto-package-update
-  :config
-  (auto-package-update-maybe))
+;; (use-package auto-package-update
+;;   :config
+;;   (auto-package-update-maybe))
 
-; TODO: write package to support auto-update, like for package.el
-;;;; Update quelpa packages on Mondays ;;;;;;;;;;;;;;;;;;;;;;;;;;
-(when (string= (substring (current-time-string) 0 3) "Mon")
-               (setq quelpa-upgrade-p t))
+
+;; ;;;; Update quelpa packages on Mondays ;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (when (string= (substring (current-time-string) 0 3) "Mon")
+;;                (setq quelpa-upgrade-p t))
 
 (use-package benchmark-init
   :config
