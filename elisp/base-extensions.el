@@ -97,19 +97,6 @@
   :config
   (global-page-break-lines-mode))
 
-(use-package projectile
-  :diminish projectile-mode
-  :config
-  (projectile-mode +1)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (setq projectile-known-projects-file
-	(expand-file-name "projectile-bookmarks.eld" temp-dir))
-
-  (use-package helm-projectile
-    :after helm
-    :config
-    (helm-projectile-on)))
-
 (use-package recentf
   :defer 10
   :commands (recentf-mode

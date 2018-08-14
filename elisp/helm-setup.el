@@ -122,6 +122,7 @@ _~_: modified
 
 (use-package helm-git-grep)
 
+(use-package helm-rg)
 
 (use-package helm-flycheck
   :after (helm flycheck)

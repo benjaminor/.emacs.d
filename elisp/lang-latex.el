@@ -33,9 +33,9 @@
   (eval-after-load 'helm-mode
     '(add-to-list 'helm-completing-read-handlers-alist '(reftex-citation . nil))))
 
-;; (use-package latex-preview-pane
-;;   :config
-;;   (latex-preview-pane-enable))
+(use-package latex-preview-pane
+  :config
+  (latex-preview-pane-enable))
 
 
 (use-package reftex
