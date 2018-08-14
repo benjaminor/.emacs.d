@@ -20,8 +20,8 @@
 (use-package markdown-mode
   :defer t
   :mode (("\\.text\\'" . markdown-mode)
-	 ("\\.markdown\\'" . markdown-mode)
-	 ("\\.md\\'" . markdown-mode))
+		 ("\\.markdown\\'" . markdown-mode)
+		 ("\\.md\\'" . markdown-mode))
   )
 
 
@@ -39,12 +39,27 @@
 (use-package nxml-mode
   :ensure nil
   :mode (("\\.xml$" . nxml-mode)
-	 ("\\.xsl$" . nxml-mode)
-	 ("\\.xhtml$" . nxml-mode)
-	 ("\\.page$" . nxml-mode)
-	 ("\\.xslt$" .  nxml-mode)))
+		 ("\\.xsl$" . nxml-mode)
+		 ("\\.xhtml$" . nxml-mode)
+		 ("\\.page$" . nxml-mode)
+		 ("\\.xslt$" .  nxml-mode))
+  :config
+  (autoload 'xml-mode "nxml" "XML editing mode" t))
 
-(autoload 'xml-mode "nxml" "XML editing mode" t)
+(use-package web-mode
+  :config
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  :mode (("\\.launch?\\'" . web-mode)
+		 ("\\.html?\\'" . web-mode)
+		 ("\\.phtml\\'" . web-mode)
+		 ("\\.tpl\\.php\\'" . web-mode)
+		 ("\\.[agj]sp\\'" . web-mode)
+		 ("\\.as[cp]x\\'" . web-mode)
+		 ("\\.erb\\'" . web-mode)
+		 ("\\.mustache\\'" . web-mode)
+		 ("\\.djhtml\\'" . web-mode)))
 
 (use-package csv-mode)
 

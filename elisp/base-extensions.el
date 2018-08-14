@@ -256,7 +256,12 @@
 	      (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
 		(ggtags-mode 1)))))
 
+(use-package powerline
+  :config
+  (powerline-default-theme))
 
+(use-package powerline-evil
+  :after (powerline evil))
 
 
 (use-package dumb-jump
