@@ -19,15 +19,15 @@
   :ensure nil
   :config
   (setq org-capture-templates
-
 		'(("t" "Todo" entry (file+headline "~/org/todo.org" "Tasks")
 		   "* TODO %?\n  %i\n  %a")
 		  ("w" "Web site" entry
 		   (file "")
 		   "* %a :website:\n\n%U %?\n\n%:initial")))
   :bind ("C-c c" . org-capture))
-;; (use-package org-protocol-capture-html
-;;   :after org-protocol)
+(use-package org-protocol-capture-html
+  :load-path "~/.emacs.d/lisp/org-protocol-capture-html"
+  :after org-protocol)
 (use-package org-projectile-helm)
 
 (use-package org-projectile
