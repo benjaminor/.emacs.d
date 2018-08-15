@@ -56,6 +56,7 @@
 
 (use-package dash)
 
+(use-package git-timemachine)
 
 (use-package magit
   :config

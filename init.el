@@ -51,6 +51,8 @@
 
 (require 'helm-setup)
 
+(require 'projectile-setup)
+
 (require 'org-setup)
 
 (require 'file-handler)

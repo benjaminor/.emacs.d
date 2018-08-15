@@ -1,4 +1,4 @@
-;;; package --- file-handler
+;;; projectile setup
 ;;; Commentary:
 
 ;;; Code:
@@ -21,5 +21,5 @@
 (use-package projectile-ripgrep
   :after (ripgrep helm-rg))
 
-
+(provide 'projectile-setup)
 ;;; projectile-setup.el ends here
