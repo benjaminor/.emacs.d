@@ -38,11 +38,6 @@
 ;; XML-mode
 (use-package nxml-mode
   :ensure nil
-  :mode (("\\.xml$" . nxml-mode)
-		 ("\\.xsl$" . nxml-mode)
-		 ("\\.xhtml$" . nxml-mode)
-		 ("\\.page$" . nxml-mode)
-		 ("\\.xslt$" .  nxml-mode))
   :config
   (autoload 'xml-mode "nxml" "XML editing mode" t))
 
@@ -51,7 +46,12 @@
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
-  :mode (("\\.launch?\\'" . web-mode)
+  :mode (("\\.xml$" . web-mode)
+		 ("\\.xsl$" . web-mode)
+		 ("\\.xhtml$" . web-mode)
+		 ("\\.page$" . web-mode)
+		 ("\\.xslt$" .  web-mode)
+		 ("\\.launch?\\'" . web-mode)
 		 ("\\.html?\\'" . web-mode)
 		 ("\\.phtml\\'" . web-mode)
 		 ("\\.tpl\\.php\\'" . web-mode)

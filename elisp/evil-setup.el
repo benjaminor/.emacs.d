@@ -10,10 +10,8 @@
   (setq evil-want-integration nil)
   :config
   (evil-mode 1)
-  (define-key evil-insert-state-map "\C-e" nil)
-  (define-key evil-insert-state-map "\C-a" nil)
-  :bind (("C-e" . move-end-of-line)
-	 ("C-a" . beginning-of-line)))
+  (setq evil-insert-state-map (make-sparse-keymap))
+  (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state))
 
 (use-package evil-collection
   :after evil
