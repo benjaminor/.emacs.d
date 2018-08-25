@@ -63,6 +63,8 @@
 
 (require 'lisp-setup)
 
+(require 'clojure-setup)
+
 (require 'lang-latex)
 
 (require 'lang-python)
