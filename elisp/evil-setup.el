@@ -21,5 +21,10 @@
 (use-package evil-magit
   :after magit)
 
+(use-package evil-commentary
+  :after evil
+  :config
+  (evil-commentary-mode))
+
 (provide 'evil-setup)
 ;;; evil-setup ends here
