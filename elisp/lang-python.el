@@ -57,16 +57,16 @@
   :init (add-hook 'pip-requirements-mode-hook #'me/pip-requirements-ignore-case))
 
 
-(use-package conda
-  :config
-  ;; if you want interactive shell support, include:
-  (conda-env-initialize-interactive-shells)
-  ;; if you want eshell support, include:
-  (conda-env-initialize-eshell)
-  ;; if you want auto-activation (see below for details), include:
-  (conda-env-autoactivate-mode nil)
-  (custom-set-variables
-   '(conda-anaconda-home "~/anaconda3")))
+;; (use-package conda
+;;   :config
+;;   ;; if you want interactive shell support, include:
+;;   (conda-env-initialize-interactive-shells)
+;;   ;; if you want eshell support, include:
+;;   (conda-env-initialize-eshell)
+;;   ;; if you want auto-activation (see below for details), include:
+;;   (conda-env-autoactivate-mode nil)
+;;   (custom-set-variables
+;;    '(conda-anaconda-home "~/anaconda3")))
 
 (use-package ein
   :config
