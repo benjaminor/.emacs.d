@@ -31,5 +31,10 @@
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
 
+(use-package evil-commentary
+  :after evil
+  :config
+  (evil-commentary-mode))
+
 (provide 'evil-setup)
 ;;; evil-setup ends here

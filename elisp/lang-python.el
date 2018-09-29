@@ -71,7 +71,7 @@
 (use-package ein
   :config
   (setq ein:completion-backend "use-company-backend")
-  (setq ein:jupyter-default-notebook-directory "$HOME/Python_Notebooks/"))
+  (setq ein:jupyter-default-notebook-directory "$HOME/ipnb/"))
 
 (use-package sphinx-doc
   :config
