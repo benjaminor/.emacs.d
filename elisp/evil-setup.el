@@ -8,6 +8,7 @@
 (use-package evil
   :init
   (setq evil-want-integration nil)
+  (setq evil-want-keybinding nil)
   :config
   (evil-mode 1)
   (setq evil-insert-state-map (make-sparse-keymap))

@@ -14,10 +14,10 @@
 (use-package ansi-color
   :defer t
   :config (progn
-	    (defun my/ansi-colorize-buffer ()
-	      (let ((buffer-read-only nil))
-		(ansi-color-apply-on-region (point-min) (point-max))))
-	    (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)))
+			(defun my/ansi-colorize-buffer ()
+			  (let ((buffer-read-only nil))
+				(ansi-color-apply-on-region (point-min) (point-max))))
+			(add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)))
 
 (use-package ace-jump-mode
   :bind
@@ -27,12 +27,12 @@
   :defer t
   :init
   (progn
-    (global-set-key [remap other-window] 'ace-window)
-    (global-unset-key (kbd "C-x o"))
-    (custom-set-faces
-     '(aw-leading-char-face
-       ((t (:inherit ace-jump-face-foreground :height 3.0)))))
-    )
+	(global-set-key [remap other-window] 'ace-window)
+	(global-unset-key (kbd "C-x o"))
+	(custom-set-faces
+	 '(aw-leading-char-face
+	   ((t (:inherit ace-jump-face-foreground :height 3.0)))))
+	)
   :bind* ("M-p" . ace-window)
   )
 
@@ -101,8 +101,8 @@
 (use-package recentf
   :defer 10
   :commands (recentf-mode
-	     recentf-add-file
-	     recentf-apply-filename-handlers)
+			 recentf-add-file
+			 recentf-apply-filename-handlers)
   :config
   (setq recentf-save-file (recentf-expand-file-name "~/.emacs.d/private/cache/recentf"))
   (recentf-mode 1))
@@ -114,7 +114,7 @@
   :after smartparens
   :config
   (add-hook 'after-init-hook
-	    (lambda () (smartparens-global-mode))))
+			(lambda () (smartparens-global-mode))))
 ;; (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
 ;; (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 ;; == undo-tree ==
@@ -158,11 +158,11 @@
   :defer t
   :config
   (beacon-mode 1))
-					; this color looks good for the zenburn theme but not for the one
-					; I'm using for the videos
-					; (setq beacon-color "#666600")
-					; expand the marked region in semantic increments (negative prefix to reduce region)
-					; deletes all the whitespace when you hit backspace or delete
+										; this color looks good for the zenburn theme but not for the one
+										; I'm using for the videos
+										; (setq beacon-color "#666600")
+										; expand the marked region in semantic increments (negative prefix to reduce region)
+										; deletes all the whitespace when you hit backspace or delete
 (use-package expand-region
   :defer 15
   :bind
@@ -240,9 +240,9 @@
   :defer t
   :config
   (add-hook 'c-mode-common-hook
-	    (lambda ()
-	      (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-		(ggtags-mode 1)))))
+			(lambda ()
+			  (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+				(ggtags-mode 1)))))
 
 (use-package powerline
   :config
@@ -255,15 +255,15 @@
 (use-package dumb-jump
   :config
   (global-set-key (kbd "C-M-p")
-		  (defhydra dumb-jump-hydra (:color blue :columns 3 global-map )
-		    "Dumb Jump"
-		    ("j" dumb-jump-go "Go")
-		    ("o" dumb-jump-go-other-window "Other (when )indow")
-		    ("e" dumb-jump-go-prefer-external "Go external")
-		    ("x" dumb-jump-go-prefer-external-other-window "Go external other window")
-		    ("i" dumb-jump-go-prompt "Prompt")
-		    ("l" dumb-jump-quick-look "Quick look")
-		    ("b" dumb-jump-back "Back"))))
+				  (defhydra dumb-jump-hydra (:color blue :columns 3 global-map )
+					"Dumb Jump"
+					("j" dumb-jump-go "Go")
+					("o" dumb-jump-go-other-window "Other (when )indow")
+					("e" dumb-jump-go-prefer-external "Go external")
+					("x" dumb-jump-go-prefer-external-other-window "Go external other window")
+					("i" dumb-jump-go-prompt "Prompt")
+					("l" dumb-jump-quick-look "Quick look")
+					("b" dumb-jump-back "Back"))))
 
 (use-package iedit)
 
@@ -275,6 +275,12 @@
   :quelpa (docker :repo "Silex/docker.el" :fetcher github))
 
 (use-package docker-compose-mode)
+
+(use-package groovy-mode)
+
+(use-package neotree
+  :config
+  (global-set-key [f9] 'neotree-toggle))
 
 (provide 'base-extensions)
 ;;; base-extensions.el ends here
