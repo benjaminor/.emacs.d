@@ -29,8 +29,7 @@
   :config
   (with-eval-after-load 'flycheck
     (add-hook 'flycheck-mode-hook #'flycheck-pycheckers-setup))
-  ;;TODO change mypy2/mypy3 dependent on python2/python3 environment
-  (setq flycheck-pycheckers-checkers '(pylint mypy3 flake8 bandit)))
+  (setq flycheck-pycheckers-checkers '(pylint flake8 bandit)))
 
 ;; https://github.com/jyp/attrap
 ;; Fix the flycheck-error at point (currently for Lisp and Haskell ;;

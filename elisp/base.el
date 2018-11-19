@@ -7,12 +7,10 @@
 
 (require 'package)
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                         ("marmalade" . "https://marmalade-repo.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;; Bootstrap `quelpa';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(package-initialize)
 (setq quelpa-update-melpa-p nil)
 (unless (require 'quelpa nil t)
   (with-temp-buffer

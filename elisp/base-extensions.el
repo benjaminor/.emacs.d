@@ -282,5 +282,9 @@
   :config
   (global-set-key [f9] 'neotree-toggle))
 
+(use-package eyebrowse
+  :config
+  (eyebrowse-mode t))
+
 (provide 'base-extensions)
 ;;; base-extensions.el ends here
