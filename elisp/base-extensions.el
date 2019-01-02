@@ -114,9 +114,12 @@
   :after smartparens
   :config
   (add-hook 'after-init-hook
-			(lambda () (smartparens-global-mode))))
-;; (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
-;; (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
+			(lambda () (smartparens-global-mode)))
+  ;; (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
+  ;; (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
+  (setq sp-autoescape-string-quote nil)
+  (setq sp-escape-quotes-after-insert nil))
+
 ;; == undo-tree ==
 (use-package undo-tree
   :quelpa (undo-tree :fetcher github :repo "emacsmirror/undo-tree")
