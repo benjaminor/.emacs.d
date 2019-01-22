@@ -293,5 +293,13 @@
   :config
   (global-aggressive-indent-mode 1))
 
+(use-package format-all
+  :config
+  (add-hook 'prog-mode-hook (lambda () (format-all-mode t))))
+
+(use-package origami
+  :config
+  (global-origami-mode))
+
 (provide 'base-extensions)
 ;;; base-extensions.el ends here

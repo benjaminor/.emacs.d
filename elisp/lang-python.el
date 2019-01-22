@@ -20,13 +20,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(use-package elpy
- :defer nil
- :config
- ;; (setq elpy-modules (delq 'elpy-module-company elpy-modules))
- (elpy-enable)
- (setq elpy-rpc-python-command "python3")
- (with-eval-after-load 'elpy (remove-hook 'elpy-modules 'elpy-module-flymake)))
+;; (use-package elpy
+;;  :defer nil
+;;  :config
+;;  ;; (setq elpy-modules (delq 'elpy-module-company elpy-modules))
+;;  (elpy-enable)
+;;  (setq elpy-rpc-python-command "python3")
+;;  (with-eval-after-load 'elpy (remove-hook 'elpy-modules 'elpy-module-flymake)))
 
 (use-package python
   :delight python-mode "Python"
@@ -36,14 +36,14 @@
   (defun python-switch-interpreter()
 	(interactive)
 	(let* ((interp python-shell-interpreter)
-	   (change (if (string= interp "ipython") "python" "ipython")))
+		   (change (if (string= interp "ipython") "python" "ipython")))
 	  (if (string= interp "ipython")
-	  (setq python-shell-interpreter "python"
-		python-shell-interpreter-args "-i")
-	(when (executable-find "ipython")
-	  (setq
-	   python-shell-interpreter "ipython"
-	   python-shell-interpreter-args "--simple-prompt -i")))
+		  (setq python-shell-interpreter "python"
+				python-shell-interpreter-args "-i")
+		(when (executable-find "ipython")
+		  (setq
+		   python-shell-interpreter "ipython"
+		   python-shell-interpreter-args "--simple-prompt -i")))
 	  ;; (setq python-shell-interpreter change)
 	  (message "Python interpreter switched from %s to %s" interp change)))
   :bind
@@ -76,14 +76,14 @@
 (use-package sphinx-doc
   :config
   (add-hook 'python-mode-hook (lambda ()
-				(require 'sphinx-doc)
-				(sphinx-doc-mode t))))
+								(require 'sphinx-doc)
+								(sphinx-doc-mode t))))
 
 
-(use-package blacken
-  :quelpa (:fetcher github :repo "proofit404/blacken")
-  :config
-  (add-hook 'python-mode-hook 'blacken-mode))
+;; (use-package blacken
+;;   :quelpa (:fetcher github :repo "proofit404/blacken")
+;;   :config
+;;   (add-hook 'python-mode-hook 'blacken-mode))
 
 (provide 'lang-python)
 ;;; lang-python.el ends here

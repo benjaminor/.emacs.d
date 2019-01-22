@@ -125,7 +125,5 @@
 
 ;; (add-to-list 'company-backends (company-mode/backend-with-yas '(company-math-symbols-latex comany-math-symbols-unicode company-latex-commands)))
 
-
-
 (provide 'text-completion)
 ;;; text-completion.el ends here

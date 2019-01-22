@@ -60,3 +60,5 @@ straight/
 .mc-lists.el
 /lisp/
 elisp/flycheck_*.el
+/.lsp-session-v1
+/.cache/treemacs-persist-at-last-error
