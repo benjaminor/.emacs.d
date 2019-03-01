@@ -11,6 +11,7 @@
   (add-hook 'emacs-lisp-mode-hook 'highlight-defined-mode))
 
 (use-package ielm
+  :ensure nil
   :defer t
   :init (add-hook 'ielm-mode-hook '(lambda () (setq-local scroll-margin 0))))
 

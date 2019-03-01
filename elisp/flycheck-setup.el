@@ -41,19 +41,19 @@
 (defun flycheck-proselint-setup ()
   "Add proselist to list of flycheck checkers."
   (flycheck-define-checker proselint
-  "A linter for prose."
-  :command ("proselint" source-inplace)
-  :error-patterns
-  ((warning line-start (file-name) ":" line ":" column ": "
-		(id (one-or-more (not (any " "))))
-		" "
-		(message (one-or-more not-newline)
-			 (zero-or-more "\n" (any " ") (one-or-more not-newline)))
-		line-end))
-  :modes (text-mode markdown-mode gfm-mode message-mode)
-  (add-to-list 'flycheck-checkers 'proselint))
+    "A linter for prose."
+    :command ("proselint" source-inplace)
+    :error-patterns
+    ((warning line-start (file-name) ":" line ":" column ": "
+	      (id (one-or-more (not (any " "))))
+	      " "
+	      (message (one-or-more not-newline)
+		       (zero-or-more "\n" (any " ") (one-or-more not-newline)))
+	      line-end))
+    :modes (text-mode markdown-mode gfm-mode message-mode)
+    (add-to-list 'flycheck-checkers 'proselint))
 
-(flycheck-proselint-setup))
+  (flycheck-proselint-setup))
 
 (use-package flycheck-vale
   :defer t
@@ -67,7 +67,8 @@
 ;; Spell checking ;;
 ;;;;;;;;;;;;;;;;;;;;
 
-(use-package ispell)
+(use-package ispell
+  :ensure nil)
 
 (use-package rw-language-and-country-codes)
 
@@ -80,40 +81,41 @@
   (rw-hunspell-setup)
   (setq ispell-dictionary "en_US_hunspell")
   (defun fd-switch-dictionary()
-	  (interactive)
-	  (let* ((dic ispell-current-dictionary)
-	 (change (if (string= dic "de_DE_hunspell") "en_US_hunspell" "de_DE_hunspell")))
-	(ispell-change-dictionary change)
-	(message "Dictionary switched from %s to %s" dic change)
-	))
+    (interactive)
+    (let* ((dic ispell-current-dictionary)
+	   (change (if (string= dic "de_DE_hunspell") "en_US_hunspell" "de_DE_hunspell")))
+      (ispell-change-dictionary change)
+      (message "Dictionary switched from %s to %s" dic change)
+      ))
 
   (global-set-key (kbd "<f8>")   'fd-switch-dictionary))
 
 
 
-;TODO: maybe implement automatic switching with wiki mode
+					;TODO: maybe implement automatic switching with wiki mode
 
 (use-package flyspell
+  :ensure nil
   :config
   (dolist (hook '(text-mode-hook))
-	(add-hook hook (lambda () (flyspell-mode 1))))
+    (add-hook hook (lambda () (flyspell-mode 1))))
 
   (dolist (mode '(emacs-lisp-mode-hook
-		inferior-lisp-mode-hook
-		clojure-mode-hook
-		python-mode-hook
-		js-mode-hook
-		R-mode-hook))
-  (add-hook mode
-		'(lambda ()
-		   (flyspell-prog-mode))))
+		  inferior-lisp-mode-hook
+		  clojure-mode-hook
+		  python-mode-hook
+		  js-mode-hook
+		  R-mode-hook))
+    (add-hook mode
+	      '(lambda ()
+		 (flyspell-prog-mode))))
   (define-key flyspell-mode-map (kbd "C-;") nil)
   (global-set-key (kbd "<f6>") 'ispell-word)
   (defun flyspell-check-next-highlighted-word ()
-	"Custom function to spell check next highlighted word"
-	(interactive)
-	(flyspell-goto-next-error)
-	(ispell-word))
+    "Custom function to spell check next highlighted word"
+    (interactive)
+    (flyspell-goto-next-error)
+    (ispell-word))
   (global-set-key (kbd "M-<f6>") 'flyspell-check-next-highlighted-word))
 
 
@@ -137,13 +139,13 @@
   (setq langtool-mother-tongue "de")
   (setq langtool-language-tool-jar "$HOME/LanguageTool-4.0/languagetool-commandline.jar")
   (defun langtool-autoshow-detail-popup (overlays)
-	(when (require 'popup nil t)
-	  ;; Do not interrupt current popup
-	  (unless (or popup-instances
+    (when (require 'popup nil t)
+      ;; Do not interrupt current popup
+      (unless (or popup-instances
 		  ;; suppress popup after type `C-g` .
 		  (memq last-command '(keyboard-quit)))
-	  (let ((msg (langtool-details-error-message overlays)))
-		(popup-tip msg)))))
+	(let ((msg (langtool-details-error-message overlays)))
+	  (popup-tip msg)))))
 
   (setq langtool-autoshow-message-function
 	'langtool-autoshow-detail-popup))

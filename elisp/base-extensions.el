@@ -12,6 +12,7 @@
 
 ;; https://emacs.stackexchange.com/questions/8135/why-does-compilation-buffer-show-control-characters
 (use-package ansi-color
+  :ensure nil
   :defer t
   :config (progn
 			(defun my/ansi-colorize-buffer ()
@@ -37,6 +38,7 @@
   )
 
 (use-package ediff
+  :ensure nil
   :defer t
   :config
   (setq ediff-window-setup-function 'ediff-setup-windows-plain)
@@ -99,6 +101,7 @@
   (global-page-break-lines-mode))
 
 (use-package recentf
+  :ensure nil
   :defer 10
   :commands (recentf-mode
 			 recentf-add-file
@@ -149,6 +152,7 @@
   (tabbar-mode 1))
 
 (use-package windmove
+  :ensure nil
   :bind
   ("C-x <up>" . windmove-up)
   ("C-x <down>" . windmove-down)

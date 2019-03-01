@@ -14,17 +14,17 @@
   :defer 2
   :config
   (setq helm-split-window-inside-p          t
-	helm-idle-delay                       0.0
-	helm-input-idle-delay                 0.01
-	helm-yas-display-key-on-candidate     t
-	helm-quick-update                     t
-	helm-move-to-line-cycle-in-source     t
-	helm-ff-search-library-in-sexp        t
-	helm-scroll-amount                    8
-	helm-M-x-fuzzy-match                  t
-	helm-ff-file-name-history-use-recentf t
-	helm-split-window-default-side        'below
-	helm-ff-skip-boring-files             t)
+		helm-idle-delay                       0.0
+		helm-input-idle-delay                 0.01
+		helm-yas-display-key-on-candidate     t
+		helm-quick-update                     t
+		helm-move-to-line-cycle-in-source     t
+		helm-ff-search-library-in-sexp        t
+		helm-scroll-amount                    8
+		helm-M-x-fuzzy-match                  t
+		helm-ff-file-name-history-use-recentf t
+		helm-split-window-default-side        'below
+		helm-ff-skip-boring-files             t)
   (helm-adaptive-mode 1)
   (helm-mode 1)
   ;; (with-eval-after-load 'company
@@ -35,7 +35,7 @@
   ;;; does not work right now, how ot look over it later
   ;; TODO
   (defhydra hydra-helm-menu (:color pink
-				    :hint nil)
+									:hint nil)
     "
 ^Mark^             ^Unmark^           ^Actions^          ^Search
 ^^^^^^^^-----------------------------------------------------------------
@@ -72,29 +72,29 @@ _~_: modified
 
   (if (string-equal system-type "gnu/linux")
       (setq helm-grep-default-command
-	    "grep --color=always -d skip %e -n%cH -e %p %f"
-	    helm-grep-default-recurse-command
-	    "grep --color=always -d recurse %e -n%cH -e %p %f"))
+			"grep --color=always -d skip %e -n%cH -e %p %f"
+			helm-grep-default-recurse-command
+			"grep --color=always -d recurse %e -n%cH -e %p %f"))
 
   :bind (("C-x b" . helm-mini)
-	 ("C-x C-f" . helm-find-files)
-	 ("M-x" . helm-M-x)
-	 ("C-h a" . helm-apropos)
-	 ("M-y" . helm-show-kill-ring)
-	 :map helm-map
-	 ("C-i" . helm-execute-persistent-action)
-	 ("C-z" . helm-select-action)
-	 ("C-j" . helm-next-line)
-	 ("C-k" . helm-previous-line)
-	 ("C-h" . helm-next-source)
-	 ("C-S-h" . describe-key)
-	 ("C-e" . hydra-helm-menu/body)
-	 :map helm-find-files-map
-	 ("C-l" . helm-execute-persistent-action)
-	 ("C-h" . helm-find-files-up-one-level)
-	 :map helm-read-file-map
-	 ("C-l" . helm-execute-persistent-action)
-	 ("C-h" . helm-find-files-up-one-level)))
+		 ("C-x C-f" . helm-find-files)
+		 ("M-x" . helm-M-x)
+		 ("C-h a" . helm-apropos)
+		 ("M-y" . helm-show-kill-ring)
+		 :map helm-map
+		 ("C-i" . helm-execute-persistent-action)
+		 ("C-z" . helm-select-action)
+		 ("C-j" . helm-next-line)
+		 ("C-k" . helm-previous-line)
+		 ("C-h" . helm-next-source)
+		 ("C-S-h" . describe-key)
+		 ("C-e" . hydra-helm-menu/body)
+		 :map helm-find-files-map
+		 ("C-l" . helm-execute-persistent-action)
+		 ("C-h" . helm-find-files-up-one-level)
+		 :map helm-read-file-map
+		 ("C-l" . helm-execute-persistent-action)
+		 ("C-h" . helm-find-files-up-one-level)))
 
 (use-package helm-google
   :after helm
@@ -115,7 +115,7 @@ _~_: modified
   :after helm
   :config
   (general-define-key :keymaps 'helm-ag-map
-		      "C-c C-e" 'helm-ag-edit)
+					  "C-c C-e" 'helm-ag-edit)
   (bind-key "C-c C-e" 'helm-ag-edit helm-ag-mode-map)
   )
 
@@ -134,60 +134,59 @@ _~_: modified
   :config
   (helm-flx-mode +1)
   (setq helm-flx-for-helm-find-files t ;; t by default
-	helm-flx-for-helm-locate t) ;; nil by default
+		helm-flx-for-helm-locate t) ;; nil by default
   )
 
 
 (use-package helm-swoop
+  :bind
+  ("M-i" . helm-swoop)
+  ("M-I" . helm-multi-swoop)
+  ("C-c M-i" . helm-multi-swoop)
+  ("C-x M-i" helm-multi-swoop-all)
   :config
-  (progn
-					; Change the keybinds to whatever you like :)
-    (global-set-key (kbd "M-i") 'helm-swoop)
-    (global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
-    (global-set-key (kbd "C-c M-i") 'helm-multi-swoop)
-    (global-set-key (kbd "C-x M-i") 'helm-multi-swoop-all)
+										; Change the keybinds to whatever you like :)
+  ;; When doing isearch, hand the word over to helm-swoop
+  (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+  ;; From helm-swoop to helm-multi-swoop-all
+  (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+  ;; When doing evil-search, hand the word over to helm-swoop
+  ;; (define-key evil-motion-state-map (kbd "M-i") 'helm-swoop-from-evil-search)
 
-    ;; When doing isearch, hand the word over to helm-swoop
-    (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
-    ;; From helm-swoop to helm-multi-swoop-all
-    (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
-    ;; When doing evil-search, hand the word over to helm-swoop
-    ;; (define-key evil-motion-state-map (kbd "M-i") 'helm-swoop-from-evil-search)
+  ;; Instead of helm-multi-swoop-all, you can also use helm-multi-swoop-current-mode
+  (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
 
-    ;; Instead of helm-multi-swoop-all, you can also use helm-multi-swoop-current-mode
-    (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
+  ;; Move up and down like isearch
+  (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
+  (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
+  (define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
+  (define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
 
-    ;; Move up and down like isearch
-    (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
-    (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
-    (define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
-    (define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
+  ;; Save buffer when helm-multi-swoop-edit complete
+  (setq helm-multi-swoop-edit-save t)
 
-    ;; Save buffer when helm-multi-swoop-edit complete
-    (setq helm-multi-swoop-edit-save t)
+  ;; If this value is t, split window inside the current window
+  (setq helm-swoop-split-with-multiple-windows nil)
 
-    ;; If this value is t, split window inside the current window
-    (setq helm-swoop-split-with-multiple-windows nil)
+  ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+  (setq helm-swoop-split-direction 'split-window-vertically)
 
-    ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-    (setq helm-swoop-split-direction 'split-window-vertically)
+  ;; If nil, you can slightly boost invoke speed in exchange for text color
+  ;;    (setq helm-swoop-speed-or-color nil)
 
-    ;; If nil, you can slightly boost invoke speed in exchange for text color
-    ;;    (setq helm-swoop-speed-or-color nil)
+  ;; ;; Go to the opposite side of line from the end or beginning of line
+  (setq helm-swoop-move-to-line-cycle t)
 
-    ;; ;; Go to the opposite side of line from the end or beginning of line
-    (setq helm-swoop-move-to-line-cycle t)
+  ;; Optional face for line numbers
+  ;; Face name is `helm-swoop-line-number-face`
+  (setq helm-swoop-use-line-number-face t)
 
-    ;; Optional face for line numbers
-    ;; Face name is `helm-swoop-line-number-face`
-    (setq helm-swoop-use-line-number-face t)
+  ;; If you prefer fuzzy matching
+  ;;    (setq helm-swoop-use-fuzzy-match t)
 
-    ;; If you prefer fuzzy matching
-    ;;    (setq helm-swoop-use-fuzzy-match t)
-
-    ;; Disable pre-input
-    (setq helm-swoop-pre-input-function
-	  (lambda () ""))))
+  ;; Disable pre-input
+  (setq helm-swoop-pre-input-function
+		(lambda () "")))
 
 (provide 'helm-setup)
 ;;; helm-setup.el ends here

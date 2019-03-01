@@ -39,6 +39,7 @@
 
 
 (use-package reftex
+  :ensure nil
   :after auctex
   :hook (LaTeX-mode . reftex-mode))
 
