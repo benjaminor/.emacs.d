@@ -16,7 +16,7 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Auto completion is setup in text-completion with company-jedi ;;
+;; Auto completion is setup in text-completion.el with company-jedi ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -79,11 +79,6 @@
 								(require 'sphinx-doc)
 								(sphinx-doc-mode t))))
 
-
-;; (use-package blacken
-;;   :quelpa (:fetcher github :repo "proofit404/blacken")
-;;   :config
-;;   (add-hook 'python-mode-hook 'blacken-mode))
 
 (provide 'lang-python)
 ;;; lang-python.el ends here
