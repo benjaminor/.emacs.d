@@ -126,6 +126,11 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-auto-revert-mode t)
 
+;; avoid using fish shell for shell commands
+(setq shell-file-name "/bin/bash")
+(setq explicit-shell-file-name "/bin/bash")
+
+
 ;; Enable toolbar & menubar
 (menu-bar-mode 1)
 (when (fboundp 'tool-bar-mode)

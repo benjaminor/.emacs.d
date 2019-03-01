@@ -293,9 +293,9 @@
   :config
   (eyebrowse-mode t))
 
-(use-package aggressive-indent
-  :config
-  (global-aggressive-indent-mode 1))
+;; (use-package aggressive-indent
+;;   :config
+;;   (global-aggressive-indent-mode 1))
 
 (use-package format-all
   :config
@@ -304,6 +304,8 @@
 (use-package origami
   :config
   (global-origami-mode))
+
+(use-package fish-mode)
 
 (provide 'base-extensions)
 ;;; base-extensions.el ends here
