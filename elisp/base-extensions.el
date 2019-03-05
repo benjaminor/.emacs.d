@@ -253,7 +253,7 @@
 (use-package dumb-jump
   :config
   (global-set-key (kbd "C-M-p")
-				  (defhydra dumb-jump-hydra (:color blue :columns 3 global-map )
+				  (defhydra dumb-jump-hydra (:color blue :columns 3)
 					"Dumb Jump"
 					("j" dumb-jump-go "Go")
 					("o" dumb-jump-go-other-window "Other (when )indow")

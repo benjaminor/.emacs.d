@@ -64,3 +64,4 @@ elisp/flycheck_*.el
 /.cache/treemacs-persist-at-last-error
 /ede-projects.el
 semanticdb/
+transient/

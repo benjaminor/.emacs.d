@@ -143,7 +143,7 @@ _~_: modified
   ("M-i" . helm-swoop)
   ("M-I" . helm-multi-swoop)
   ("C-c M-i" . helm-multi-swoop)
-  ("C-x M-i" helm-multi-swoop-all)
+  ("C-x M-i" . helm-multi-swoop-all)
   :config
 										; Change the keybinds to whatever you like :)
   ;; When doing isearch, hand the word over to helm-swoop

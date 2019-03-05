@@ -35,5 +35,12 @@
   :config
   (setq ccls-executable "/usr/local/bin/ccls"))
 
+(use-package dap-mode
+  :commands dap-mode
+  :config
+  (dap-mode 1)
+  (dap-ui-mode 1)
+  (require 'dap-python))
+
 (provide 'language-server-setup)
 ;;; language-server-setup.el ends here
