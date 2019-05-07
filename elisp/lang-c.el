@@ -16,6 +16,7 @@
   (define-key c-mode-base-map (kbd "RET") 'newline-and-indent))
 
 (use-package semantic
+  :disabled
   :config
   (global-semanticdb-minor-mode 1)
   (global-semantic-idle-scheduler-mode 1)

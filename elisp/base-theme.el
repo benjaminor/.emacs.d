@@ -34,7 +34,7 @@
   (setq solarized-height-plus-2 1.0)
   (setq solarized-height-plus-3 1.0)
   (setq solarized-height-plus-4 1.0)
-  (load-theme 'solarized-light t))
+  (load-theme 'solarized-dark t))
 
 (use-package all-the-icons)
 
