@@ -25,44 +25,41 @@
 		helm-ff-file-name-history-use-recentf t
 		helm-split-window-default-side        'below
 		helm-ff-skip-boring-files             t)
-  (helm-adaptive-mode 1)
+  (helm-adaptive-mode t)
   (helm-mode 1)
-  ;; (with-eval-after-load 'company
-  ;;   (define-key company-mode-map (kbd "C-:") 'helm-company)
-  ;;   (define-key company-active-map (kbd "C-:") 'helm-company))
 
 
   ;;; does not work right now, how ot look over it later
   ;; TODO
-  (defhydra hydra-helm-menu (:color pink
-									:hint nil)
-    "
-^Mark^             ^Unmark^           ^Actions^          ^Search
-^^^^^^^^-----------------------------------------------------------------
-_m_: mark          _u_: unmark        _x_: execute       _R_: re-isearch
-_s_: save          _U_: unmark up     _b_: bury          _I_: isearch
-_d_: delete        ^ ^                _g_: refresh       _O_: multi-occur
-_D_: delete up     ^ ^                _T_: files only: % -28`Buffer-menu-files-only
-_~_: modified
-"
-    ("m" Buffer-menu-mark)
-    ("u" Buffer-menu-unmark)
-    ("U" Buffer-menu-backup-unmark)
-    ("d" Buffer-menu-delete)
-    ("D" Buffer-menu-delete-backwards)
-    ("s" Buffer-menu-save)
-    ("~" Buffer-menu-not-modified)
-    ("x" Buffer-menu-execute)
-    ("b" Buffer-menu-bury)
-    ("g" revert-buffer)
-    ("T" Buffer-menu-toggle-files-only)
-    ("O" Buffer-menu-multi-occur :color blue)
-    ("I" Buffer-menu-isearch-buffers :color blue)
-    ("R" Buffer-menu-isearch-buffers-regexp :color blue)
-    ("c" nil "cancel")
-    ("v" Buffer-menu-select "select" :color blue)
-    ("o" Buffer-menu-other-window "other-window" :color blue)
-    ("q" quit-window "quit" :color blue))
+  ;;   (defhydra hydra-helm-menu (:color pink
+  ;; 									:hint nil)
+  ;;     "
+  ;; ^Mark^             ^Unmark^           ^Actions^          ^Search
+  ;; ^^^^^^^^-----------------------------------------------------------------
+  ;; _m_: mark          _u_: unmark        _x_: execute       _R_: re-isearch
+  ;; _s_: save          _U_: unmark up     _b_: bury          _I_: isearch
+  ;; _d_: delete        ^ ^                _g_: refresh       _O_: multi-occur
+  ;; _D_: delete up     ^ ^                _T_: files only: % -28`Buffer-menu-files-only
+  ;; _~_: modified
+  ;; "
+  ;;     ("m" Buffer-menu-mark)
+  ;;     ("u" Buffer-menu-unmark)
+  ;;     ("U" Buffer-menu-backup-unmark)
+  ;;     ("d" Buffer-menu-delete)
+  ;;     ("D" Buffer-menu-delete-backwards)
+  ;;     ("s" Buffer-menu-save)
+  ;;     ("~" Buffer-menu-not-modified)
+  ;;     ("x" Buffer-menu-execute)
+  ;;     ("b" Buffer-menu-bury)
+  ;;     ("g" revert-buffer)
+  ;;     ("T" Buffer-menu-toggle-files-only)
+  ;;     ("O" Buffer-menu-multi-occur :color blue)
+  ;;     ("I" Buffer-menu-isearch-buffers :color blue)
+  ;;     ("R" Buffer-menu-isearch-buffers-regexp :color blue)
+  ;;     ("c" nil "cancel")
+  ;;     ("v" Buffer-menu-select "select" :color blue)
+  ;;     ("o" Buffer-menu-other-window "other-window" :color blue)
+  ;;     ("q" quit-window "quit" :color blue))
 
   (defun spacemacs//hide-cursor-in-helm-buffer ()
     "Hide the cursor in helm buffers."
@@ -88,7 +85,7 @@ _~_: modified
 		 ("C-k" . helm-previous-line)
 		 ("C-h" . helm-next-source)
 		 ("C-S-h" . describe-key)
-		 ("C-e" . hydra-helm-menu/body)
+		 ;; ("C-e" . hydra-helm-menu/body)
 		 :map helm-find-files-map
 		 ("C-l" . helm-execute-persistent-action)
 		 ("C-h" . helm-find-files-up-one-level)
@@ -124,11 +121,13 @@ _~_: modified
 
 (use-package helm-rg)
 
-(use-package helm-flycheck
-  :after (helm flycheck)
-  :config
-  (define-key flycheck-mode-map (kbd "C-c ! l") nil)
-  (define-key flycheck-mode-map (kbd "C-c ! l") 'helm-flycheck))
+;; WARNING:currently not maintained
+;; (use-package helm-flycheck
+;;   :after (helm flycheck)
+;;   :config
+;;   (define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck))
+;; (define-key flycheck-mode-map (kbd "C-c ! l") nil)
+;; (define-key flycheck-mode-map (kbd "C-c ! l") 'helm-flycheck))
 
 (use-package helm-flx
   :config

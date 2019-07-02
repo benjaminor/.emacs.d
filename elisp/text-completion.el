@@ -25,18 +25,16 @@
   )
 
 (use-package company-auctex
-  :defer t
   :config
- ;;; (company-auctex-init)
-  (add-to-list 'company-backends (company-mode/backend-with-yas '(company-math-symbols-latex company-math-symbols-unicode company-latex-commands company-auctex-labels company-auctex-bibs company-auctex-macros company-auctex-symbols company-auctex-environments))))
+  (company-auctex-init))
 
 (use-package company-irony
   :config
   (add-to-list 'company-backends 'company-irony))
 
-(use-package company-anaconda
-  :config
-  (add-to-list 'company-backends (company-mode/backend-with-yas '(company-anaconda))))
+;; (use-package company-anaconda
+;;   :config
+;;   (add-to-list 'company-backends (company-mode/backend-with-yas '(company-anaconda))))
 
 (use-package company-jedi
   :disabled
@@ -69,17 +67,18 @@
 
 (use-package company-box
   :hook (company-mode . company-box-mode)
-  :after icons-in-terminal
-  :config
-  (setq company-box-icons-unknown 'fa_question_circle)
+  :after icons-in-terminal)
+;; :config
+;; (setq company-box-icons-unknown 'fa_question_circle)
 
-  (setq company-box-icons-elisp
-		'((fa_tag :face font-lock-function-name-face) ;; Function
-		  (fa_cog :face font-lock-variable-name-face) ;; Variable
-		  (fa_cube :face font-lock-constant-face) ;; Feature
-		  (md_color_lens :face font-lock-doc-face))) ;; Face
 
-  (setq company-box-icons-yasnippet 'fa_bookmark))
+;; (setq company-box-icons-elisp
+;;		'((fa_tag :face font-lock-function-name-face) ;; Function
+;;		  (fa_cog :face font-lock-variable-name-face) ;; Variable
+;;		  (fa_cube :face font-lock-constant-face) ;; Feature
+;;		  (md_color_lens :face font-lock-doc-face))) ;; Face
+
+;; (setq company-box-icons-yasnippet 'fa_bookmark))
 
 (use-package company
   :diminish company-mode
@@ -93,6 +92,7 @@
    "C-k" 'company-select-previous
    "C-l" 'company-complete-selection)
   :config
+  (add-hook 'after-init-hook '(lambda() (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))) )
   (setq company-idle-delay              0.1
 		company-minimum-prefix-length   2
 		company-show-numbers            t
@@ -100,8 +100,8 @@
 		company-dabbrev-downcase        nil
 		completion-styles               '(basic substring partial-completion)
 		)
-  (add-to-list 'company-backends (company-mode/backend-with-yas '(company-irony)))
-  (add-to-list 'company-backends (company-mode/backend-with-yas '(company-elisp)))
+  ;; (push 'company-irony company-backends)
+  (push 'company-elisp company-backends)
   :bind
   ("C-<tab>" . #'company-complete))
 
@@ -118,7 +118,7 @@
   :bind
   ("C-<return>" . yas-expand-from-trigger-key))
 
-(setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
+
 
 ;; Auctex completion::
 ;; (add-to-list 'company-backends (company-mode/backend-with-yas '()))

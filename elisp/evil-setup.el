@@ -7,12 +7,10 @@
 
 (use-package evil
   :init
-  (setq evil-want-integration nil)
+  (setq evil-want-integration t)
   (setq evil-want-keybinding nil)
   :config
-  (evil-mode 1)
-  (setq evil-insert-state-map (make-sparse-keymap))
-  (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state))
+  (evil-mode 1))
 
 (use-package evil-collection
   :after evil
@@ -36,6 +34,11 @@
   :after evil
   :config
   (evil-commentary-mode))
+
+(use-package evil-leader
+  :after evil
+  :config
+  (global-evil-leader-mode))
 
 (provide 'evil-setup)
 ;;; evil-setup ends here
