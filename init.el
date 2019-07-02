@@ -29,11 +29,11 @@
       gc-cons-percentage 0.6)
 
 (add-hook 'after-init-hook
-	  `(lambda ()
-	     (setq file-name-handler-alist file-name-handler-alist-old
-		   gc-cons-threshold 800000
-		   gc-cons-percentage 0.1)
-	     (garbage-collect)) t)
+		  `(lambda ()
+			 (setq file-name-handler-alist file-name-handler-alist-old
+				   gc-cons-threshold 800000
+				   gc-cons-percentage 0.1)
+			 (garbage-collect)) t)
 
 
 ;;;;;Code from emacs-bootstrap

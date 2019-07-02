@@ -49,6 +49,25 @@
   :bind
   ("<f7>" . 'python-switch-interpreter))
 
+(use-package python-pytest
+  :after python
+  :custom
+  (python-pytest-arguments
+   '("--color"          ;; colored output in the buffer
+	 "--failed-first"   ;; run the previous failed tests first
+	 "--maxfail=5"))    ;; exit in 5 continuous failures in a run
+  :config
+  (which-key-declare-prefixes-for-mode 'python-mode "SPC pt" "Testing")
+  (evil-leader/set-key-for-mode 'python-mode
+	"ptp" 'python-pytest-popup
+	"ptt" 'python-pytest
+	"ptf" 'python-pytest-file
+	"ptF" 'python-pytest-file-dwim
+	"ptm" 'python-pytest-function
+	"ptM" 'python-pytest-function-dwim
+	"ptl" 'python-pytest-last-failed)
+  )
+
 (use-package pip-requirements
   :delight pip-requirements-mode "PyPA Requirements"
   :preface
@@ -64,9 +83,8 @@
   ;; if you want eshell support, include:
   (conda-env-initialize-eshell)
   ;; if you want auto-activation (see below for details), include:
-  (conda-env-autoactivate-mode t)
-  (custom-set-variables
-   '(conda-anaconda-home "~/anaconda3")))
+  ;; (conda-env-autoactivate-mode t)
+  )
 
 (use-package ein
   :config
