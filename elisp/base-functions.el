@@ -20,7 +20,7 @@
     (call-interactively 'helm-find-files)))
 
 (global-set-key "\C-xü" 'my-find-cfiles)
-	(defun my-find-cfiles ()
+(defun my-find-cfiles ()
   "Force a starting path."
   (interactive)
   (let ((default-directory "~/Documents/c-files/"))
@@ -38,12 +38,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun vsplit-last-buffer ()
+  "Split the buffer vertically and open last buffer."
   (interactive)
   (split-window-vertically)
   (other-window 1 nil)
   (switch-to-next-buffer)
   )
 (defun hsplit-last-buffer ()
+  "Split the buffer horizontally and open last buffer."
   (interactive)
   (split-window-horizontally)
   (other-window 1 nil)
@@ -57,10 +59,6 @@
 (global-set-key (kbd "<f5>") 'revert-buffer)
 
 
-(defun connect-remote ()
-  (interactive)
-  (dired "/ssh:ben@172.16.23.106:/home/ben/Projects/CVE"))
-;;
 ;; Aliases
 ;;
 (defalias 'sh 'shell)

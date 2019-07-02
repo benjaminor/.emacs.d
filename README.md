@@ -11,8 +11,9 @@ Noteable packages
 * evil
 * flycheck, yasnippet and company
 * auctex and org configuration
-* eglot (language-server-client)
+* lsp-mode (language-server-client)
 * magit
+* racer, cider
 
 and many more.
 

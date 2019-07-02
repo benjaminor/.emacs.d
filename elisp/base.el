@@ -83,7 +83,6 @@
       require-final-newline               t
       visible-bell                        nil
       ring-bell-function                  'ignore
-      custom-file                         "~/.emacs.d/.custom.el"
       ;; http://ergoemacs.org/emacs/emacs_stop_cursor_enter_prompt.html
       minibuffer-prompt-properties
       '(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)
@@ -100,9 +99,22 @@
       select-enable-clipboard            t
       vc-follow-symlinks                 nil
       term-suppress-hard-newline         t
-      view-read-only                     t)
+      view-read-only                     t
+	  default-frame-alist '((font . "Iosevka")))
 (delete-selection-mode 1)
 (global-display-line-numbers-mode)
+
+(setq-default cursor-type 'bar)           ; Line-style cursor similar to other text editors
+
+
+;;; Offload the custom-set-variables to a separate file
+;;; This keeps your init.el neater and you have the option
+;;; to gitignore your custom.el if you see fit.
+(setq custom-file "~/.emacs.d/custom.el")
+(unless (file-exists-p custom-file)
+  (write-region "" nil custom-file))
+(load custom-file)
+
 ;; Bookmarks
 (setq
  ;; persistent bookmarks
@@ -139,6 +151,9 @@
   (scroll-bar-mode -1))
 
 (show-paren-mode 1)
+
+
+(global-prettify-symbols-mode +1)
 
 ;;;Maximize on startup
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))

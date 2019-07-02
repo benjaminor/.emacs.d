@@ -65,3 +65,4 @@ elisp/flycheck_*.el
 /ede-projects.el
 semanticdb/
 transient/
+/custom.el

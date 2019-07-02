@@ -228,8 +228,27 @@
 
 
 (use-package treemacs
-  :commands treemacs)
+  :commands treemacs
+  :demand
+  :config
+  (global-set-key (kbd "C-ü") 'treemacs)
+  (global-set-key (kbd "C-M-ü") (defhydra treemacs-hydra (:color red :hint nil)
+								  "Treemacs hydra"
+								  ("b" treemacs-bookmark "Bookmark in treemacs")
+								  ("f" treemacs-find-file "Current file in treemacs")
+								  ("s" treemacs-select-window "Select treemacs window")
+								  ("p" treemacs-projectile "Add a project from projectile to treemacs"))))
+;; _b_: bookmark       _f_: current file
+;; _s_: select window  _p_: projectile to treemacs
 
+(use-package treemacs-evil
+  :after (treemacs evil))
+(use-package treemacs-projectile
+  :after (treemacs projectile))
+(use-package treemacs-icons-dired
+  :after (treemacs))
+(use-package treemacs-magit
+  :after (treemacs magit))
 (use-package rainbow-delimiters
   :config
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
