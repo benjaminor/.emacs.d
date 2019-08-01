@@ -10,6 +10,7 @@
 (use-package lsp-mode
   :after yasnippet
   :commands lsp
+  :demand
   :config
   (setq lsp-prefer-flymake nil
 		lsp-restart 'ignore
@@ -22,6 +23,14 @@
   (add-hook 'python-mode-hook #'lsp)
   (add-hook 'c-mode-common-hook #'lsp))
 
+(use-package lsp-python-ms
+  :init
+  (setq lsp-python-ms-executable my-lsp-python-ms-executable)
+  :config
+  :hook (python-mode . (lambda () (progn
+							   (setq-local lsp-prefer-flymake :none)
+							   (setq-local flycheck-checker 'python-pycheckers)))))
+
 (use-package lsp-ui
   :commands lsp-ui-mode
   :config
@@ -29,12 +38,7 @@
   (global-set-key (kbd "M-#") 'xref-find-definitions)
   (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
   (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
-  ;; (defun my-python-flycheck-setup ()
-  ;;	"my flycheck setup for `python-mode'."
-  ;;	(flycheck-add-next-checker 'lsp-ui 'python-pycheckers)
-  ;;	(flycheck-add-next-checker 'python-pycheckers 'lsp-ui))
 
-  ;; (add-hook 'python-mode 'my-python-flycheck-setup)
   ;; (lsp-ui-peek-find-workspace-symbol "pattern 0")
   ;; If the server supports custom cross references
   ;; (lsp-ui-peek-find-custom 'base "$cquery/base")
@@ -52,10 +56,10 @@
 		 (lambda () (require 'ccls) (lsp))))
 
 (use-package dap-mode
-  :disabled
   :commands dap-mode
   :config
   (dap-mode 1)
+  (require 'dap-ui)
   (dap-ui-mode 1)
   (require 'dap-python))
 
