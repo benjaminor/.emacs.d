@@ -28,12 +28,12 @@
   :defer t
   :init
   (progn
-	(global-set-key [remap other-window] 'ace-window)
-	(global-unset-key (kbd "C-x o"))
-	(custom-set-faces
-	 '(aw-leading-char-face
-	   ((t (:inherit ace-jump-face-foreground :height 3.0)))))
-	)
+    (global-set-key [remap other-window] 'ace-window)
+    (global-unset-key (kbd "C-x o"))
+    (custom-set-faces
+     '(aw-leading-char-face
+       ((t (:inherit ace-jump-face-foreground :height 3.0)))))
+    )
   :bind* ("M-p" . ace-window)
   )
 
@@ -316,6 +316,23 @@
   (global-origami-mode))
 
 (use-package fish-mode)
+
+(use-package highlight-operators)
+
+(use-package highlight-numbers
+  :config
+  (add-hook 'prog-mode-hook 'highlight-numbers-mode))
+
+(use-package centaur-tabs
+  :demand
+  :after evil
+  :config
+  (centaur-tabs-mode t)
+  (setq centaur-tabs-set-close-button nil)
+  :bind
+  (:map evil-normal-state-map
+		("g t" . centaur-tabs-forward)
+		("g T" . centaur-tabs-backward)))
 
 (provide 'base-extensions)
 ;;; base-extensions.el ends here

@@ -66,3 +66,4 @@ elisp/flycheck_*.el
 semanticdb/
 transient/
 /custom.el
+/.dap-breakpoints
