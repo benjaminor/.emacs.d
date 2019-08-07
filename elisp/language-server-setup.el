@@ -24,7 +24,9 @@
   (add-hook 'c-mode-common-hook #'lsp))
 
 (use-package lsp-python-ms
+  :if (boundp 'my-lsp-python-ms-executable)
   :init
+  ;; load from custom.el
   (setq lsp-python-ms-executable my-lsp-python-ms-executable)
   :config
   :hook (python-mode . (lambda () (progn

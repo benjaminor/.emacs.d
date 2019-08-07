@@ -4,10 +4,9 @@
 
 (use-package cc-mode
   :ensure nil
-  :init
+  :config
   (define-key c-mode-map  [(tab)] 'company-complete)
   (define-key c++-mode-map  [(tab)] 'company-complete)
-  :config
   (setq-default c-basic-offset 4
 				c-default-style "linux"
 				gdb-many-windows t

@@ -69,10 +69,11 @@
   (pdf-tools-install))
 
 (use-package pandoc-mode
+  :if (executable-find "pandoc")
   :config
+  (use-package ox-pandoc)
   (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
 
-(use-package ox-pandoc)
 
 
 (provide 'file-handler)
