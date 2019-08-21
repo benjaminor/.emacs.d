@@ -309,7 +309,7 @@
 
 (use-package format-all
   :config
-  (add-hook 'prog-mode-hook (lambda () (format-all-mode t))))
+  (add-hook 'prog-mode-hook (lambda () (format-all-mode))))
 
 (use-package origami
   :config
