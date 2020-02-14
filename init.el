@@ -31,8 +31,8 @@
 (add-hook 'after-init-hook
 		  `(lambda ()
 			 (setq file-name-handler-alist file-name-handler-alist-old
-				   gc-cons-threshold 800000
-				   gc-cons-percentage 0.1)
+				   gc-cons-threshold 100000000
+				   gc-cons-percentage 0.3)
 			 (garbage-collect)) t)
 
 
@@ -49,6 +49,12 @@
 (require 'base-extensions)
 
 (require 'base-functions)
+
+(require 'navigation)
+
+(require 'visual)
+
+(require 'editing)
 
 (require 'evil-setup)
 
@@ -84,7 +90,9 @@
 
 (require 'language-server-setup)
 
+(require 'fun-stuff)
 
+(require 'git-setup)
 
 (provide 'init)
 ;;; init.el ends here

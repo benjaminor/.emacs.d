@@ -14,28 +14,12 @@
 (use-package ansi-color
   :ensure nil
   :defer t
-  :config (progn
-			(defun my/ansi-colorize-buffer ()
-			  (let ((buffer-read-only nil))
-				(ansi-color-apply-on-region (point-min) (point-max))))
-			(add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)))
+  :config
+  (defun my/ansi-colorize-buffer ()
+	(let ((buffer-read-only nil))
+	  (ansi-color-apply-on-region (point-min) (point-max))))
+  (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer))
 
-(use-package ace-jump-mode
-  :bind
-  ("C-c SPC" . ace-jump-mode))
-
-(use-package ace-window
-  :defer t
-  :init
-  (progn
-    (global-set-key [remap other-window] 'ace-window)
-    (global-unset-key (kbd "C-x o"))
-    (custom-set-faces
-     '(aw-leading-char-face
-       ((t (:inherit ace-jump-face-foreground :height 3.0)))))
-    )
-  :bind* ("M-p" . ace-window)
-  )
 
 (use-package ediff
   :ensure nil
@@ -54,37 +38,7 @@
   (exec-path-from-shell-copy-env "PYTHONPATH")
   (exec-path-from-shell-initialize))
 
-
-
 (use-package dash)
-
-(use-package git-timemachine)
-
-(use-package magit
-  :config
-  :defer t
-  :bind
-  ;; Magic
-  ("C-x g" . magit-status))
-
-(use-package magit-todos
-  :config (magit-todos-mode))
-
-(use-package magit-popup)
-
-(use-package magithub
-  :after magit
-  :defer t
-  :config
-  (magithub-feature-autoinject t))
-
-(use-package gitignore-mode
-  :mode ("\\.gitignore\\'" . gitignore-mode))
-
-(use-package hl-todo
-  :ensure t
-  :config
-  (global-hl-todo-mode))
 
 (use-package multiple-cursors
   :bind
@@ -92,13 +46,6 @@
   ("C->" . mc/mark-next-like-this)
   ("C-<" . mc/mark-previous-like-this)
   ("C-c C->" . mc/mark-all-like-this))
-
-
-
-(use-package page-break-lines
-  :defer t
-  :config
-  (global-page-break-lines-mode))
 
 (use-package recentf
   :ensure nil
@@ -113,77 +60,30 @@
 ;; Use smartparens instead of autopair
 (use-package smartparens)
 (use-package smartparens-config
-  :ensure nil
+  :ensure smartparens
   :after smartparens
   :config
-  (add-hook 'after-init-hook
-			(lambda () (smartparens-global-mode)))
-  ;; (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
-  ;; (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
+  (smartparens-global-mode)
   (setq sp-autoescape-string-quote nil)
   (setq sp-escape-quotes-after-insert nil))
 
 ;; == undo-tree ==
 (use-package undo-tree
-  :quelpa (undo-tree :fetcher github :repo "emacsmirror/undo-tree")
   :diminish undo-tree-mode
   :config
   (global-undo-tree-mode 1)
   (setq undo-tree-visualizer-timestamps t)
   (setq undo-tree-visualizer-diff t)
-  (setq undo-tree-auto-save-history nil)
-  ;; (setq undo-tree-history-directory-alist `(("." . ,(concat temp-dir "/undo/"))))
-  )
+  (setq undo-tree-auto-save-history nil))
 
 (use-package which-key
   :config
   (which-key-mode))
 
-(use-package ws-butler
-  :init
-  (ws-butler-global-mode)
-  :diminish ws-butler-mode)
-
 (use-package try
   :defer t)
 
-(use-package tabbar
-  :config
-  (tabbar-mode 1))
-
-(use-package windmove
-  :ensure nil
-  :bind
-  ("C-x <up>" . windmove-up)
-  ("C-x <down>" . windmove-down)
-  ("C-x <left>" . windmove-left)
-  ("C-x <right>" . windmove-right))
-
 (use-package wgrep)
-
-(use-package beacon
-  :defer t
-  :config
-  (beacon-mode 1))
-										; this color looks good for the zenburn theme but not for the one
-										; I'm using for the videos
-										; (setq beacon-color "#666600")
-										; expand the marked region in semantic increments (negative prefix to reduce region)
-										; deletes all the whitespace when you hit backspace or delete
-(use-package expand-region
-  :defer 15
-  :bind
-  ("C-=" . er/expand-region))
-
-(use-package hungry-delete
-  :disabled
-  :defer t
-  :config
-  (global-hungry-delete-mode 1))
-
-(use-package whitespace-cleanup-mode
-  :config
-  (global-whitespace-cleanup-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;ARIBAS is an interactive interpreter for big integer arithmetic and multi-precision floating point arithmetic with a Pascal/Modula like syntax. ;;
@@ -195,28 +95,25 @@
   :config
   (autoload 'run-aribas "aribas" "Run ARIBAS." t))
 
-
-
 (use-package crux
-  :config
-  (crux-with-region-or-buffer indent-region)
-  (crux-with-region-or-buffer untabify)
-  (crux-with-region-or-line comment-or-uncomment-region)
   :bind
   ("C-c o" . crux-open-with)
   ("C-c u" . crux-view-url)
   ("C-c t" . crux-visit-term-buffer)
   ("C-c r" . crux-rename-file-and-buffer)
-  ("C-c k" . crux-kill-other-buffers)
   ("C-c I" . crux-find-user-init-file)
   ("C-c S" . crux-find-shell-init-file)
   ("C-c D" . crux-delete-file-and-buffer)
-  ("C-c n" . crux-cleanup-buffer-or-region)
+  ("C-c ." . crux-cleanup-buffer-or-region)
   ("C-c e" . crux-eval-and-replace)
-  ("C-c d" . crux-duplicate-current-line-or-region)
   ("C-S-<return>" . crux-smart-open-line-above)
   ("S-<return>" . crux-smart-open-line)
-  ("C-k" . crux-smart-kill-line))
+  ("C-k" . crux-smart-kill-line)
+  :config
+  (crux-reopen-as-root-mode)
+  (crux-with-region-or-buffer indent-region)
+  (crux-with-region-or-buffer untabify)
+  (crux-with-region-or-line comment-or-uncomment-region))
 
 
 (use-package helpful
@@ -227,47 +124,12 @@
   (global-set-key (kbd "C-c C-d") #'helpful-at-point))
 
 
-(use-package treemacs
-  :commands treemacs
-  :demand
-  :config
-  (global-set-key (kbd "C-ü") 'treemacs)
-  (global-set-key (kbd "C-M-ü") (defhydra treemacs-hydra (:color red :hint nil)
-								  "Treemacs hydra"
-								  ("b" treemacs-bookmark "Bookmark in treemacs")
-								  ("f" treemacs-find-file "Current file in treemacs")
-								  ("s" treemacs-select-window "Select treemacs window")
-								  ("p" treemacs-projectile "Add a project from projectile to treemacs"))))
-;; _b_: bookmark       _f_: current file
-;; _s_: select window  _p_: projectile to treemacs
-
-(use-package treemacs-evil
-  :after (treemacs evil))
-(use-package treemacs-projectile
-  :after (treemacs projectile))
-(use-package treemacs-icons-dired
-  :after (treemacs))
-(use-package treemacs-magit
-  :after (treemacs magit))
-(use-package rainbow-delimiters
-  :config
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
-
-;; Add more functionality to dired
-;; https://github.com/purcell/emacs.d/blob/master/lisp/init-dired.el
-(setq-default dired-dwim-target t)
-(use-package diredfl
-  :defer 4
-  :config
-  (diredfl-global-mode))
-
 (use-package powerline
   :config
   (powerline-default-theme))
 
 (use-package powerline-evil
   :after (powerline evil))
-
 
 (use-package dumb-jump
   :config
@@ -285,54 +147,36 @@
 (use-package iedit)
 
 (use-package dockerfile-mode
-  :quelpa (dockerfile-mode :repo "spotify/dockerfile-mode" :fetcher github)
   :mode ("Dockerfile\\'" . dockerfile-mode))
 
 (use-package docker
-  :quelpa (docker :repo "Silex/docker.el" :fetcher github))
+  :bind ("C-c d" . docker))
 
 (use-package docker-compose-mode)
 
 (use-package groovy-mode)
 
-(use-package neotree
-  :config
-  (global-set-key [f9] 'neotree-toggle))
-
-(use-package eyebrowse
-  :config
-  (eyebrowse-mode t))
-
-;; (use-package aggressive-indent
-;;   :config
-;;   (global-aggressive-indent-mode 1))
-
-(use-package format-all
-  :config
-  (add-hook 'prog-mode-hook (lambda () (format-all-mode))))
-
-(use-package origami
-  :config
-  (global-origami-mode))
-
 (use-package fish-mode)
 
-(use-package highlight-operators)
-
-(use-package highlight-numbers
+(use-package paradox
   :config
-  (add-hook 'prog-mode-hook 'highlight-numbers-mode))
+  (paradox-enable))
 
-(use-package centaur-tabs
-  :demand
-  :after evil
+(use-package package-utils)
+
+(use-package rg
   :config
-  (centaur-tabs-mode t)
-  (setq centaur-tabs-set-close-button nil)
-  :bind
-  (:map evil-normal-state-map
-		("g t" . centaur-tabs-forward)
-		("g T" . centaur-tabs-backward)))
+  (rg-enable-default-bindings))
+
+
+(use-package direnv
+  :config
+  (direnv-mode))
+
+(use-package google-this
+  :config
+  (google-this-mode 1)
+  (global-set-key (kbd "C-c /") 'google-this-mode-submap))
 
 (provide 'base-extensions)
 ;;; base-extensions.el ends here
