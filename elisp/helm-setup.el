@@ -85,18 +85,14 @@
   (bind-key "C-c C-e" 'helm-ag-edit helm-ag-mode-map)
   )
 
-
-(use-package helm-git-grep)
+(use-package helm-bibtex
+  :after org-ref
+  :config
+  (setq bibtex-completion-bibliography org-ref-default-bibliography
+		bibtex-completion-library-path (concat org-ref-pdf-directory "/")
+		bibtex-completion-notes-path org-ref-bibliography-notes))
 
 (use-package helm-rg)
-
-;; WARNING:currently not maintained
-;; (use-package helm-flycheck
-;;   :after (helm flycheck)
-;;   :config
-;;   (define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck))
-;; (define-key flycheck-mode-map (kbd "C-c ! l") nil)
-;; (define-key flycheck-mode-map (kbd "C-c ! l") 'helm-flycheck))
 
 (use-package helm-flx
   :config
@@ -149,6 +145,9 @@
   ;; Disable pre-input
   (setq helm-swoop-pre-input-function
 		(lambda () "")))
+
+(use-package helm-make
+  :after helm)
 
 (provide 'helm-setup)
 ;;; helm-setup.el ends here
