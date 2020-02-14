@@ -6,7 +6,6 @@
 
 
 (use-package highlight-defined
-  :defer t
   :config
   (add-hook 'emacs-lisp-mode-hook 'highlight-defined-mode))
 

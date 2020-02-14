@@ -46,14 +46,9 @@
   (add-hook 'rust-mode-hook 'flycheck-mode)
   (add-hook 'flycheck-mode-hook 'flycheck-rust-setup)
   (add-hook 'rust-mode-hook 'racer-mode)
-  (add-hook 'rust-mode-hook 'cargo-minor-mode)
+  (add-hook 'rust-mode-hook 'cargo-minor-mode))
 
-  ;; format rust buffers on save using rustfmt
-  ;; (add-hook 'before-save-hook
-  ;; (lambda ()
-  ;; (when (eq major-mode 'rust-mode)
-  ;; (rust-format-buffer))))))
-  )
+(use-package rustic)
 
 (provide 'lang-rust)
 ;;; lang-rust.el ends here
