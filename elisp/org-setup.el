@@ -5,89 +5,156 @@
 ;;; Code:
 
 (use-package org
-  :defer t
   :config
-  (setq org-directory "~/org"
-	org-default-notes-file (concat org-directory "/todo.org"))
-  (setq org-agenda-files (directory-files "~/org/" t ".org$" t))
+  ;; (require 'org-capture)
+  (setq org-directory "~/org/"
+		org-default-notes-file (concat org-directory "todo.org"))
+  (setq org-agenda-files (directory-files org-directory t ".org$" t))
   (setq org-agenda-skip-unavailable-files t)
+  (setq org-log-done 'time)
 
-  ;;   (defhydra hydra-org-agenda-view (:hint none)
-  ;;    "
-  ;; _d_: ?d? day        _g_: time grid=?g?  _a_: arch-trees
-  ;; _w_: ?w? week       _[_: inactive       _A_: arch-files
-  ;; _t_: ?t? fortnight  _f_: follow=?f?     _r_: clock report=?r?
-  ;; _m_: ?m? month      _e_: entry text=?e? _D_: include diary=?D?
-  ;; _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
-  ;;    ("SPC" org-agenda-reset-view)
-  ;;    ("d" org-agenda-day-view (if (eq 'day (org-agenda-cts)) "[x]" "[ ]"))
-  ;;    ("w" org-agenda-week-view (if (eq 'week (org-agenda-cts)) "[x]" "[ ]"))
-  ;;    ("t" org-agenda-fortnight-view (if (eq 'fortnight (org-agenda-cts)) "[x]" "[ ]"))
-  ;;    ("m" org-agenda-month-view (if (eq 'month (org-agenda-cts)) "[x]" "[ ]"))
-  ;;    ("y" org-agenda-year-view (if (eq 'year (org-agenda-cts)) "[x]" "[ ]"))
-  ;;    ("l" org-agenda-log-mode (format "% -3S" org-agenda-show-log))
-  ;;    ("L" (org-agenda-log-mode '(4)))
-  ;;    ("c" (org-agenda-log-mode 'clockcheck))
-  ;;    ("f" org-agenda-follow-mode (format "% -3S" org-agenda-follow-mode))
-  ;;    ("a" org-agenda-archives-mode)
-  ;;    ("A" (org-agenda-archives-mode 'files))
-  ;;    ("r" org-agenda-clockreport-mode (format "% -3S" org-agenda-clockreport-mode))
-  ;;    ("e" org-agenda-entry-text-mode (format "% -3S" org-agenda-entry-text-mode))
-  ;;    ("g" org-agenda-toggle-time-grid (format "% -3S" org-agenda-use-time-grid))
-  ;;    ("D" org-agenda-toggle-diary (format "% -3S" org-agenda-include-diary))
-  ;;    ("!" org-agenda-toggle-deadlines)
-  ;;    ("[" (let ((org-agenda-include-inactive-timestamps t))
-  ;;           (org-agenda-check-type t 'timeline 'agenda)
-  ;;           (org-agenda-redo)
-  ;;           (message "Display now includes inactive timestamps as well")))
-  ;;    ("q" (message "Abort") :exit t)
-  ;;    ("v" nil))
+  (use-package org-sidebar)
 
-  ;;   ;; Recommended binding:
-  ;;   (define-key org-agenda-mode-map "v" 'hydra-org-agenda-view/body)
+  (use-package org-ref
+    :config
+    (require 'org-ref-latex)
+    (defvar my-bibliography-dir "~/bibliography/")
+    (setq reftex-default-bibliography  (concat my-bibliography-dir "references.bib"))
+
+    ;; see org-ref for use of these variables
+    (setq org-ref-bibliography-notes (concat org-directory "bib.org")
+		  org-ref-default-bibliography (concat my-bibliography-dir "references.bib")
+		  org-ref-pdf-directory (concat my-bibliography-dir "bibtex-pdfs/")))
+
+
+  (use-package org-capture
+    :ensure nil
+    :config
+    (require 'org-protocol)
+    (setq org-capture-templates
+		  '(("t" "Todo" entry (file org-default-notes-file)
+			 "* TODO SCHEDULED: %T\n %?\n %i\n  %a")
+			("a" "Urgent simple todo" entry (file org-default-notes-file)
+			 "* TODO [#A] %?\n SCHEDULED: %T \n %i\n")
+			("b" "Near-future simple todo" entry (file org-default-notes-file)
+			 "* TODO [#B] %?\n SCHEDULED: %T \n %i\n")
+			("c" "Long-term simple todo" entry (file org-default-notes-file)
+			 "* TODO [#C] %?\n SCHEDULED: %T \n %i\n")
+			("j" "Journal" entry (file+olp+datetree "~/org/journal.org")
+			 "* %?\nEntered on %U\n  %i\n  %a")))
+
+    ;; from advice in org-protocol
+    (defun transform-square-brackets-to-round-ones(string-to-transform)
+      "Transforms [ into ( and ] into ), other chars left unchanged."
+      (concat
+       (mapcar #'(lambda (c) (if (equal c ?[) ?\( (if (equal c ?]) ?\) c))) string-to-transform))
+      )
+
+    (push '("P" "Protocol" entry (file+headline "notes.org" "Inbox")
+			"* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
+		  org-capture-templates)
+    (push '("L" "Protocol Link" entry (file+headline "notes.org" "Inbox")
+			"* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]%(progn (setq kk/delete-frame-after-capture 2) \"\")\nCaptured On: %U")
+		  org-capture-templates))
+
+
+  (defun org-archive-done-tasks ()
+    (interactive)
+    (org-map-entries
+     (lambda ()
+       (org-archive-subtree)
+       (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
+     "/DONE" 'file))
+
   :bind
   ("C-c l" . org-store-link)
-  ("C-c a" . org-agenda))
+  ("C-c a" . org-agenda)
+  ("C-c c" . org-capture))
 
-(use-package org-protocol
-  :ensure nil
-  :config
-  (setq org-capture-templates
-	'(("t" "Todo" entry (file+headline "~/org/todo.org" "Tasks")
-	   "* TODO %?\n  %i\n  %a")
-	  ("w" "Web site" entry
-	   (file "")
-	   "* %a :website:\n\n%U %?\n\n%:initial")))
-  :bind ("C-c c" . org-capture))
 
 (use-package org-protocol-capture-html
-  :load-path "~/.emacs.d/lisp/org-protocol-capture-html"
-  :after org-protocol)
+  :quelpa (org-protocol-capture-html :fetcher github :repo "alphapapa/org-protocol-capture-html")
+  :after org-protocol
+  :config
+  (push '("w" "Web site" entry (file "notes.org") "* %a :website:\n\n%U %?\n\n%:initial") org-capture-templates)
+  )
 
 (use-package org-projectile
+  :defer 3
+  :after (org projectile)
   :config
-  (org-projectile-per-project)
   (push (org-projectile-project-todo-entry) org-capture-templates)
-  (setq org-projectile-per-project-filepath "todo.org"
-	org-agenda-files (append org-agenda-files (org-projectile-todo-files))))
+  (setq org-projectile-projects-file (concat org-directory "projects.org"))
+  (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files))))
 
 (use-package helm-org
   :after (helm org))
 
 (use-package org-projectile-helm
-  :after (helm-org org-projectile))
+  :after (helm-org org-projectile)
+  :bind (("C-c n p" . org-projectile-helm-template-or-project)))
+
+
+(use-package helm-org-rifle
+  :bind ("C-c C-h" . helm-org-rifle-agenda-files))
 
 (use-package org-bullets
   :config
   (setq org-hide-leading-stars t)
-  (add-hook 'org-mode-hook
-	    (lambda ()
-	      (org-bullets-mode t))))
+  :hook (org-mode . (lambda ()
+					  (org-bullets-mode t))))
 
 (use-package htmlize)
 
 (use-package org-fs-tree
   :quelpa (org-fs-tree :repo "ScriptDevil/org-fs-tree" :fetcher github))
+
+(use-package org-super-agenda
+  :after org
+  :config
+  (org-super-agenda-mode 1)
+  (setq org-super-agenda-groups
+		'(;; Each group has an implicit boolean OR operator between its selectors.
+		  (:name "Today"  ; Optionally specify section name
+				 :time-grid t  ; Items that appear on the time grid
+				 :todo "TODAY")  ; Items that have this TODO keyword
+		  (:name "Important"
+				 ;; Single arguments given alone
+				 :tag "bills"
+				 :priority "A")
+		  ;; Set order of multiple groups at once
+		  (:order-multi (2 (:name "Shopping in town"
+								  ;; Boolean AND group matches items that match all subgroups
+								  :and (:tag "shopping" :tag "@town"))
+						   (:name "Food-related"
+								  ;; Multiple args given in list with implicit OR
+								  :tag ("food" "dinner"))
+						   (:name "Personal"
+								  :habit t
+								  :tag "personal")
+						   (:name "Space-related (non-moon-or-planet-related)"
+								  ;; Regexps match case-insensitively on the entire entry
+								  :and (:regexp ("space" "NASA")
+												;; Boolean NOT also has implicit OR between selectors
+												:not (:regexp "moon" :tag "planet")))))
+		  ;; Groups supply their own section names when none are given
+		  (:todo "WAITING" :order 8)  ; Set order of this section
+		  (:todo ("SOMEDAY" "TO-READ" "CHECK" "TO-WATCH" "WATCHING")
+				 ;; Show this group at the end of the agenda (since it has the
+				 ;; highest number). If you specified this group last, items
+				 ;; with these todo keywords that e.g. have priority A would be
+				 ;; displayed in that group instead, because items are grouped
+				 ;; out in the order the groups are listed.
+				 :order 9)
+		  (:priority<= "C"
+					   ;; Show this section after "Today" and "Important", because
+					   ;; their order is unspecified, defaulting to 0. Sections
+					   ;; are displayed lowest-number-first.
+					   :order 1)
+		  ;; After the last group, the agenda will display items that didn't
+		  ;; match any of these groups, with the default order position of 99
+		  )))
+
 
 (provide 'org-setup)
 ;;; org-setup.el ends here
