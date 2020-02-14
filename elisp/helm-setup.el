@@ -1,4 +1,4 @@
-;;; package -- helm-setup
+;; package -- helm-setup
 ;;; Commentary:
 ;;; setup helm and connected packages
 ;;; Code:
@@ -10,6 +10,7 @@
   (global-set-key (kbd "C-c h") 'helm-command-prefix)
   (global-unset-key (kbd "C-x c"))
   (global-set-key (kbd "C-x C-r") 'helm-recentf)
+  (global-unset-key (kbd "C-x C-b"))
   :diminish helm-mode
   :defer 2
   :config
@@ -22,6 +23,10 @@
 		helm-ff-search-library-in-sexp        t
 		helm-scroll-amount                    8
 		helm-M-x-fuzzy-match                  t
+		helm-buffers-fuzzy-matching           t
+		helm-recentf-fuzzy-match              t
+		helm-semantic-fuzzy-match             t
+		helm-imenu-fuzzy-match                t
 		helm-ff-file-name-history-use-recentf t
 		helm-split-window-default-side        'below
 		helm-ff-skip-boring-files             t)
@@ -29,46 +34,14 @@
   (helm-mode 1)
 
 
-  ;;; does not work right now, how ot look over it later
-  ;; TODO
-  ;;   (defhydra hydra-helm-menu (:color pink
-  ;; 									:hint nil)
-  ;;     "
-  ;; ^Mark^             ^Unmark^           ^Actions^          ^Search
-  ;; ^^^^^^^^-----------------------------------------------------------------
-  ;; _m_: mark          _u_: unmark        _x_: execute       _R_: re-isearch
-  ;; _s_: save          _U_: unmark up     _b_: bury          _I_: isearch
-  ;; _d_: delete        ^ ^                _g_: refresh       _O_: multi-occur
-  ;; _D_: delete up     ^ ^                _T_: files only: % -28`Buffer-menu-files-only
-  ;; _~_: modified
-  ;; "
-  ;;     ("m" Buffer-menu-mark)
-  ;;     ("u" Buffer-menu-unmark)
-  ;;     ("U" Buffer-menu-backup-unmark)
-  ;;     ("d" Buffer-menu-delete)
-  ;;     ("D" Buffer-menu-delete-backwards)
-  ;;     ("s" Buffer-menu-save)
-  ;;     ("~" Buffer-menu-not-modified)
-  ;;     ("x" Buffer-menu-execute)
-  ;;     ("b" Buffer-menu-bury)
-  ;;     ("g" revert-buffer)
-  ;;     ("T" Buffer-menu-toggle-files-only)
-  ;;     ("O" Buffer-menu-multi-occur :color blue)
-  ;;     ("I" Buffer-menu-isearch-buffers :color blue)
-  ;;     ("R" Buffer-menu-isearch-buffers-regexp :color blue)
-  ;;     ("c" nil "cancel")
-  ;;     ("v" Buffer-menu-select "select" :color blue)
-  ;;     ("o" Buffer-menu-other-window "other-window" :color blue)
-  ;;     ("q" quit-window "quit" :color blue))
-
   (defun spacemacs//hide-cursor-in-helm-buffer ()
-    "Hide the cursor in helm buffers."
-    (with-helm-buffer
-      (setq cursor-in-non-selected-windows nil)))
+	"Hide the cursor in helm buffers."
+	(with-helm-buffer
+	  (setq cursor-in-non-selected-windows nil)))
   (add-hook 'helm-after-initialize-hook 'spacemacs//hide-cursor-in-helm-buffer)
 
   (if (string-equal system-type "gnu/linux")
-      (setq helm-grep-default-command
+	  (setq helm-grep-default-command
 			"grep --color=always -d skip %e -n%cH -e %p %f"
 			helm-grep-default-recurse-command
 			"grep --color=always -d recurse %e -n%cH -e %p %f"))
@@ -78,6 +51,9 @@
 		 ("M-x" . helm-M-x)
 		 ("C-h a" . helm-apropos)
 		 ("M-y" . helm-show-kill-ring)
+		 :map helm-command-map
+		 ("x" . helm-register)
+		 ("g" . helm-google-suggest)
 		 :map helm-map
 		 ("C-i" . helm-execute-persistent-action)
 		 ("C-z" . helm-select-action)
@@ -92,13 +68,6 @@
 		 :map helm-read-file-map
 		 ("C-l" . helm-execute-persistent-action)
 		 ("C-h" . helm-find-files-up-one-level)))
-
-(use-package helm-google
-  :after helm
-  :config
-  (global-set-key (kbd "C-h C--") 'helm-google))
-
-
 
 ;; == ag ==
 ;; Note that 'ag' (the silver searcher) needs to be installed.
@@ -138,9 +107,10 @@
 
 
 (use-package helm-swoop
+  :after helm
   :bind
   ("M-i" . helm-swoop)
-  ("M-I" . helm-multi-swoop)
+  ("M-I" . helm-swoop-back-to-last-point)
   ("C-c M-i" . helm-multi-swoop)
   ("C-x M-i" . helm-multi-swoop-all)
   :config
@@ -150,16 +120,9 @@
   ;; From helm-swoop to helm-multi-swoop-all
   (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
   ;; When doing evil-search, hand the word over to helm-swoop
-  ;; (define-key evil-motion-state-map (kbd "M-i") 'helm-swoop-from-evil-search)
 
   ;; Instead of helm-multi-swoop-all, you can also use helm-multi-swoop-current-mode
   (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
-
-  ;; Move up and down like isearch
-  (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
-  (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
-  (define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
-  (define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
 
   ;; Save buffer when helm-multi-swoop-edit complete
   (setq helm-multi-swoop-edit-save t)
