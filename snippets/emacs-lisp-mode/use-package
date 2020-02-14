@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: my-use-package
+# key: ups
+# --
+(use-package ${1:package-name}$0)
