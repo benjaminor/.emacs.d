@@ -14,6 +14,7 @@
 
 
 (defun company-mode/backend-with-yas (backend)
+  "Add :with company-yasnippet to BACKEND if it is possible."
   (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
 	  backend
 	(append (if (consp backend) backend (list backend))
@@ -28,14 +29,6 @@
   :config
   (company-auctex-init))
 
-(use-package company-irony
-  :config
-  (add-to-list 'company-backends 'company-irony))
-
-;; (use-package company-anaconda
-;;   :config
-;;   (add-to-list 'company-backends (company-mode/backend-with-yas '(company-anaconda))))
-
 (use-package company-jedi
   :disabled
   :config
@@ -47,7 +40,6 @@
 (use-package company-c-headers
   :config
   (add-to-list 'company-backends 'company-c-headers))
-
 
 (use-package  company-statistics
   :defer t
@@ -65,27 +57,11 @@
   (use-package pos-tip)
   (company-quickhelp-mode 1))
 
-(use-package company-box
-  :hook (company-mode . company-box-mode)
-  :after icons-in-terminal)
-;; :config
-;; (setq company-box-icons-unknown 'fa_question_circle)
-
-
-;; (setq company-box-icons-elisp
-;;		'((fa_tag :face font-lock-function-name-face) ;; Function
-;;		  (fa_cog :face font-lock-variable-name-face) ;; Variable
-;;		  (fa_cube :face font-lock-constant-face) ;; Feature
-;;		  (md_color_lens :face font-lock-doc-face))) ;; Face
-
-;; (setq company-box-icons-yasnippet 'fa_bookmark))
 
 (use-package company
   :diminish company-mode
   :init
   (global-company-mode 1)
-  ;;TODO: replace (bind-key with :bind)
-  ;;(bind-key "C-<tab>" #'company-complete)
   (general-define-key
    :keymaps 'company-active-map
    "C-j" 'company-select-next
@@ -100,7 +76,6 @@
 		company-dabbrev-downcase        nil
 		completion-styles               '(basic substring partial-completion)
 		)
-  ;; (push 'company-irony company-backends)
   (push 'company-elisp company-backends)
   :bind
   ("C-<tab>" . #'company-complete))
@@ -118,12 +93,6 @@
   :bind
   ("C-<return>" . yas-expand-from-trigger-key))
 
-
-
-;; Auctex completion::
-;; (add-to-list 'company-backends (company-mode/backend-with-yas '()))
-
-;; (add-to-list 'company-backends (company-mode/backend-with-yas '(company-math-symbols-latex comany-math-symbols-unicode company-latex-commands)))
 
 (provide 'text-completion)
 ;;; text-completion.el ends here
