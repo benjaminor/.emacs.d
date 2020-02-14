@@ -7,7 +7,10 @@
 (use-package flycheck
   :diminish flycheck-mode
   :config
-  (global-flycheck-mode))
+  (global-flycheck-mode)
+  :custom
+  (flycheck-checker-error-threshold 10000))
+
 
 (use-package flycheck-color-mode-line
   :after flycheck
@@ -109,17 +112,9 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; https://github.com/d12frosted/flyspell-correct ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (use-package flyspell-correct-helm
-;;   :config
-;;   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-wrapper)
-;;   ;;(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
-;; )
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; https://github.com/mhayashi1120/Emacs-langtool ;;
 ;; Languagetool setup				  ;;
+;; this is outcommented now, will reconfigure it again when I need it
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; (use-package langtool
