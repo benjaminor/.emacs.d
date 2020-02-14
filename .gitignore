@@ -67,3 +67,5 @@ semanticdb/
 transient/
 /custom.el
 /.dap-breakpoints
+/url/
+/xkcd/
