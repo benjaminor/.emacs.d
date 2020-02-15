@@ -54,7 +54,7 @@
 			 recentf-add-file
 			 recentf-apply-filename-handlers)
   :config
-  (setq recentf-save-file (recentf-expand-file-name "~/.emacs.d/private/cache/recentf"))
+  (setq recentf-save-file (recentf-expand-file-name (concat user-emacs-directory "private/cache/recentf")))
   (recentf-mode 1))
 
 ;; Use smartparens instead of autopair
@@ -91,7 +91,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package aribas
-  :load-path "~/.emacs.d/lisp/aribas"
+  :load-path "lisp/aribas"
   :config
   (autoload 'run-aribas "aribas" "Run ARIBAS." t))
 
