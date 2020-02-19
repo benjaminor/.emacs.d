@@ -22,7 +22,8 @@
   :mode (("\\.text\\'" . markdown-mode)
 		 ("\\.markdown\\'" . markdown-mode)
 		 ("\\.md\\'" . markdown-mode))
-  )
+  :config
+  (unbind-key "M-p" markdown-mode-map))
 
 
 ;; == JSON Mode ==
