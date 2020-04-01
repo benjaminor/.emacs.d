@@ -35,6 +35,7 @@
   :config
   (global-origami-mode))
 
+;; light following the cursor
 (use-package beacon
   :defer 5
   :config

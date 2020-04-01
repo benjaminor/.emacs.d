@@ -158,10 +158,12 @@
 
 (use-package fish-mode)
 
+;; modern emacs package menu
 (use-package paradox
   :config
   (paradox-enable))
 
+;; improved emacs controls for managing packages
 (use-package package-utils)
 
 (use-package rg

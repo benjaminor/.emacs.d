@@ -21,9 +21,7 @@
   :defer t
   :mode (("\\.text\\'" . markdown-mode)
 		 ("\\.markdown\\'" . markdown-mode)
-		 ("\\.md\\'" . markdown-mode))
-  :config
-  (unbind-key "M-p" markdown-mode-map))
+		 ("\\.md\\'" . markdown-mode)))
 
 
 ;; == JSON Mode ==

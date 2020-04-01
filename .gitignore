@@ -69,3 +69,4 @@ transient/
 /.dap-breakpoints
 /url/
 /xkcd/
+/.cache/

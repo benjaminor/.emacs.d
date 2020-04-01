@@ -8,9 +8,7 @@
   :defer t
   :bind
   ;; Magic
-  ("C-x g" . magit-status)
-  :config
-  (unbind-key "M-p" magit-section-mode-map))
+  ("C-x g" . magit-status))
 
 (use-package magit-todos
   :config (magit-todos-mode))

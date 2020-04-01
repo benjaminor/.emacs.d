@@ -4,11 +4,9 @@
 
 ;; buffer layout
 (use-package treemacs
-  :disabled
-  :commands treemacs
+  :bind (("<f9>" . treemacs))
   :demand
   :config
-  (global-set-key (kbd "C-ü") 'treemacs)
   (global-set-key (kbd "C-M-ü") (defhydra treemacs-hydra (:color red :hint nil)
 								  "Treemacs hydra"
 								  ("b" treemacs-bookmark "Bookmark in treemacs")
@@ -91,7 +89,7 @@
    '(aw-leading-char-face
 	 ((t (:inherit ace-jump-face-foreground :height 3.0)))))
   :bind
-  ("M-p" . ace-window))
+  ("M-ö" . ace-window))
 
 (use-package ace-jump-mode
   :bind
