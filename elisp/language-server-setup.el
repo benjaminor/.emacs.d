@@ -17,16 +17,17 @@
 		lsp-enable-identation t
 		lsp-before-save-edits t
 		lsp-signature-auto-activate t
+		lsp-prefer-capf t
 		lsp-signature-render-documentation t
 		lsp-enable-semantic-highlighting nil
 		lsp-enable-text-document-color t
 		lsp-auto-guess-root t
 		lsp-enable-snippet t
-		lsp-idle-delay 0.5
+		lsp-idle-delay 0.4
 		lsp-clients-clangd-args '("-background-index" "-log=error" "-clang-tidy")
 		)
   :hook
-  (lsp-enable-which-key-integration)
+  (lsp-mode . lsp-enable-which-key-integration)
   (python-mode . lsp-deferred)
   (c-mode-common . lsp-deferred)
   (LaTeX-mode . lsp-deferred)

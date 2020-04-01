@@ -25,11 +25,6 @@
 (use-package treemacs-magit
   :after (treemacs magit))
 
-(use-package neotree
-  :config
-  (global-set-key [f9] 'neotree-toggle))
-
-
 (use-package tabbar
   :disabled
   :config

@@ -69,8 +69,8 @@
    "C-l" 'company-complete-selection)
   :config
   (add-hook 'after-init-hook '(lambda() (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))) )
-  (setq company-idle-delay              0.1
-		company-minimum-prefix-length   2
+  (setq company-idle-delay              0.0
+		company-minimum-prefix-length   1
 		company-show-numbers            t
 		company-tooltip-limit           20
 		company-dabbrev-downcase        nil

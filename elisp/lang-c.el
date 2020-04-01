@@ -25,15 +25,8 @@
 		 '(("\\.cmake\\'" . cmake-mode))
 		 auto-mode-alist)))
 
-(use-package cmake-font-lock
-  :defer t
-  :after cmake-mode
-  :hook
-  (cmake-mode cmake-font-lock-activate)
-  :config
-  (autoload 'cmake-font-lock-activate "cmake-font-lock" nil t))
-
 (use-package modern-cpp-font-lock
+  :diminish
   :config
   (modern-c++-font-lock-global-mode))
 
