@@ -3,14 +3,23 @@
 ;;; setup helm and connected packages
 ;;; Code:
 
+
 (use-package helm
   :init
+
+  ;; some nicer icons for helm
+  (use-package helm-treemacs-icons
+	:after (treemacs)
+	:quelpa (helm-treemacs-icons :fetcher github :repo "yyoncho/helm-treemacs-icons")
+	:config
+	(helm-treemacs-icons-enable))
+
   (require 'helm-files)
   (require 'helm-config)
   (global-set-key (kbd "C-c h") 'helm-command-prefix)
-  (global-unset-key (kbd "C-x c"))
+  (global-unset-key (kbd "C-x c")) ;; unset normal helm command prefix
   (global-set-key (kbd "C-x C-r") 'helm-recentf)
-  (global-unset-key (kbd "C-x C-b"))
+
   :diminish helm-mode
   :defer 2
   :config
@@ -35,19 +44,20 @@
 
 
   (defun spacemacs//hide-cursor-in-helm-buffer ()
-	"Hide the cursor in helm buffers."
-	(with-helm-buffer
-	  (setq cursor-in-non-selected-windows nil)))
+    "Hide the cursor in helm buffers."
+    (with-helm-buffer
+      (setq cursor-in-non-selected-windows nil)))
   (add-hook 'helm-after-initialize-hook 'spacemacs//hide-cursor-in-helm-buffer)
 
   (if (string-equal system-type "gnu/linux")
-	  (setq helm-grep-default-command
+      (setq helm-grep-default-command
 			"grep --color=always -d skip %e -n%cH -e %p %f"
 			helm-grep-default-recurse-command
 			"grep --color=always -d recurse %e -n%cH -e %p %f"))
 
-  :bind (("C-x b" . helm-mini)
-		 ("C-x C-f" . helm-find-files)
+  :bind (([remap list-buffers] . helm-mini)
+		 ([remap find-file] . helm-find-files)
+		 ("C-x b" . helm-mini)
 		 ("M-x" . helm-M-x)
 		 ("C-h a" . helm-apropos)
 		 ("M-y" . helm-show-kill-ring)
