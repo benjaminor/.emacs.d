@@ -10,7 +10,8 @@
   (setq evil-want-integration t)
   (setq evil-want-keybinding nil)
   :config
-  (evil-mode 1))
+  (evil-mode 1)
+  (define-key evil-normal-state-map " " 'save-buffer))
 
 (use-package evil-collection
   :after evil
@@ -38,7 +39,12 @@
 (use-package evil-leader
   :after evil
   :config
-  (global-evil-leader-mode))
+  (global-evil-leader-mode)
+  (evil-leader/set-leader "ü")
+  (evil-leader/set-key
+	"e" 'find-file
+	"b" 'switch-to-buffer
+	"k" 'kill-buffer))
 
 (use-package key-chord
   :config

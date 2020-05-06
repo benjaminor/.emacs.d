@@ -88,7 +88,7 @@
 
 (require 'debugging)
 
-(require 'language-server-setup)
+(require 'lsp-setup)
 
 (require 'fun-stuff)
 
