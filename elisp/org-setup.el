@@ -6,32 +6,67 @@
 
 (use-package org
   :config
-  ;; (require 'org-capture)
   (setq org-directory "~/org/"
 		org-default-notes-file (concat org-directory "todo.org"))
+  (push '("pdf" . zathura) org-file-apps)
   (setq org-agenda-files (directory-files org-directory t ".org$" t))
-  (setq org-agenda-skip-unavailable-files t)
+  (setq org-agenda-skip-scheduled-if-done t
+		org-agenda-skip-unavailable-files t
+		org-agenda-skip-deadline-if-done t
+		org-agenda-include-deadlines t
+		org-startup-with-inline-images t
+		org-agenda-block-separator nil
+		org-agenda-compact-blocks t)
+
+
   (setq org-log-done 'time)
 
   (use-package org-sidebar)
 
-  (use-package org-ref
-    :config
-    (require 'org-ref-latex)
-    (defvar my-bibliography-dir "~/bibliography/")
-    (setq reftex-default-bibliography  (concat my-bibliography-dir "references.bib"))
+  (use-package org-noter)
 
-    ;; see org-ref for use of these variables
-    (setq org-ref-bibliography-notes (concat org-directory "bib.org")
-		  org-ref-default-bibliography (concat my-bibliography-dir "references.bib")
-		  org-ref-pdf-directory (concat my-bibliography-dir "bibtex-pdfs/")))
+  (use-package org-download
+	:after org
+	:bind
+	(:map org-mode-map
+          (("M-p" . org-download-screenshot)
+           ("M-P" . org-download-yank))))
+
+  (use-package org-ref
+	:config
+	(require 'org-ref-latex)
+	(require 'org-ref-pdf)
+	(setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+
+	(defvar my-bibliography-dir "~/bibliography/")
+	(setq reftex-default-bibliography  (concat my-bibliography-dir "references.bib"))
+
+	;; see org-ref for use of these variables
+	(setq org-ref-bibliography-notes (concat org-directory "bib.org")
+		  org-ref-default-bibliography (cons (concat my-bibliography-dir "references.bib") ())
+		  org-ref-pdf-directory (concat my-bibliography-dir "bibtex-pdfs/"))
+	:bind
+	("C-c C-ö" . org-ref-bibtex-hydra/body))
+
+  (use-package org-roam
+	:hook
+	(after-init . org-roam-mode)
+	:custom
+	(org-roam-directory (concat org-directory "org-roam/"))
+	:bind (:map org-roam-mode-map
+				(("C-c n l" . org-roam)
+				 ("C-c n f" . org-roam-find-file)
+				 ("C-c n b" . org-roam-switch-to-buffer)
+				 ("C-c n g" . org-roam-graph-show))
+				:map org-mode-map
+				(("C-c n i" . org-roam-insert))))
 
 
   (use-package org-capture
-    :ensure nil
-    :config
-    (require 'org-protocol)
-    (setq org-capture-templates
+	:ensure nil
+	:config
+	(require 'org-protocol)
+	(setq org-capture-templates
 		  '(("t" "Todo" entry (file org-default-notes-file)
 			 "* TODO SCHEDULED: %T\n %?\n %i\n  %a")
 			("a" "Urgent simple todo" entry (file org-default-notes-file)
@@ -43,28 +78,30 @@
 			("j" "Journal" entry (file+olp+datetree "~/org/journal.org")
 			 "* %?\nEntered on %U\n  %i\n  %a")))
 
-    ;; from advice in org-protocol
-    (defun transform-square-brackets-to-round-ones(string-to-transform)
+	;; from advice in org-protocol
+	(defun transform-square-brackets-to-round-ones(string-to-transform)
       "Transforms [ into ( and ] into ), other chars left unchanged."
       (concat
-       (mapcar #'(lambda (c) (if (equal c ?[) ?\( (if (equal c ?]) ?\) c))) string-to-transform))
+       (mapcar #'(lambda (c) (if (equal c ?\[) ?\( (if (equal c ?\]) ?\) c))) string-to-transform))
       )
 
-    (push '("P" "Protocol" entry (file+headline "notes.org" "Inbox")
+	(push '("P" "Protocol" entry (file+headline "notes.org" "Inbox")
 			"* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
 		  org-capture-templates)
-    (push '("L" "Protocol Link" entry (file+headline "notes.org" "Inbox")
+	(push '("L" "Protocol Link" entry (file+headline "notes.org" "Inbox")
 			"* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]%(progn (setq kk/delete-frame-after-capture 2) \"\")\nCaptured On: %U")
-		  org-capture-templates))
+		  org-capture-templates)
+
+	(require 'org-roam-protocol))
 
 
   (defun org-archive-done-tasks ()
-    (interactive)
-    (org-map-entries
-     (lambda ()
+	(interactive)
+	(org-map-entries
+	 (lambda ()
        (org-archive-subtree)
        (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
-     "/DONE" 'file))
+	 "/DONE" 'file))
 
   :bind
   ("C-c l" . org-store-link)
