@@ -8,6 +8,33 @@
 
 (use-package hydra)
 
+(defhydra hydra-zoom (global-map "<f2>")
+  "zoom"
+  ("g" text-scale-increase "in")
+  ("l" text-scale-decrease "out"))
+
+(defhydra hydra-misc-helper (:exit t :color pink
+								   :hint nil
+								   :columns 5)
+  "
+^Emacs^                      ^Buffer^
+^^^^^^^^--------------------------------------
+_u_: upgrade all packages  _e_: eval-buffer
+_r_: rg in emacs config    _h_: helm-rg for buffer and below
+"
+  ("u" package-utils-upgrade-all)
+  ("e" eval-buffer)
+  ("h" helm-rg)
+  ("r" (lambda ()
+		 (interactive)
+		 (let ((default-directory "/home/ben/dotfiles/roles/dotfiles/files/emacs/"))
+		   (helm-projectile-rg)))
+   )
+  ("q" quit-window "quit" :color blue))
+
+(define-key global-map (kbd "C-ä") 'hydra-misc-helper/body)
+
+
 (use-package delight)
 
 ;; https://emacs.stackexchange.com/questions/8135/why-does-compilation-buffer-show-control-characters
