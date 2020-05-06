@@ -90,6 +90,11 @@
   :bind
   ("C-c SPC" . ace-jump-mode))
 
+(use-package discover-my-major
+  :bind
+  ("C-h C-m" . discover-my-major)
+  ("C-h M-m" . discover-my-mode))
+
 
 (provide 'navigation)
 ;;; navigation.el ends here

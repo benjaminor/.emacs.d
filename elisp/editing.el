@@ -25,6 +25,7 @@
   ((latex-mode . format-all-mode)
    (emacs-lisp-mode . format-all-mode)
    (c++-mode . format-all-mode)
+   (c-mode . format-all-mode)
    (python-mode . format-all-mode)
    (rust-mode . format-all-mode)))
 

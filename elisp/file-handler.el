@@ -73,7 +73,7 @@
   (use-package ox-pandoc)
   (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
 
-
+(use-package ansible)
 
 (provide 'file-handler)
 ;;; file-handler.el ends here

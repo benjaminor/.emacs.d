@@ -61,10 +61,9 @@
 ;; from: https://with-emacs.com/posts/tips/quit-current-context/
 (defun keyboard-quit-context+ ()
   "Quit current context.
-
-This function is a combination of `keyboard-quit' and
-`keyboard-escape-quit' with some parts omitted and some custom
-behavior added."
+    This function is a combination of `keyboard-quit' and
+    `keyboard-escape-quit' with some parts omitted and some custom
+    behavior added."
   (interactive)
   (cond ((region-active-p)
          ;; Avoid adding the region to the window selection.
@@ -86,11 +85,7 @@ behavior added."
            (minibuffer-hide-completions))
          (abort-recursive-edit))
         (t
-         (when completion-in-region-mode
-           (completion-in-region-mode -1))
-         (let ((debug-on-quit nil))
-           (signal 'quit nil)))))
-
+         (keyboard-quit))))
 (global-set-key [remap keyboard-quit] #'keyboard-quit-context+)
 
 
