@@ -27,6 +27,7 @@
    (c++-mode . format-all-mode)
    (c-mode . format-all-mode)
    (python-mode . format-all-mode)
+   (rustic-mode . format-all-mode)
    (rust-mode . format-all-mode)))
 
 (use-package aggressive-indent

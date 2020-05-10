@@ -18,6 +18,9 @@
 		org-agenda-block-separator nil
 		org-agenda-compact-blocks t)
 
+  ;; make html export more beautiful
+  (setq org-html-head "<link rel=\"stylesheet\" href=\"https://orthen.net/org.min.css\" />")
+
 
   (setq org-log-done 'time)
 
