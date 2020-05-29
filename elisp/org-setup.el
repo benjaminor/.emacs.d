@@ -19,7 +19,7 @@
 		org-agenda-compact-blocks t)
 
   ;; make html export more beautiful
-  (setq org-html-head "<link rel=\"stylesheet\" href=\"https://orthen.net/org.min.css\" />")
+  (setq org-html-head "<link rel=\"stylesheet\" href=\"https://orthen.net/sakura.css\" type=\"text/css\">")
 
 
   (setq org-log-done 'time)

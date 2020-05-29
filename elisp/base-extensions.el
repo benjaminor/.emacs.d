@@ -3,8 +3,7 @@
 ;;; Code:
 
 (use-package general
-  :defer t
-  )
+  :defer t)
 
 (use-package hydra)
 

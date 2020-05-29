@@ -7,27 +7,21 @@
   :init
   (setq lsp-keymap-prefix "C-ö")
   :after yasnippet
-  :commands (lsp lsp-deferred)
   :demand
   :config
   ;; Mainly for lsp readout
   (setq read-process-output-max (* (* 1024 1024) 4))
-  (setq lsp-prefer-flymake nil
-		lsp-restart 'ignore
-		lsp-auto-configure t
-		;; lsp-enable-on-type-formatting t
-		;; lsp-enable-identation t
+  (setq lsp-restart 'ignore
 		lsp-before-save-edits t
 		lsp-signature-auto-activate t
 		lsp-prefer-capf t
 		lsp-signature-render-documentation t
-		lsp-enable-semantic-highlighting nil
 		lsp-enable-text-document-color t
 		lsp-auto-guess-root t
 		lsp-enable-snippet t
-		lsp-idle-delay 0.4
+		lsp-idle-delay 0.3
 		lsp-rust-server 'rust-analyzer
-		lsp-clients-clangd-args '("-background-index" "-log=error" "-clang-tidy")
+		lsp-clients-clangd-args '("-background-index" "-j=2" "-log=error" "-clang-tidy")
 		)
   (setq lsp-diagnostics-modeline-scope :project)
   :hook
@@ -72,7 +66,6 @@
 		lsp-ui-sideline-ignore-duplicate t
 		lsp-ui-sideline-show-code-actions t)
   ;; If the server supports custom cross references
-  ;; (lsp-ui-peek-find-workspace-symbol "pattern 0")
   )
 
 (use-package posframe)

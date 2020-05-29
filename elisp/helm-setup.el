@@ -115,7 +115,8 @@
 (use-package helm-swoop
   :after helm
   :bind
-  ("M-i" . helm-swoop)
+  ("M-s" . helm-swoop)
+  ("M-i" . helm-swoop-without-pre-input)
   ("M-I" . helm-swoop-back-to-last-point)
   ("C-c M-i" . helm-multi-swoop)
   ("C-x M-i" . helm-multi-swoop-all)
@@ -151,10 +152,7 @@
 
   ;; If you prefer fuzzy matching
   ;;    (setq helm-swoop-use-fuzzy-match t)
-
-  ;; Disable pre-input
-  (setq helm-swoop-pre-input-function
-		(lambda () "")))
+  )
 
 (use-package helm-make
   :after helm)
