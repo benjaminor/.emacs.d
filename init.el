@@ -26,6 +26,7 @@
       file-name-handler-alist nil
       message-log-max 16384
       gc-cons-threshold 402653184
+	  comp-deferred-compilation t
       gc-cons-percentage 0.6)
 
 (add-hook 'after-init-hook
