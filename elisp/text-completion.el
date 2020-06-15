@@ -22,8 +22,12 @@
 
 (use-package company-math
   :config
-  (setq company-math-allow-latex-symbols-in-faces t)
-  )
+  (setq company-math-allow-latex-symbols-in-faces t))
+
+(use-package company-tabnine
+  :disabled
+  :config
+  (add-to-list 'company-backends 'company-tabnine))
 
 (use-package company-auctex
   :config
