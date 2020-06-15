@@ -5,7 +5,6 @@
 ;; buffer layout
 (use-package treemacs
   :bind (("<f9>" . treemacs))
-  :demand
   :config
   (global-set-key (kbd "C-M-ü") (defhydra treemacs-hydra (:color red :hint nil)
 								  "Treemacs hydra"
@@ -15,6 +14,7 @@
 								  ("p" treemacs-projectile "Add a project from projectile to treemacs"))))
 ;; _b_: bookmark       _f_: current file
 ;; _s_: select window  _p_: projectile to treemacs
+
 
 (use-package treemacs-evil
   :after (treemacs evil))
@@ -50,8 +50,19 @@
 
 
 (use-package eyebrowse
+  :disabled
   :config
   (eyebrowse-mode t))
+
+(use-package perspective
+  :demand
+  :custom
+  (persp-state-default-file (concat user-emacs-directory ".perspective-session"))
+  :hook
+  (after-init . (lambda() (persp-state-load persp-state-default-file)))
+  (kill-emacs . persp-state-save)
+  :config
+  (persp-mode))
 
 ;; Add more functionality to dired
 ;; https://github.com/purcell/emacs.d/blob/master/lisp/init-dired.el

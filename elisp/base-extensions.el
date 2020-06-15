@@ -20,6 +20,8 @@
 ^^^^^^^^--------------------------------------
 _u_: upgrade all packages  _e_: eval-buffer
 _r_: rg in emacs config    _h_: helm-rg for buffer and below
+_s_: switch perspective
+
 "
   ("u" package-utils-upgrade-all)
   ("e" eval-buffer)
@@ -29,10 +31,10 @@ _r_: rg in emacs config    _h_: helm-rg for buffer and below
 		 (let ((default-directory "/home/ben/dotfiles/roles/dotfiles/files/emacs/"))
 		   (helm-projectile-rg)))
    )
-  ("q" quit-window "quit" :color blue))
+  ("s" persp-switch)
+  ("q" nil "quit" :color blue))
 
 (define-key global-map (kbd "C-ä") 'hydra-misc-helper/body)
-
 
 (use-package delight)
 
