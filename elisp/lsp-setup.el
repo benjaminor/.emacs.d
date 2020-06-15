@@ -32,8 +32,7 @@
   (c-mode-common . lsp-deferred)
   (latex-mode . lsp-deferred)
   (tex-mode . lsp-deferred)
-  (yaml-mode . lsp-deferred)
-  (java-mode. lsp-deferred))
+  (yaml-mode . lsp-deferred))
 
 (use-package lsp-python-ms
   :if (boundp 'my-lsp-python-ms-executable)
@@ -42,8 +41,9 @@
   (setq lsp-python-ms-executable my-lsp-python-ms-executable))
 
 (use-package lsp-java
-  :config
-  (require 'dap-java))
+  :hook
+  (java-mode . lsp-deferred))
+
 
 (use-package lsp-ui
   :after lsp-mode
@@ -74,6 +74,10 @@
   :commands dap-mode
   :after posframe
   :config
+
+  (use-package dap-java
+	:after lsp-java
+	:ensure nil)
 
   (add-hook 'dap-stopped-hook
 			(lambda (arg) (call-interactively #'dap-hydra)))
