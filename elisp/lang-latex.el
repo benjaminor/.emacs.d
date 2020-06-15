@@ -28,6 +28,15 @@
 
   (add-hook 'TeX-mode-hook '(lambda () (setq TeX-engine 'luatex)))
 
+  ;; to use pdfview with auctex
+  (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+		TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))
+		TeX-source-correlate-start-server t) ;; not sure if last line is neccessary
+
+  ;; to have the buffer refresh after compilation
+  (add-hook 'TeX-after-compilation-finished-functions
+			#'TeX-revert-document-buffer)
+
   ;; " expands into csquotes macros
   (setq LaTeX-csquotes-close-quote "}"
 		LaTeX-csquotes-open-quote "\\enquote{")

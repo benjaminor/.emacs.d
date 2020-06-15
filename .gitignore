@@ -71,3 +71,4 @@ transient/
 /xkcd/
 /.cache/
 /.extension/
+/.perspective-session
