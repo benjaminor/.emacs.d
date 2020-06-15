@@ -203,6 +203,10 @@ _s_: switch perspective
   :config
   (direnv-mode))
 
+(use-package nix-mode
+  :mode "\\.nix\\'")
+
+
 (use-package google-this
   :config
   (google-this-mode 1)
