@@ -6,29 +6,27 @@
 (use-package treemacs
   :bind (("<f9>" . treemacs))
   :config
-  (global-set-key (kbd "C-M-ü") (defhydra treemacs-hydra (:color red :hint nil)
-								  "Treemacs hydra"
-								  ("b" treemacs-bookmark "Bookmark in treemacs")
-								  ("f" treemacs-find-file "Current file in treemacs")
-								  ("s" treemacs-select-window "Select treemacs window")
-								  ("p" treemacs-projectile "Add a project from projectile to treemacs"))))
-;; _b_: bookmark       _f_: current file
-;; _s_: select window  _p_: projectile to treemacs
+  (global-set-key (kbd "C-ü") (defhydra treemacs-hydra (:color red :hint nil)
+								"Treemacs hydra"
+								("b" treemacs-bookmark "Bookmark in treemacs")
+								("f" treemacs-find-file "Current file in treemacs")
+								("s" treemacs-select-window "Select treemacs window")
+								("p" treemacs-projectile "Add a project from projectile to treemacs"))))
 
+(use-package treemacs-all-the-icons
+  :after treemacs
+  :config
+  (treemacs-load-theme "all-the-icons"))
 
 (use-package treemacs-evil
   :after (treemacs evil))
 (use-package treemacs-projectile
   :after (treemacs projectile))
 (use-package treemacs-icons-dired
-  :after (treemacs))
+  :after (treemacs)
+  (treemacs-icons-dired-mode))
 (use-package treemacs-magit
   :after (treemacs magit))
-
-(use-package tabbar
-  :disabled
-  :config
-  (tabbar-mode 1))
 
 (use-package centaur-tabs
   :demand

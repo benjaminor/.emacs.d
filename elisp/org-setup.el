@@ -36,6 +36,7 @@
            ("M-P" . org-download-yank))))
 
   (use-package org-ref
+	:demand
 	:config
 	(require 'org-ref-latex)
 	(require 'org-ref-pdf)
