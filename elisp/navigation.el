@@ -52,16 +52,6 @@
   :config
   (eyebrowse-mode t))
 
-(use-package perspective
-  :demand
-  :custom
-  (persp-state-default-file (concat user-emacs-directory ".perspective-session"))
-  :hook
-  (after-init . (lambda() (persp-state-load persp-state-default-file)))
-  (kill-emacs . persp-state-save)
-  :config
-  (persp-mode))
-
 ;; Add more functionality to dired
 ;; https://github.com/purcell/emacs.d/blob/master/lisp/init-dired.el
 (setq-default dired-dwim-target t)
