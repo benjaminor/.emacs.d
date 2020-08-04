@@ -13,17 +13,17 @@
   (setq read-process-output-max (* (* 1024 1024) 4))
   (setq lsp-restart 'ignore
 		lsp-before-save-edits t
-		lsp-signature-auto-activate t
-		lsp-prefer-capf t
+		lsp-signature-auto-activate nil
 		lsp-signature-render-documentation t
 		lsp-enable-text-document-color t
+		lsp-headerline-breadcrumb-enable t
 		lsp-auto-guess-root t
 		lsp-enable-snippet t
 		lsp-idle-delay 0.3
 		lsp-rust-server 'rust-analyzer
 		lsp-clients-clangd-args '("-background-index" "-j=2" "-log=error" "-clang-tidy")
 		)
-  (setq lsp-diagnostics-modeline-scope :project)
+  (add-hook 'lsp-managed-mode-hook (lambda () (setq-local company-backends '(company-capf))))
   :hook
   (lsp-managed-mode . lsp-diagnostics-modeline-mode)
   (lsp-mode . lsp-enable-which-key-integration)
@@ -59,6 +59,7 @@
   (setq lsp-ui-doc-enable t
 		lsp-ui-doc-header t
 		lsp-ui-doc-include-signature t
+		lsp-ui-doc-delay 0.5
 		lsp-ui-doc-position 'top
 		;; lsp-ui-doc-border (face-foreground 'default)
 		lsp-ui-sideline-enable t
