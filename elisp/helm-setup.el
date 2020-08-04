@@ -8,11 +8,10 @@
   :init
 
   ;; some nicer icons for helm
-  (use-package helm-treemacs-icons
+  (use-package helm-icons
 	:after (treemacs)
-	:quelpa (helm-treemacs-icons :fetcher github :repo "yyoncho/helm-treemacs-icons")
 	:config
-	(helm-treemacs-icons-enable))
+	(helm-icons-enable))
 
   (require 'helm-files)
   (require 'helm-config)
@@ -103,13 +102,6 @@
 		bibtex-completion-notes-path org-ref-bibliography-notes))
 
 (use-package helm-rg)
-
-(use-package helm-flx
-  :config
-  (helm-flx-mode +1)
-  (setq helm-flx-for-helm-find-files t ;; t by default
-		helm-flx-for-helm-locate t) ;; nil by default
-  )
 
 
 (use-package helm-swoop

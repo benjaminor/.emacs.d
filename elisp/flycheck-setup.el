@@ -72,8 +72,7 @@
 (use-package ispell
   :ensure nil
   :config
-  (setq ispell-program-name "hunspell")
-  (setenv "DICPATH" "/usr/share/hunspell/")
+  (setq ispell-program-name "aspell")
   (setq ispell-dictionary "en_US")
   (defun fd-switch-dictionary()
     (interactive)
