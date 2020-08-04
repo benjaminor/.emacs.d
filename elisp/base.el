@@ -53,6 +53,30 @@ There are two things you can do about this warning:
 
 (use-package bind-key)
 
+(use-package disable-mouse
+  :after evil
+  :config
+  (global-disable-mouse-mode)
+  (mapc #'disable-mouse-in-keymap
+		(list evil-motion-state-map
+			  evil-normal-state-map
+			  evil-visual-state-map
+			  evil-insert-state-map)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; no mouse, no arrow keys
+(global-unset-key (kbd "<left>"))
+(global-unset-key (kbd "<right>"))
+(global-unset-key (kbd "<up>"))
+(global-unset-key (kbd "<down>"))
+(global-unset-key (kbd "<C-left>"))
+(global-unset-key (kbd "<C-right>"))
+(global-unset-key (kbd "<C-up>"))
+(global-unset-key (kbd "<C-down>"))
+(global-unset-key (kbd "<M-left>"))
+(global-unset-key (kbd "<M-right>"))
+(global-unset-key (kbd "<M-up>"))
+(global-unset-key (kbd "<M-down>"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -88,6 +112,7 @@ There are two things you can do about this warning:
 (set-selection-coding-system 'utf-8)   ; please
 (prefer-coding-system        'utf-8)   ; with sugar on top
 (setq default-process-coding-system '(utf-8-unix . utf-8-unix))
+(require 'iso-transl)
 
 ;; Emacs customizations
 (setq confirm-kill-emacs                  nil
