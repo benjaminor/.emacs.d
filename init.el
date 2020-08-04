@@ -38,8 +38,8 @@
 
 
 ;;;;;Code from emacs-bootstrap
-(add-to-list 'load-path (concat user-emacs-directory "elisp"))
-(let ((default-directory (concat user-emacs-directory "lisp/")))
+(add-to-list 'load-path (locate-user-emacs-file "elisp"))
+(let ((default-directory (locate-user-emacs-file "lisp/")))
   (normal-top-level-add-subdirs-to-load-path))
 
 

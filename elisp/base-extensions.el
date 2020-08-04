@@ -82,7 +82,7 @@ _s_: switch perspective
 			 recentf-add-file
 			 recentf-apply-filename-handlers)
   :config
-  (setq recentf-save-file (recentf-expand-file-name (concat user-emacs-directory "private/cache/recentf")))
+  (setq recentf-save-file (recentf-expand-file-name (locate-user-emacs-file "private/cache/recentf")))
   (recentf-mode 1))
 
 ;; Use smartparens instead of autopair

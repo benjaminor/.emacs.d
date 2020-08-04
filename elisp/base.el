@@ -75,7 +75,7 @@ There are two things you can do about this warning:
   ;; To disable collection of benchmark data after init is done.
   (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
-(defconst private-dir  (expand-file-name "private" user-emacs-directory))
+(defconst private-dir  (locate-user-emacs-file "private"))
 (defconst temp-dir (format "%s/cache" private-dir)
   "Hostname-based elisp temp directories.")
 
@@ -124,7 +124,7 @@ There are two things you can do about this warning:
 ;;; Offload the custom-set-variables to a separate file
 ;;; This keeps your init.el neater and you have the option
 ;;; to gitignore your custom.el if you see fit.
-(setq custom-file (concat user-emacs-directory "custom.el"))
+(setq custom-file (locate-user-emacs-file "custom.el"))
 (unless (file-exists-p custom-file)
   (write-region "" nil custom-file))
 (load custom-file)
