@@ -5,22 +5,33 @@
 (use-package general
   :defer t)
 
-(use-package hydra)
+(use-package hydra
+  :preface
+  (defun me/make-hydra-heading (&rest headings)
+	"Format HEADINGS to look pretty in a hydra docstring."
+	(mapconcat (lambda (it)
+				 (propertize (format "%-20s" it) 'face 'font-lock-doc-face))
+			   headings
+			   nil))
+  :bind
+  ("<f2>" . hydra-zoom/body)
+  ("C-ä" . hydra-misc-helper/body)
+  ("C-c f" . hydra-flycheck/body))
 
-(defhydra hydra-zoom (global-map "<f2>")
+(defhydra hydra-zoom ()
   "zoom"
   ("g" text-scale-increase "in")
   ("l" text-scale-decrease "out"))
+
 
 (defhydra hydra-misc-helper (:exit t :color pink
 								   :hint nil
 								   :columns 5)
   "
-^Emacs^                      ^Buffer^
-^^^^^^^^--------------------------------------
-_u_: upgrade all packages  _e_: eval-buffer
+^Emacs^                      ^Buffer^                          ^Org^
+^^^^^^^^------------------------------------------------------------------------------
+_u_: upgrade all packages  _e_: eval-buffer                   _o_: rg through org-dir
 _r_: rg in emacs config    _h_: helm-rg for buffer and below
-_s_: switch perspective
 
 "
   ("u" package-utils-upgrade-all)
@@ -28,13 +39,92 @@ _s_: switch perspective
   ("h" helm-rg)
   ("r" (lambda ()
 		 (interactive)
-		 (let ((default-directory "/home/ben/dotfiles/roles/dotfiles/files/emacs/"))
-		   (helm-projectile-rg)))
-   )
-  ("s" persp-switch)
-  ("q" nil "quit" :color blue))
+		 (let ((default-directory "/home/ben/dotfiles/roles/dotfiles/files/emacs/")
+			   (helm-projectile-set-input-automatically nil))
+		   (helm-projectile-rg))))
+  ("o" my-rg-through-org-directory)
+  ("q" nil "quit" :color blue)
+  ("C-g" nil "quit" :color blue))
 
-(define-key global-map (kbd "C-ä") 'hydra-misc-helper/body)
+
+(defhydra hydra-flycheck (:color blue)
+  (concat "\n " (me/make-hydra-heading "Flycheck" "Errors" "Checker")
+		  "
+ _q_ quit              _j_ previous          _?_ describe
+ _m_ manual            _k_ next              _d_ disable
+ _v_ verify setup      _f_ check             _s_ select
+ ^^                    _l_ list              ^^
+")
+  ("q" nil)
+  ("j" flycheck-previous-error :color red)
+  ("k" flycheck-next-error :color red)
+  ("?" flycheck-describe-checker)
+  ("d" flycheck-disable-checker)
+  ("f" flycheck-buffer)
+  ("l" flycheck-list-errors)
+  ("m" flycheck-manual)
+  ("s" flycheck-select-checker)
+  ("v" flycheck-verify-setup))
+
+(defhydra hydra-projectile (:color teal
+								   :hint nil)
+  "
+	 PROJECTILE: %(projectile-project-root)
+
+	 Find File            Search/Tags          Buffers                Cache
+------------------------------------------------------------------------------------------
+  _r_: recent file         _s_: rg           _b_: switch to buffer    _x_: remove known project
+  _d_: dir                 _m_: multi-occur                         _c_: cache clear
+						 _l_: proj-rg-no-in
+																^^^^_X_: cleanup non-existing
+																^^^^_z_: cache current
+
+"
+  ("s"   helm-projectile-rg)
+  ("b"   helm-projectile-switch-to-buffer)
+  ("c"   projectile-invalidate-cache)
+  ("d"   helm-projectile-find-dir)
+  ("f"   helm-projectile-find-file)
+  ("K"   projectile-kill-buffers)
+  ("m"   projectile-multi-occur)
+  ("p"   helm-projectile-switch-project)
+  ("r"   helm-projectile-recentf)
+  ("x"   projectile-remove-known-project)
+  ("X"   projectile-cleanup-known-projects)
+  ("z"   projectile-cache-current-file)
+  ("l"   projectile-ripgrep-no-input)
+  ("q"   nil "cancel" :color blue)
+  ("C-g" nil "cancel" :color blue))
+
+(define-key global-map (kbd "C-l") 'hydra-projectile/body)
+
+(defhydra hydra-spotify (:hint nil)
+  "
+^Search^                  ^Control^               ^Manage^
+^^^^^^^^-----------------------------------------------------------------
+_t_: Track               _SPC_: Play/Pause        _+_: Volume up
+_m_: My Playlists        _n_  : Next Track        _-_: Volume down
+_f_: Featured Playlists  _p_  : Previous Track    _x_: Mute
+_u_: User Playlists      _r_  : Repeat            _d_: Device
+^^                       _s_  : Shuffle           _q_: Quit
+"
+  ("t" spotify-track-search :exit t)
+  ("m" spotify-my-playlists :exit t)
+  ("f" spotify-featured-playlists :exit t)
+  ("u" spotify-user-playlists :exit t)
+  ("SPC" spotify-toggle-play :exit nil)
+  ("n" spotify-next-track :exit nil)
+  ("p" spotify-previous-track :exit nil)
+  ("r" spotify-toggle-repeat :exit nil)
+  ("s" spotify-toggle-shuffle :exit nil)
+  ("+" spotify-volume-up :exit nil)
+  ("-" spotify-volume-down :exit nil)
+  ("x" spotify-volume-mute-unmute :exit nil)
+  ("d" spotify-select-device :exit nil)
+  ("q" quit-window "quit" :color blue))
+
+(define-key global-map (kbd "C-c .") 'hydra-spotify/body)
+
 
 (use-package delight)
 
