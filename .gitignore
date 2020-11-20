@@ -72,3 +72,4 @@ transient/
 /.cache/
 /.extension/
 /.perspective-session
+/eln-cache/
