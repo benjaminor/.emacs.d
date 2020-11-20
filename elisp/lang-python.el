@@ -1,7 +1,8 @@
 ;;; package -- setting up a proper python IDE in emacs
 
 ;;; Commentary:
-;; Using anaconda, ipython etc.
+;; don't use ipython, jedi, elpy anymore
+;; only relying on lsp-mode
 
 ;;; Code:
 
@@ -9,31 +10,13 @@
 ;;;python
 ;;;;;;;;;;;;;;;;
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Auto completion is setup in text-completion.el with company-jedi ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
 (use-package python
+  :ensure nil
   :delight python-mode "Python"
-  :interpreter ("python" . python-mode)
-  :config
-
-  (defun python-switch-interpreter()
-	(interactive)
-	(let* ((interp python-shell-interpreter)
-		   (change (if (string= interp "ipython") "python" "ipython")))
-	  (if (string= interp "ipython")
-		  (setq python-shell-interpreter "python"
-				python-shell-interpreter-args "-i")
-		(when (executable-find "ipython")
-		  (setq
-		   python-shell-interpreter "ipython"
-		   python-shell-interpreter-args "--simple-prompt -i")))
-	  ;; (setq python-shell-interpreter change)
-	  (message "Python interpreter switched from %s to %s" interp change)))
-  :bind
-  ("<f7>" . 'python-switch-interpreter))
+  :custom
+  (python-shell-interpreter "python")
+  :interpreter ("python" . python-mode))
 
 (use-package python-pytest
   :after python
