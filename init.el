@@ -20,23 +20,16 @@
 ;;----------------------------------------------------------------------------
 ;; Adjust garbage collection thresholds during startup, and thereafter
 ;;----------------------------------------------------------------------------
-(setq comp-async-env-modifier-form '((setenv "LIBRARY_PATH"
-                                             (concat
-											  (shell-command-to-string "nix eval --raw '(let pkgs = import <nixpkgs> {}; in with pkgs; stdenv.lib.makeLibraryPath [stdenv.cc.cc stdenv.glibc])'")
-											  ":"
-											  (shell-command-to-string "nix eval --raw '(let pkgs = import <nixpkgs> {}; in with pkgs; lib.getLib libgccjit + /lib/gcc/x86_64-unknown-linux-gnu/9.3.0 )'")))))
 
 (setq package-enable-at-startup nil
       file-name-handler-alist nil
       message-log-max 16384
-      gc-cons-threshold 402653184
-	  comp-deferred-compilation nil
       gc-cons-percentage 0.6)
 
 (add-hook 'after-init-hook
-		  `(lambda ()
+		  '(lambda ()
 			 (setq file-name-handler-alist file-name-handler-alist-old
-				   gc-cons-threshold 100000000
+				   gc-cons-threshold (* 100 1024 1024)
 				   gc-cons-percentage 0.3)
 			 (garbage-collect)) t)
 

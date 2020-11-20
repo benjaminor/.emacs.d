@@ -18,9 +18,10 @@ There are two things you can do about this warning:
 2. Remove this warning from your init file so you won't see it again."))
   ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+  (add-to-list 'package-archives (cons "org" (concat proto "://orgmode.org/elpa/")) t)
   (when (< emacs-major-version 24)
-    ;; For important compatibility libraries like cl-lib
-    (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")))))
+	;; For important compatibility libraries like cl-lib
+	(add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;; Bootstrap `quelpa';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -38,9 +39,10 @@ There are two things you can do about this warning:
    :fetcher git
    :url "https://github.com/quelpa/quelpa-use-package.git"))
 
+;; leave it in but should not be necessary because we are using emacs-overlay now
+;; and define use-package as a dependency there
 (quelpa
  '(use-package))
-
 
 (eval-when-compile
   (require 'quelpa)
@@ -116,29 +118,29 @@ There are two things you can do about this warning:
 
 ;; Emacs customizations
 (setq confirm-kill-emacs                  nil
-      confirm-nonexistent-file-or-buffer  t
-      save-interprogram-paste-before-kill t
-      mouse-yank-at-point                 t
-      require-final-newline               t
-      visible-bell                        nil
-      ring-bell-function                  'ignore
-      ;; http://ergoemacs.org/emacs/emacs_stop_cursor_enter_prompt.html
-      minibuffer-prompt-properties
-      '(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)
+	  confirm-nonexistent-file-or-buffer  t
+	  save-interprogram-paste-before-kill t
+	  mouse-yank-at-point                 t
+	  require-final-newline               t
+	  visible-bell                        nil
+	  ring-bell-function                  'ignore
+	  ;; http://ergoemacs.org/emacs/emacs_stop_cursor_enter_prompt.html
+	  minibuffer-prompt-properties
+	  '(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)
 
-      ;; Disable non selected window highlight
-      cursor-in-non-selected-windows     nil
-      highlight-nonselected-windows      nil
-      ;; PATH
-      exec-path                          (append exec-path '("/usr/local/bin/"))
-      indent-tabs-mode                   nil
-      tab-width                          4
-      inhibit-startup-message            t
-      fringes-outside-margins            t
-      select-enable-clipboard            t
-      vc-follow-symlinks                 nil
-      term-suppress-hard-newline         t
-      view-read-only                     t
+	  ;; Disable non selected window highlight
+	  cursor-in-non-selected-windows     nil
+	  highlight-nonselected-windows      nil
+	  ;; PATH
+	  exec-path                          (append exec-path '("/usr/local/bin/"))
+	  indent-tabs-mode                   nil
+	  tab-width                          4
+	  inhibit-startup-message            t
+	  fringes-outside-margins            t
+	  select-enable-clipboard            t
+	  vc-follow-symlinks                 nil
+	  term-suppress-hard-newline         t
+	  view-read-only                     t
 	  default-frame-alist '((font . "Iosevka")))
 (delete-selection-mode 1)
 (global-display-line-numbers-mode)
@@ -182,7 +184,7 @@ There are two things you can do about this warning:
 (setq explicit-shell-file-name "/bin/bash")
 
 
-;; Enable toolbar & menubar
+;; disable toolbar & menubar
 (menu-bar-mode -1)
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
@@ -190,7 +192,6 @@ There are two things you can do about this warning:
   (scroll-bar-mode -1))
 
 (show-paren-mode 1)
-
 
 (global-prettify-symbols-mode +1)
 
@@ -203,7 +204,7 @@ There are two things you can do about this warning:
 (desktop-save-mode 1)
 
 ;; Garbage collection
-(add-hook 'focus-out-hook #'garbage-collect)
+(add-function :after after-focus-change-function #'garbage-collect)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; mark line where cursor is
@@ -211,6 +212,8 @@ There are two things you can do about this warning:
 
 ;; start an emacs server so that I can send file directly to emacs without having to restart it every time
 (server-start)
+
+(setq network-security-level 'high)
 
 
 (provide 'base)
