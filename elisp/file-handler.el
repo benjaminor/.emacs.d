@@ -75,5 +75,20 @@
 
 (use-package ansible)
 
+(use-package nix-mode
+  :mode "\\.nix\\'")
+
+(use-package dockerfile-mode
+  :mode ("Dockerfile\\'" . dockerfile-mode))
+
+(use-package docker-compose-mode)
+
+(use-package groovy-mode)
+
+(use-package fish-mode)
+
+(use-package nov
+  :mode ("\\.epub\\'" . nov-mode))
+
 (provide 'file-handler)
 ;;; file-handler.el ends here
