@@ -15,11 +15,8 @@
 
 (use-package magit-popup)
 
-(use-package magithub
-  :after magit
-  :defer t
-  :config
-  (magithub-feature-autoinject t))
+(use-package forge
+  :after magit)
 
 (use-package gitignore-mode
   :mode ("\\.gitignore\\'" . gitignore-mode))
