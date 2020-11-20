@@ -156,8 +156,6 @@ _u_: User Playlists      _r_  : Repeat            _d_: Device
   (exec-path-from-shell-copy-env "PYTHONPATH")
   (exec-path-from-shell-initialize))
 
-(use-package dash)
-
 (use-package multiple-cursors
   :bind
   ("C-S-c C-S-c" . mc/edit-lines)
@@ -216,17 +214,12 @@ _u_: User Playlists      _r_  : Repeat            _d_: Device
 (use-package crux
   :bind
   ("C-c o" . crux-open-with)
-  ("C-c u" . crux-view-url)
   ("C-c t" . crux-visit-term-buffer)
   ("C-c r" . crux-rename-file-and-buffer)
   ("C-c I" . crux-find-user-init-file)
-  ("C-c S" . crux-find-shell-init-file)
   ("C-c D" . crux-delete-file-and-buffer)
-  ("C-c ." . crux-cleanup-buffer-or-region)
+  ("C-c ü" . crux-cleanup-buffer-or-region)
   ("C-c e" . crux-eval-and-replace)
-  ("C-S-<return>" . crux-smart-open-line-above)
-  ("S-<return>" . crux-smart-open-line)
-  ("C-k" . crux-smart-kill-line)
   :config
   (crux-reopen-as-root-mode)
   (crux-with-region-or-buffer indent-region)
@@ -242,14 +235,8 @@ _u_: User Playlists      _r_  : Repeat            _d_: Device
   (global-set-key (kbd "C-c C-d") #'helpful-at-point))
 
 
-(use-package powerline
-  :config
-  (powerline-default-theme))
-
-(use-package powerline-evil
-  :after (powerline evil))
-
 (use-package dumb-jump
+  :disabled ;; I don't use this (atm only making use of lsp)
   :config
   (global-set-key (kbd "C-M-p")
 				  (defhydra dumb-jump-hydra (:color blue :columns 3)
@@ -264,17 +251,8 @@ _u_: User Playlists      _r_  : Repeat            _d_: Device
 
 (use-package iedit)
 
-(use-package dockerfile-mode
-  :mode ("Dockerfile\\'" . dockerfile-mode))
-
 (use-package docker
   :bind ("C-c d" . docker))
-
-(use-package docker-compose-mode)
-
-(use-package groovy-mode)
-
-(use-package fish-mode)
 
 ;; modern emacs package menu
 (use-package paradox
@@ -288,19 +266,34 @@ _u_: User Playlists      _r_  : Repeat            _d_: Device
   :config
   (rg-enable-default-bindings))
 
-
 (use-package direnv
   :config
   (direnv-mode))
 
-(use-package nix-mode
-  :mode "\\.nix\\'")
-
-
 (use-package google-this
+  :init
+  (setq google-this-keybind (kbd "C-c g"))
   :config
-  (google-this-mode 1)
-  (global-set-key (kbd "C-c /") 'google-this-mode-submap))
+  (google-this-mode 1))
+
+(use-package proced
+  :ensure nil
+  :custom
+  (proced-auto-update-interval 1)
+  :hook
+  (proced-mode . (lambda () (proced-toggle-auto-update 1))))
+
+(use-package vterm)
+
+(use-package matrix-client
+  :quelpa (matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
+						 :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
+
+(use-package oauth2)
+(use-package spotify
+  :after oauth2
+  :defer 5
+  :quelpa (spotify.el :fetcher github :repo "danielfm/spotify.el"))
 
 (provide 'base-extensions)
 ;;; base-extensions.el ends here
