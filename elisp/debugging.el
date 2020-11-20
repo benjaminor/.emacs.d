@@ -1,4 +1,4 @@
-;;; Debugging -- using realgud as a debugger
+;;; Debugging
 
 ;;; Commentary:
 
@@ -13,13 +13,6 @@
 
 (use-package bug-hunter
   :defer t)
-
-
-(use-package realgud
-  :defer t
-  :config
-  ;; (load-library realgud)
-  )
 
 (provide 'debugging)
 ;;; debugging.el ends here

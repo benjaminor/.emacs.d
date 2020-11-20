@@ -3,14 +3,14 @@
 ;;; Commentary:
 ;;
 
-
 ;;; Code:
 
-(use-package cider)
 
+(use-package cider
+  :defer)
 
 (use-package helm-cider
-  :after (helm  cider))
+  :after helm cider)
 
 (provide 'clojure-setup)
 
