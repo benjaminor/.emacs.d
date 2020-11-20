@@ -53,7 +53,7 @@
 
 (require 'base-extensions)
 
-(require 'base-functions)
+(require 'base-customization)
 
 (require 'navigation)
 
