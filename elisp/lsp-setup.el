@@ -2,12 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 
-
 (use-package lsp-mode
   :init
   (setq lsp-keymap-prefix "C-ö")
   :after yasnippet
-  :demand
   :config
   ;; Mainly for lsp readout
   (setq read-process-output-max (* (* 1024 1024) 4))
@@ -16,16 +14,24 @@
 		lsp-signature-auto-activate nil
 		lsp-signature-render-documentation t
 		lsp-enable-text-document-color t
+		lsp-semantic-highlighting 'immediate
+		lsp-file-watch-threshold nil
 		lsp-headerline-breadcrumb-enable t
 		lsp-auto-guess-root t
 		lsp-enable-snippet t
-		lsp-idle-delay 0.3
+		lsp-idle-delay 0.1
 		lsp-rust-server 'rust-analyzer
 		lsp-clients-clangd-args '("-background-index" "-j=2" "-log=error" "-clang-tidy")
 		)
-  (add-hook 'lsp-managed-mode-hook (lambda () (setq-local company-backends '(company-capf))))
+  ;; (lsp-register-client
+  ;;  (make-lsp-client :new-connection (lsp-tramp-connection "/home/ben/.nix-profile/bin/clangd")
+  ;;                   :major-modes '(c-mode c++-mode objc-mode)
+  ;;                   :remote? t
+  ;;                   :server-id 'clangd-remote))
+
   :hook
-  (lsp-managed-mode . lsp-diagnostics-modeline-mode)
+  (lsp-managed-mode . (lambda () (setq-local company-backends '(company-capf company-yasnippet))))
+  (lsp-managed-mode . lsp-modeline-diagnostics-mode)
   (lsp-mode . lsp-enable-which-key-integration)
   (python-mode . lsp-deferred)
   (rustic-mode . lsp-deferred)
@@ -39,6 +45,10 @@
   :init
   ;; load from custom.el
   (setq lsp-python-ms-executable my-lsp-python-ms-executable))
+
+(use-package lsp-pyright
+  :hook (python-mode . (lambda ()
+						 (require 'lsp-pyright))))
 
 (use-package lsp-java
   :hook
@@ -90,11 +100,15 @@
 
   ;; support for different protocols
   (require 'dap-python)
+
+  (require 'dap-lldb)
+  (require 'dap-cpptools)
+
   (require 'dap-gdb-lldb)
   (dap-gdb-lldb-setup))
 
 (use-package helm-lsp
-  :after (helm lsp-mode)
+  :after helm projectile lsp-mode
   :config
   ;; got this from issue #1 in helm-lsp repo
   (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
@@ -103,14 +117,16 @@
   :after helm)
 
 (use-package lsp-treemacs
-  :after (treemacs lsp-mode)
+  :after treemacs lsp-mode
   :commands lsp-treemacs-errors-list
   :config
   (lsp-treemacs-sync-mode 1))
 
 (use-package lsp-origami
+  :after lsp-mode
   :config
   (add-hook 'lsp-after-open-hook #'lsp-origami-mode))
 
+
 (provide 'lsp-setup)
-;;; language-server-setup.el ends here
+;;; lsp-setup.el ends here
