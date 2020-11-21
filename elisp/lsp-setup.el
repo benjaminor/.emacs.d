@@ -28,9 +28,9 @@
   ;;                   :major-modes '(c-mode c++-mode objc-mode)
   ;;                   :remote? t
   ;;                   :server-id 'clangd-remote))
+  (advice-add 'lsp-completion-mode :after #'(lambda(&rest r) (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))))
 
   :hook
-  (lsp-managed-mode . (lambda () (setq-local company-backends '(company-capf company-yasnippet))))
   (lsp-managed-mode . lsp-modeline-diagnostics-mode)
   (lsp-mode . lsp-enable-which-key-integration)
   (python-mode . lsp-deferred)
