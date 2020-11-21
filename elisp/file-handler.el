@@ -62,12 +62,20 @@
 		 ("\\.mustache\\'" . web-mode)
 		 ("\\.djhtml\\'" . web-mode)))
 
-(use-package csv-mode)
+(use-package csv-mode
+  :mode
+  ("\\.[Cc][Ss][Vv]\\'"))
 
 (use-package pdf-tools
   :magic ("%PDF" . pdf-view-mode)
   :config
-  (pdf-tools-install))
+  (pdf-tools-install)
+
+  (use-package pdf-continuous-scroll-mode :quelpa (:location (recipe
+															  :fetcher github
+															  :repo "dalanicolai/pdf-continuous-scroll-mode.el"))
+	:hook
+	(pdf-view-mode . pdf-continuous-scroll-mode)))
 
 (use-package pandoc-mode
   :if (executable-find "pandoc")
