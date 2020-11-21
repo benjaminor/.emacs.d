@@ -10,18 +10,20 @@
 
 ;; == YAML Mode ==
 (use-package yaml-mode
-  :defer t
-  :init
-  (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-  (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode)))
+  :mode
+  ("\\.yml\\'"
+   "\\.yaml\\'"))
 
 
 ;; == Markdown ==
 (use-package markdown-mode
-  :defer t
-  :mode (("\\.text\\'" . markdown-mode)
-		 ("\\.markdown\\'" . markdown-mode)
-		 ("\\.md\\'" . markdown-mode)))
+  :mode
+  ("INSTALL\\'"
+   "CONTRIBUTORS\\'"
+   "LICENSE\\'"
+   "README\\'"
+   "\\.markdown\\'"
+   "\\.md\\'"))
 
 
 ;; == JSON Mode ==
@@ -73,7 +75,8 @@
   (use-package ox-pandoc)
   (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
 
-(use-package ansible)
+(use-package ansible
+  :defer)
 
 (use-package nix-mode
   :mode "\\.nix\\'")
@@ -81,11 +84,14 @@
 (use-package dockerfile-mode
   :mode ("Dockerfile\\'" . dockerfile-mode))
 
-(use-package docker-compose-mode)
+(use-package docker-compose-mode
+  :defer 10)
 
-(use-package groovy-mode)
+(use-package groovy-mode
+  :defer 10)
 
-(use-package fish-mode)
+(use-package fish-mode
+  :defer 10)
 
 (use-package nov
   :mode ("\\.epub\\'" . nov-mode))

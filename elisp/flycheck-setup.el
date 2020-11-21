@@ -18,7 +18,6 @@
   '(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode))
 
 (use-package flycheck-yamllint
-  :ensure t
   :defer t
   :init
   (progn
@@ -35,7 +34,6 @@
 ;; https://github.com/jyp/attrap
 ;; Fix the flycheck-error at point (currently for Lisp and Haskell ;;
 (use-package attrap
-  :defer t
   :bind (("C-x /" . attrap-attrap)))
 
 ;;;###autoload

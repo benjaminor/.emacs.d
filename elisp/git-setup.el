@@ -5,15 +5,16 @@
 (use-package git-timemachine)
 
 (use-package magit
-  :defer t
   :bind
   ;; Magic
   ("C-x g" . magit-status))
 
 (use-package magit-todos
+  :after magit
   :config (magit-todos-mode))
 
-(use-package magit-popup)
+(use-package magit-popup
+  :after magit)
 
 (use-package forge
   :after magit)

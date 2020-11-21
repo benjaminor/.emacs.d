@@ -165,7 +165,6 @@ _u_: User Playlists      _r_  : Repeat            _d_: Device
 
 (use-package recentf
   :ensure nil
-  :defer 10
   :commands (recentf-mode
 			 recentf-add-file
 			 recentf-apply-filename-handlers)

@@ -10,7 +10,7 @@
 
 (use-package rust-mode
   :bind ( :map rust-mode-map
-			   (("C-c C-t" . racer-describe)))
+		  (("C-c C-t" . racer-describe)))
   :config
   ;; add flycheck support for rust
   ;; https://github.com/flycheck/flycheck-rust
@@ -48,6 +48,7 @@
   (add-hook 'rust-mode-hook 'cargo-minor-mode))
 
 (use-package rustic
+  :after rust-mode
   :config
   (setq rustic-lsp-server 'rust-analyzer))
 

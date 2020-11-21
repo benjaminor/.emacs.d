@@ -19,17 +19,17 @@
   (treemacs-load-theme "all-the-icons"))
 
 (use-package treemacs-evil
-  :after (treemacs evil))
+  :after treemacs evil)
 (use-package treemacs-projectile
-  :after (treemacs projectile))
+  :after treemacs projectile)
 (use-package treemacs-icons-dired
-  :after (treemacs)
+  :after treemacs
+  :config
   (treemacs-icons-dired-mode))
 (use-package treemacs-magit
-  :after (treemacs magit))
+  :after treemacs magit)
 
 (use-package centaur-tabs
-  :demand
   :after evil
   :config
   (centaur-tabs-mode t)
@@ -43,6 +43,7 @@
 		("g T" . centaur-tabs-backward)))
 
 (use-package zoom
+  :defer
   :custom
   (zoom-mode t))
 
@@ -61,7 +62,6 @@
   (diredfl-global-mode))
 
 (use-package expand-region
-  :defer 15
   :bind
   ("C-=" . er/expand-region))
 
@@ -75,7 +75,6 @@
   ("C-x <right>" . windmove-right))
 
 (use-package ace-window
-  :defer t
   :init
   (global-set-key [remap other-window] 'ace-window)
   (global-unset-key (kbd "C-x o"))
