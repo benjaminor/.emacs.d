@@ -145,8 +145,6 @@
   :hook (org-mode . (lambda ()
 					  (org-bullets-mode t))))
 
-(use-package htmlize)
-
 (use-package org-fs-tree
   :after org
   :quelpa (org-fs-tree :repo "ScriptDevil/org-fs-tree" :fetcher github))

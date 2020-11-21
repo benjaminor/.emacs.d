@@ -294,5 +294,9 @@ _u_: User Playlists      _r_  : Repeat            _d_: Device
   :defer 5
   :quelpa (spotify.el :fetcher github :repo "danielfm/spotify.el"))
 
+
+(use-package htmlize
+  :defer)
+
 (provide 'base-extensions)
 ;;; base-extensions.el ends here
