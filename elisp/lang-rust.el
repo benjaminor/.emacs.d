@@ -22,26 +22,6 @@
   ;; cargo-mode for all the cargo related operations
   (use-package cargo)
 
-  ;; racer-mode for getting IDE like features for rust-mode
-  ;; https://github.com/racer-rust/emacs-racer
-  ;; (use-package racer
-  ;;   :init (setq racer-rust-src-path
-  ;; 			  (concat (string-trim
-  ;; 					   (shell-command-to-string "rustc --print sysroot"))
-  ;; 					  "/lib/rustlib/src/rust/src"))
-  ;;   :config
-  ;;   ;; (progn
-  ;;   ;; set racer rust source path environment variable
-  ;;   ;; (setq racer-rust-src-path (getenv "RUST_SRC_PATH"))
-  ;;   (defun my-racer-mode-hook ()
-  ;; 	(set (make-local-variable 'company-backends)
-  ;; 		 '((company-capf company-files :with company-yasnippet))))
-
-  ;;   ;; enable company and eldoc minor modes in rust-mode
-  ;;   (add-hook 'racer-mode-hook 'my-racer-mode-hook)
-  ;;   (add-hook 'racer-mode-hook 'company-mode)
-  ;;   (add-hook 'racer-mode-hook 'eldoc-mode)))
-
   (add-hook 'rust-mode-hook 'flycheck-mode)
   (add-hook 'flycheck-mode-hook 'flycheck-rust-setup)
   (add-hook 'rust-mode-hook 'racer-mode)

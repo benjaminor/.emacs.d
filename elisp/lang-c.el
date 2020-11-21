@@ -13,8 +13,7 @@
 				c-default-style "linux"
 				gdb-many-windows t
 				tab-width 4
-				indent-tabs-mode t)
-  (define-key c-mode-base-map (kbd "RET") 'newline-and-indent))
+				indent-tabs-mode t))
 
 (use-package cmake-mode
   :defer t
