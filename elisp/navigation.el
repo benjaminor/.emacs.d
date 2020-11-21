@@ -4,7 +4,9 @@
 
 ;; buffer layout
 (use-package treemacs
-  :bind (("<f9>" . treemacs))
+  :custom
+  (treemacs-width 44)
+  :bind (("<f9>" . treemacs-select-window))
   :config
   (global-set-key (kbd "C-ü") (defhydra treemacs-hydra (:color red :hint nil)
 								"Treemacs hydra"
@@ -13,17 +15,13 @@
 								("s" treemacs-select-window "Select treemacs window")
 								("p" treemacs-projectile "Add a project from projectile to treemacs"))))
 
-(use-package treemacs-all-the-icons
-  :after treemacs
-  :config
-  (treemacs-load-theme "all-the-icons"))
 
 (use-package treemacs-evil
   :after treemacs evil)
 (use-package treemacs-projectile
   :after treemacs projectile)
 (use-package treemacs-icons-dired
-  :after treemacs
+  :after treemacs dired
   :config
   (treemacs-icons-dired-mode))
 (use-package treemacs-magit
