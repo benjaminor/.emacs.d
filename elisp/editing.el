@@ -48,7 +48,24 @@
   :config
   (beacon-mode 1))
 
+(use-package su
+  :quelpa (su :repo "PythonNut/su.el" :fetcher github)
+  :config
+  (su-mode))
 
+(use-package define-word)
+
+(use-package tree-sitter
+  :defer 10
+  :config
+  (global-tree-sitter-mode))
+
+(use-package tree-sitter-langs
+  :after tree-sitter)
+
+(use-package browse-at-remote
+  :bind
+  ("C-c b" . browse-at-remote))
 
 (provide 'editing)
 ;;; editing.el ends here
