@@ -27,6 +27,8 @@
   :hook
   ((latex-mode . format-all-mode)
    (emacs-lisp-mode . format-all-mode)
+   (fish-mode . format-all-mode)
+   (nix-mode . format-all-mode)
    (c++-mode . format-all-mode)
    (c-mode . format-all-mode)
    (python-mode . format-all-mode)
