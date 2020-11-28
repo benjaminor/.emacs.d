@@ -36,6 +36,11 @@
   :config
   (evil-commentary-mode))
 
+(use-package evil-smartparens
+  :after smartparens
+  :hook
+  (smartparens-enabled . evil-smartparens-mode))
+
 (use-package evil-leader
   :after evil
   :config
