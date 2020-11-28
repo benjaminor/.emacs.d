@@ -41,10 +41,8 @@
 		("g T" . centaur-tabs-backward)))
 
 (use-package zoom
-  :defer
   :custom
   (zoom-mode t))
-
 
 (use-package eyebrowse
   :disabled

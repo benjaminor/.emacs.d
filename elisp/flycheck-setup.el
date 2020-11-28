@@ -108,6 +108,8 @@
   (global-set-key (kbd "M-<f6>") 'flyspell-check-next-highlighted-word))
 
 
+;; NOTE: if this gets reactivated, install languagetool with nix
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; https://github.com/mhayashi1120/Emacs-langtool ;;
 ;; Languagetool setup				  ;;

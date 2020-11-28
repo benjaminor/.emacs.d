@@ -4,11 +4,14 @@
 ;;; Code:
 
 
-;; cleanup text when writing
-(use-package page-break-lines
-  :defer t
-  :config
-  (global-page-break-lines-mode))
+(setq tramp-terminal-type "tramp")
+(setq tramp-shell-prompt-pattern "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(^[\\[[0-9;]*[a-zA-Z] *\\)*")
+(setq remote-file-name-inhibit-cache nil)
+(setq vc-ignore-dir-regexp
+	  (format "%s\\|%s"
+			  vc-ignore-dir-regexp
+			  tramp-file-name-regexp))
+(setq tramp-verbose 1)
 
 (use-package hungry-delete
   :disabled
