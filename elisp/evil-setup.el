@@ -11,6 +11,7 @@
   (setq evil-want-keybinding nil)
   :config
   (evil-mode 1)
+  (add-to-list 'desktop-locals-to-save 'evil-markers-alist)
   (define-key evil-normal-state-map " " 'save-buffer))
 
 (use-package evil-collection
@@ -23,11 +24,10 @@
 
 (use-package evil-org
   :after (evil org)
+  :hook
+  (org-mode . evil-org-mode)
+  (evil-org-mode . (lambda () (evil-org-set-key-theme)))
   :config
-  (add-hook 'org-mode-hook 'evil-org-mode)
-  (add-hook 'evil-org-mode-hook
-			(lambda ()
-			  (evil-org-set-key-theme)))
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
 
