@@ -101,7 +101,14 @@
 		bibtex-completion-library-path (concat org-ref-pdf-directory "/")
 		bibtex-completion-notes-path org-ref-bibliography-notes))
 
-(use-package helm-rg)
+(use-package helm-rg
+  :config
+  (defun my/rg-through-emacs-config ()
+	"Ripgrep through my emacs configuration."
+		 (interactive)
+		 (let ((default-directory user-emacs-directory)
+			   (helm-projectile-set-input-automatically nil))
+		   (helm-projectile-rg))))
 
 
 (use-package helm-swoop

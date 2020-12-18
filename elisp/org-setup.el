@@ -29,6 +29,12 @@
 
   (setq org-log-done 'time)
 
+  (defun my/rg-through-org-directory ()
+    "Interactively (rip)grep through org-directory (by default ~/org/)"
+    (interactive)
+    (let ((default-directory org-directory))
+      (helm-rg "")))
+
   (use-package org-sidebar)
 
   (use-package org-noter)
