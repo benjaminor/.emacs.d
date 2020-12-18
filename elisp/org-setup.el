@@ -21,19 +21,34 @@
 		org-agenda-include-deadlines t
 		org-startup-with-inline-images t
 		org-agenda-block-separator nil
-		org-agenda-compact-blocks t)
+		org-return-follows-link t
+		org-log-done 'time
+		org-agenda-span 'week
+		org-agenda-start-on-weekday nil
+		org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))
+		org-agenda-compact-blocks t
+		;; make html export more beautiful
+		org-html-head "<link rel=\"stylesheet\" href=\"https://orthen.net/sakura.css\" type=\"text/css\">")
 
-  ;; make html export more beautiful
-  (setq org-html-head "<link rel=\"stylesheet\" href=\"https://orthen.net/sakura.css\" type=\"text/css\">")
+  (setq org-refile-targets '((org-default-projects-file :maxlevel . 3)
+							 (org-default-notes-file :maxlevel . 1)
+							 ("~/org/someday.org" :level . 1)))
 
+  (advice-add 'org-refile :after
+			  (lambda (&rest _)
+				(org-save-all-org-buffers)))
 
-  (setq org-log-done 'time)
+  (defun add-pcomplete-to-capf ()
+    (add-hook 'completion-at-point-functions 'pcomplete-completions-at-point nil t))
+  (add-hook 'org-mode-hook #'add-pcomplete-to-capf)
 
   (defun my/rg-through-org-directory ()
     "Interactively (rip)grep through org-directory (by default ~/org/)"
     (interactive)
     (let ((default-directory org-directory))
       (helm-rg "")))
+
+  (use-package toc-org)
 
   (use-package org-sidebar)
 
@@ -71,7 +86,7 @@
 				(("C-c n l" . org-roam)
 				 ("C-c n f" . org-roam-find-file)
 				 ("C-c n b" . org-roam-switch-to-buffer)
-				 ("C-c n g" . org-roam-graph-show))
+				 ("C-c n g" . org-roam-graph))
 				:map org-mode-map
 				(("C-c n i" . org-roam-insert))))
 
@@ -152,8 +167,7 @@
   :after org projectile
   :config
   (push (org-projectile-project-todo-entry) org-capture-templates)
-  (setq org-projectile-projects-file (concat org-directory "projects.org"))
-  (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files))))
+  (setq org-projectile-projects-file org-default-projects-file))
 
 (use-package helm-org
   :after helm org)
