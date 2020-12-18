@@ -47,28 +47,27 @@
 		   ("M-P" . org-download-yank))))
 
   (use-package org-ref
-	:demand
-	:config
-	(require 'org-ref-latex)
-	(require 'org-ref-pdf)
-	(setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+    :config
+    (require 'org-ref-latex)
+    (require 'org-ref-pdf)
+    (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
 
     (defvar my-bibliography-dir "~/bibliography/")
     (setq reftex-default-bibliography  (concat my-bibliography-dir "references.bib"))
 
-	;; see org-ref for use of these variables
-	(setq org-ref-bibliography-notes (concat org-directory "bib.org")
+    ;; see org-ref for use of these variables
+    (setq org-ref-bibliography-notes (locate-user-org-file "bib.org")
 		  org-ref-default-bibliography (cons (concat my-bibliography-dir "references.bib") ())
 		  org-ref-pdf-directory (concat my-bibliography-dir "bibtex-pdfs/"))
-	:bind
-	("C-c C-ö" . org-ref-bibtex-hydra/body))
+    :bind
+    ("C-c C-ö" . org-ref-bibtex-hydra/body))
 
   (use-package org-roam
-	:hook
-	(after-init . org-roam-mode)
-	:custom
-	(org-roam-directory (concat org-directory "org-roam/"))
-	:bind (:map org-roam-mode-map
+    :hook
+    (after-init . org-roam-mode)
+    :custom
+    (org-roam-directory (locate-user-org-file "org-roam/"))
+    :bind (:map org-roam-mode-map
 				(("C-c n l" . org-roam)
 				 ("C-c n f" . org-roam-find-file)
 				 ("C-c n b" . org-roam-switch-to-buffer)
@@ -91,10 +90,12 @@
 
 
   (use-package org-capture
-	:ensure nil
-	:config
-	(require 'org-protocol)
-	(setq org-capture-templates
+    :init
+    (defvar org-default-inbox-file (locate-user-org-file "inbox.org"))
+    :ensure nil
+    :config
+    (require 'org-protocol)
+    (setq org-capture-templates
 		  '(("t" "Todo" entry (file org-default-notes-file)
 			 "* TODO SCHEDULED: %T\n %?\n %i\n  %a")
 			("a" "Urgent simple todo" entry (file org-default-notes-file)
@@ -104,32 +105,34 @@
 			("c" "Long-term simple todo" entry (file org-default-notes-file)
 			 "* TODO [#C] %?\n SCHEDULED: %T \n %i\n")
 			("j" "Journal" entry (file+olp+datetree "~/org/journal.org")
-			 "* %?\nEntered on %U\n  %i\n  %a")))
+			 "* %?\nEntered on %U\n  %i\n  %a")
+			("i" "Inbox" entry (file+headline org-default-inbox-file "Tasks")
+			 "* TODO %i%?\n /Entered on/ %U")))
 
-	;; from advice in org-protocol
-	(defun transform-square-brackets-to-round-ones(string-to-transform)
+    ;; from advice in org-protocol
+    (defun transform-square-brackets-to-round-ones(string-to-transform)
       "Transforms [ into ( and ] into ), other chars left unchanged."
       (concat
        (mapcar #'(lambda (c) (if (equal c ?\[) ?\( (if (equal c ?\]) ?\) c))) string-to-transform))
       )
 
-	(push '("P" "Protocol" entry (file+headline "notes.org" "Inbox")
+    (push '("P" "Protocol" entry (file+headline org-default-inbox-file "Links")
 			"* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
 		  org-capture-templates)
-	(push '("L" "Protocol Link" entry (file+headline "notes.org" "Inbox")
+    (push '("L" "Protocol Link" entry (file+headline org-default-inbox-file "Links")
 			"* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]%(progn (setq kk/delete-frame-after-capture 2) \"\")\nCaptured On: %U")
 		  org-capture-templates)
 
-	(require 'org-roam-protocol))
+    (require 'org-roam-protocol))
 
 
   (defun org-archive-done-tasks ()
-	(interactive)
-	(org-map-entries
-	 (lambda ()
+    (interactive)
+    (org-map-entries
+     (lambda ()
        (org-archive-subtree)
        (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
-	 "/DONE" 'file))
+     "/DONE" 'file))
 
   :bind
   ("C-c l" . org-store-link)
@@ -141,7 +144,7 @@
   :quelpa (org-protocol-capture-html :fetcher github :repo "alphapapa/org-protocol-capture-html")
   :after org-protocol
   :config
-  (push '("w" "Web site" entry (file "notes.org") "* %a :website:\n\n%U %?\n\n%:initial") org-capture-templates)
+  (push '("w" "Web site" entry (file+headline org-default-inbox-file "Links") "* %a :website:\n\n%U %?\n\n%:initial") org-capture-templates)
   )
 
 (use-package org-projectile
