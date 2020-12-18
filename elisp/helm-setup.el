@@ -6,13 +6,12 @@
 
 (use-package helm
   :init
-
-  ;; some nicer icons for helm
   (use-package helm-icons
-	:after (treemacs)
+	:demand
+	:after treemacs
 	:config
 	(helm-icons-enable))
-
+  ;; some nicer icons for helm
   (require 'helm-files)
   (require 'helm-config)
   (global-set-key (kbd "C-c h") 'helm-command-prefix)
@@ -20,7 +19,11 @@
   (global-set-key (kbd "C-x C-r") 'helm-recentf)
 
   :diminish helm-mode
-  :defer 2
+  :custom
+  (helm-M-x-always-save-history t)
+  (helm-display-function 'pop-to-buffer)
+  (savehist-additional-variables '(extended-command-history))
+  (history-delete-duplicates t)
   :config
   (setq helm-split-window-inside-p          t
 		helm-idle-delay                       0.0
@@ -41,15 +44,14 @@
   (helm-adaptive-mode t)
   (helm-mode 1)
 
-
   (defun spacemacs//hide-cursor-in-helm-buffer ()
-    "Hide the cursor in helm buffers."
-    (with-helm-buffer
-      (setq cursor-in-non-selected-windows nil)))
+	"Hide the cursor in helm buffers."
+	(with-helm-buffer
+	  (setq cursor-in-non-selected-windows nil)))
   (add-hook 'helm-after-initialize-hook 'spacemacs//hide-cursor-in-helm-buffer)
 
   (if (string-equal system-type "gnu/linux")
-      (setq helm-grep-default-command
+	  (setq helm-grep-default-command
 			"grep --color=always -d skip %e -n%cH -e %p %f"
 			helm-grep-default-recurse-command
 			"grep --color=always -d recurse %e -n%cH -e %p %f"))
@@ -105,10 +107,10 @@
   :config
   (defun my/rg-through-emacs-config ()
 	"Ripgrep through my emacs configuration."
-		 (interactive)
-		 (let ((default-directory user-emacs-directory)
-			   (helm-projectile-set-input-automatically nil))
-		   (helm-projectile-rg))))
+	(interactive)
+	(let ((default-directory user-emacs-directory)
+		  (helm-projectile-set-input-automatically nil))
+	  (helm-projectile-rg))))
 
 
 (use-package helm-swoop
