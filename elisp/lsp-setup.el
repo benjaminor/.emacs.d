@@ -6,6 +6,7 @@
   :init
   (setq lsp-keymap-prefix "C-ö")
   :after yasnippet
+  :commands lsp
   :config
   ;; Mainly for lsp readout
   (setq read-process-output-max (* (* 1024 1024) 4))
@@ -17,22 +18,16 @@
 		lsp-semantic-highlighting 'immediate
 		lsp-file-watch-threshold nil
 		lsp-headerline-breadcrumb-enable t
+		lsp-modeline-diagnostics-enable t
 		lsp-auto-guess-root t
 		lsp-enable-snippet t
 		lsp-idle-delay 0.1
 		lsp-rust-server 'rust-analyzer
 		lsp-clients-clangd-args '("-background-index" "-j=2" "-log=error" "-clang-tidy")
 		)
-  ;; (lsp-register-client
-  ;;  (make-lsp-client :new-connection (lsp-tramp-connection "/home/ben/.nix-profile/bin/clangd")
-  ;;                   :major-modes '(c-mode c++-mode objc-mode)
-  ;;                   :remote? t
-  ;;                   :server-id 'clangd-remote))
   (advice-add 'lsp-completion-mode :after #'(lambda(&rest r) (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))))
 
   :hook
-  (lsp-managed-mode . lsp-modeline-diagnostics-mode)
-  (lsp-mode . lsp-enable-which-key-integration)
   (python-mode . lsp-deferred)
   (rustic-mode . lsp-deferred)
   (c-mode-common . lsp-deferred)
@@ -61,10 +56,11 @@
   :commands lsp-ui-mode
   :custom-face
   (lsp-ui-doc-header ((t (:inherit (font-lock-string-face italic)))))
-  :bind (:map lsp-ui-mode-map
-			  ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
-			  ([remap xref-find-references] . lsp-ui-peek-find-references)
-			  ("C-c u" . lsp-ui-imenu))
+  :bind
+  (:map lsp-ui-mode-map
+		([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+		([remap xref-find-references] . lsp-ui-peek-find-references)
+		("C-c u" . lsp-ui-imenu))
   :config
   (setq lsp-ui-doc-enable t
 		lsp-ui-doc-header t
@@ -109,6 +105,7 @@
 
 (use-package helm-lsp
   :after helm projectile lsp-mode
+  :commands helm-lsp-workspace-symbol
   :config
   ;; got this from issue #1 in helm-lsp repo
   (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
