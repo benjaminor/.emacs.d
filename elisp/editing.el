@@ -27,7 +27,8 @@
 (use-package format-all
   :demand
   :hook
-  ((latex-mode . format-all-mode)
+  ((prog-mode . format-all-ensure-formatter)
+   (latex-mode . format-all-mode)
    (emacs-lisp-mode . format-all-mode)
    (fish-mode . format-all-mode)
    (nix-mode . format-all-mode)
