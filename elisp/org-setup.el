@@ -249,6 +249,13 @@
   (define-key global-map (kbd "C-c i") 'my/custom-projects-agenda))
 
 
+(use-package org-pandoc-import
+  :quelpa (org-pandoc-import
+		   :repo "tecosaur/org-pandoc-import"
+		   :fetcher github
+		   :files ("filters" "*.el"))
+  :if (executable-find "pandoc"))
+
 
 (provide 'org-setup)
 ;;; org-setup.el ends here
