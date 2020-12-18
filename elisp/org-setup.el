@@ -5,12 +5,17 @@
 ;;; Code:
 
 (use-package org
+  :init
+  (defun locate-user-org-file (FILENAME)
+    "Return an absolute per-user org file name."
+    (concat org-directory FILENAME))
   :config
   (setq org-directory "~/org/"
-		org-default-notes-file (concat org-directory "todo.org"))
+		org-default-notes-file (locate-user-org-file "notes.org"))
+  (defvar org-default-projects-file (locate-user-org-file "projects.org"))
   (push '("pdf" . zathura) org-file-apps)
-  (setq org-agenda-files (directory-files org-directory t ".org$" t))
-  (setq org-agenda-skip-scheduled-if-done t
+  (setq org-agenda-files `(,org-default-projects-file)
+		org-agenda-skip-scheduled-if-done t
 		org-agenda-skip-unavailable-files t
 		org-agenda-skip-deadline-if-done t
 		org-agenda-include-deadlines t

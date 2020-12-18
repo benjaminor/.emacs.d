@@ -12,9 +12,6 @@
 (use-package magit-todos
   :after magit)
 
-(use-package magit-popup
-  :after magit)
-
 (use-package forge
   :after magit)
 

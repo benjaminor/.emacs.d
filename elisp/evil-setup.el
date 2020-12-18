@@ -19,9 +19,6 @@
   :config
   (evil-collection-init))
 
-(use-package evil-magit
-  :after magit)
-
 (use-package evil-org
   :after (evil org)
   :hook
