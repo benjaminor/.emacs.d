@@ -10,8 +10,7 @@
   ("C-x g" . magit-status))
 
 (use-package magit-todos
-  :after magit
-  :config (magit-todos-mode))
+  :after magit)
 
 (use-package magit-popup
   :after magit)

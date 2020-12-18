@@ -20,10 +20,12 @@
   (global-hungry-delete-mode 1))
 
 (use-package whitespace-cleanup-mode
+  :disabled
   :config
   (global-whitespace-cleanup-mode))
 
 (use-package format-all
+  :demand
   :hook
   ((latex-mode . format-all-mode)
    (emacs-lisp-mode . format-all-mode)
@@ -58,6 +60,7 @@
 (use-package define-word)
 
 (use-package tree-sitter
+  :disabled
   :defer 10
   :config
   (global-tree-sitter-mode))

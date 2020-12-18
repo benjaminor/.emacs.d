@@ -231,6 +231,7 @@ _u_: User Playlists      _r_  : Repeat            _d_: Device
   (global-set-key (kbd "C-h f") #'helpful-callable)
   (global-set-key (kbd "C-h v") #'helpful-variable)
   (global-set-key (kbd "C-h k") #'helpful-key)
+  (global-set-key (kbd "C-c C-f") #'helpful-function)
   (global-set-key (kbd "C-c C-d") #'helpful-at-point))
 
 
