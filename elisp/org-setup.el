@@ -40,11 +40,11 @@
   (use-package org-noter)
 
   (use-package org-download
-	:after org
-	:bind
-	(:map org-mode-map
-          (("M-p" . org-download-screenshot)
-           ("M-P" . org-download-yank))))
+    :after org
+    :bind
+    (:map org-mode-map
+		  (("M-p" . org-download-screenshot)
+		   ("M-P" . org-download-yank))))
 
   (use-package org-ref
 	:demand
@@ -53,8 +53,8 @@
 	(require 'org-ref-pdf)
 	(setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
 
-	(defvar my-bibliography-dir "~/bibliography/")
-	(setq reftex-default-bibliography  (concat my-bibliography-dir "references.bib"))
+    (defvar my-bibliography-dir "~/bibliography/")
+    (setq reftex-default-bibliography  (concat my-bibliography-dir "references.bib"))
 
 	;; see org-ref for use of these variables
 	(setq org-ref-bibliography-notes (concat org-directory "bib.org")
@@ -146,14 +146,14 @@
 
 (use-package org-projectile
   :defer 3
-  :after (org projectile)
+  :after org projectile
   :config
   (push (org-projectile-project-todo-entry) org-capture-templates)
   (setq org-projectile-projects-file (concat org-directory "projects.org"))
   (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files))))
 
 (use-package helm-org
-  :after (helm org))
+  :after helm org)
 
 (use-package org-projectile-helm
   :after (helm-org org-projectile)
