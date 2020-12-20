@@ -1,0 +1,2343 @@
+#+title: My personal emacs configuration
+#+author: Benjamin Orthen
+#+PROPERTY: header-args :results silent
+
+* Base
+#+begin_src emacs-lisp :tangle yes
+;;; package --- summary
+;;; basic extensions
+
+;;; Commentary:
+
+;;; Code:
+
+(require 'package)
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                    (not (gnutls-available-p))))
+       (proto (if no-ssl "http" "https")))
+  (when no-ssl
+    (warn "\
+Your version of Emacs does not support SSL connections,
+which is unsafe because it allows man-in-the-middle attacks.
+There are two things you can do about this warning:
+1. Install an Emacs version that does support SSL and be safe.
+2. Remove this warning from your init file so you won't see it again."))
+  ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
+  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+  (add-to-list 'package-archives (cons "org" (concat proto "://orgmode.org/elpa/")) t)
+  (when (< emacs-major-version 24)
+	;; For important compatibility libraries like cl-lib
+	(add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;; Bootstrap `quelpa';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq quelpa-build-explicit-tar-format-p t)
+(unless (package-installed-p 'quelpa)
+  (with-temp-buffer
+    (url-insert-file-contents "https://github.com/quelpa/quelpa/raw/master/quelpa.el")
+    (eval-buffer)
+    (quelpa-self-upgrade)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;; Bootstrap `use-package' and `quelpa-use-package' ;;;;;;;;;;;;;
+(quelpa
+ '(quelpa-use-package
+   :fetcher git
+   :url "https://github.com/quelpa/quelpa-use-package.git"))
+
+;; leave it in but should not be necessary because we are using emacs-overlay now
+;; and define use-package as a dependency there
+(quelpa
+ '(use-package))
+
+(eval-when-compile
+  (require 'quelpa)
+  (require 'quelpa-use-package)
+  (require 'use-package)
+  (setq use-package-always-ensure t)
+  (quelpa-use-package-activate-advice))
+
+(use-package diminish)
+
+(use-package bind-key)
+
+(use-package disable-mouse
+  :after evil
+  :config
+  (global-disable-mouse-mode)
+  (mapc #'disable-mouse-in-keymap
+		(list evil-motion-state-map
+			  evil-normal-state-map
+			  evil-visual-state-map
+			  evil-insert-state-map)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; no mouse, no arrow keys
+(global-unset-key (kbd "<left>"))
+(global-unset-key (kbd "<right>"))
+(global-unset-key (kbd "<up>"))
+(global-unset-key (kbd "<down>"))
+(global-unset-key (kbd "<C-left>"))
+(global-unset-key (kbd "<C-right>"))
+(global-unset-key (kbd "<C-up>"))
+(global-unset-key (kbd "<C-down>"))
+(global-unset-key (kbd "<M-left>"))
+(global-unset-key (kbd "<M-right>"))
+(global-unset-key (kbd "<M-up>"))
+(global-unset-key (kbd "<M-down>"))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Don't autoupdate at the moment
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; (use-package auto-package-update
+;;   :config
+;;   (auto-package-update-maybe))
+
+
+;; ;;;; Update quelpa packages on Mondays ;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (when (string= (substring (current-time-string) 0 3) "Mon")
+;;                (setq quelpa-upgrade-p t))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package benchmark-init
+  :config
+  ;; To disable collection of benchmark data after init is done.
+  (add-hook 'after-init-hook 'benchmark-init/deactivate))
+
+(defconst private-dir  (locate-user-emacs-file "private"))
+(defconst temp-dir (format "%s/cache" private-dir)
+  "Hostname-based elisp temp directories.")
+
+;; Core settings
+;; UTF-8 please
+(set-charset-priority 'unicode)
+(setq locale-coding-system   'utf-8)   ; pretty
+(set-terminal-coding-system  'utf-8)   ; pretty
+(set-keyboard-coding-system  'utf-8)   ; pretty
+(set-selection-coding-system 'utf-8)   ; please
+(prefer-coding-system        'utf-8)   ; with sugar on top
+(setq default-process-coding-system '(utf-8-unix . utf-8-unix))
+(require 'iso-transl)
+
+;; Emacs customizations
+(setq confirm-kill-emacs                  nil
+	  confirm-nonexistent-file-or-buffer  t
+	  save-interprogram-paste-before-kill t
+	  mouse-yank-at-point                 t
+	  require-final-newline               t
+	  visible-bell                        nil
+	  ring-bell-function                  'ignore
+	  ;; http://ergoemacs.org/emacs/emacs_stop_cursor_enter_prompt.html
+	  minibuffer-prompt-properties
+	  '(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)
+
+	  ;; Disable non selected window highlight
+	  cursor-in-non-selected-windows     nil
+	  highlight-nonselected-windows      nil
+	  ;; PATH
+	  exec-path                          (append exec-path '("/usr/local/bin/"))
+	  indent-tabs-mode                   nil
+	  tab-width                          4
+	  inhibit-startup-message            t
+	  fringes-outside-margins            t
+	  select-enable-clipboard            t
+	  vc-follow-symlinks                 nil
+	  term-suppress-hard-newline         t
+	  view-read-only                     t
+	  default-frame-alist '((font . "Iosevka")))
+(delete-selection-mode 1)
+(global-display-line-numbers-mode)
+
+(setq-default cursor-type 'bar)           ; Line-style cursor similar to other text editors
+
+
+;;; Offload the custom-set-variables to a separate file
+;;; This keeps your init.el neater and you have the option
+;;; to gitignore your custom.el if you see fit.
+(setq custom-file (locate-user-emacs-file "custom.el"))
+(unless (file-exists-p custom-file)
+  (write-region "" nil custom-file))
+(load custom-file)
+
+;; Bookmarks
+(setq
+ ;; persistent bookmarks
+ bookmark-save-flag                      t
+ bookmark-default-file              (concat temp-dir "/bookmarks"))
+
+
+;; Backups enabled, use nil to disable
+(setq
+ history-length                     1000
+ backup-inhibited                   nil
+ make-backup-files                  t
+ auto-save-default                  nil
+ auto-save-interval                 1000
+ auto-save-list-file-name           (concat temp-dir "/autosave")
+ make-backup-files                  nil
+ create-lockfiles                   nil
+ backup-directory-alist            `((".*" . ,(concat temp-dir "/backup/")))
+ auto-save-file-name-transforms    `((".*" ,(concat temp-dir "/auto-save-list/") t)))
+
+(fset 'yes-or-no-p 'y-or-n-p)
+(global-auto-revert-mode t)
+
+;; avoid using fish shell for shell commands
+(setq shell-file-name "/bin/bash")
+(setq explicit-shell-file-name "/bin/bash")
+
+
+;; disable toolbar & menubar
+(menu-bar-mode -1)
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
+(when (fboundp 'scroll-bar-mode)
+  (scroll-bar-mode -1))
+
+(show-paren-mode 1)
+
+(global-prettify-symbols-mode +1)
+
+;;;Maximize on startup
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
+
+;; Save session
+(setq desktop-restore-frames nil)
+(setq desktop-restore-eager 3)
+(desktop-save-mode 1)
+
+;; Garbage collection
+(add-function :after after-focus-change-function #'garbage-collect)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; mark line where cursor is
+(global-hl-line-mode t)
+
+;; start an emacs server so that I can send file directly to emacs without having to restart it every time
+(server-start)
+
+(setq network-security-level 'high)
+
+
+(provide 'base)
+;;; base ends here
+#+end_src
+
+* Theme
+#+begin_src emacs-lisp :tangle yes
+;; Package -- summary
+
+;;; Commentary:
+
+
+;;; Code:
+;; Use nice theme for emacs
+(use-package solarized-theme
+  :config
+  ;; make the fringe stand out from the background
+  (setq solarized-distinct-fringe-background t)
+
+  ;; Don't change the font for some headings and titles
+  ;; (setq solarized-use-variable-pitch nil)
+
+  ;; make the modeline high contrast
+  ;; (setq solarized-high-contrast-mode-line t)
+
+  ;; Use less bolding
+  (setq solarized-use-less-bold t)
+
+  ;; Use more italics
+  (setq solarized-use-more-italic t)
+
+  ;; Use less colors for indicators such as git:gutter, flycheck and similar
+  ;; (setq solarized-emphasize-indicators nil)
+
+  ;; Don't change size of org-mode headlines (but keep other size-changes)
+  (setq solarized-scale-org-headlines nil)
+
+  ;; Avoid all font-size changes
+  (setq solarized-height-minus-1 1.0)
+  (setq solarized-height-plus-1 1.0)
+  (setq solarized-height-plus-2 1.0)
+  (setq solarized-height-plus-3 1.0)
+  (setq solarized-height-plus-4 1.0)
+  (load-theme 'solarized-dark t))
+
+(use-package all-the-icons)
+
+(use-package font-lock+
+  :quelpa (font-lock+ :repo "emacsmirror/font-lock-plus" :fetcher github))
+
+(provide 'base-theme)
+;;; base-theme.el ends here
+#+end_src
+
+* Base Extensions
+#+begin_src emacs-lisp :tangle yes
+;;; package -- base extensions
+;;; Commentary:
+;;; Code:
+
+(use-package general
+  :defer t)
+
+(use-package hydra
+  :preface
+  (defun me/make-hydra-heading (&rest headings)
+	"Format HEADINGS to look pretty in a hydra docstring."
+	(mapconcat (lambda (it)
+				 (propertize (format "%-20s" it) 'face 'font-lock-doc-face))
+			   headings
+			   nil))
+  :bind
+  ("<f2>" . hydra-zoom/body)
+  ("C-ä" . hydra-misc-helper/body)
+  ("C-c f" . hydra-flycheck/body))
+
+(defhydra hydra-zoom ()
+  "zoom"
+  ("g" text-scale-increase "in")
+  ("l" text-scale-decrease "out"))
+
+
+(defhydra hydra-misc-helper (:exit t :color pink
+								   :hint nil
+								   :columns 5)
+  "
+^Emacs^                      ^Buffer^                          ^Org^
+^^^^^^^^------------------------------------------------------------------------------
+_u_: upgrade all packages  _e_: eval-buffer                   _o_: rg through org-dir
+_r_: rg in emacs config    _h_: helm-rg for buffer and below
+
+"
+  ("u" package-utils-upgrade-all)
+  ("e" eval-buffer)
+  ("h" helm-rg)
+  ("r" my/rg-through-emacs-config)
+  ("o" my/rg-through-org-directory)
+  ("q" nil "quit" :color blue)
+  ("C-g" nil "quit" :color blue))
+
+
+(defhydra hydra-flycheck (:color blue)
+  (concat "\n " (me/make-hydra-heading "Flycheck" "Errors" "Checker")
+		  "
+ _q_ quit              _j_ previous          _?_ describe
+ _m_ manual            _k_ next              _d_ disable
+ _v_ verify setup      _f_ check             _s_ select
+ ^^                    _l_ list              ^^
+")
+  ("q" nil)
+  ("j" flycheck-previous-error :color red)
+  ("k" flycheck-next-error :color red)
+  ("?" flycheck-describe-checker)
+  ("d" flycheck-disable-checker)
+  ("f" flycheck-buffer)
+  ("l" flycheck-list-errors)
+  ("m" flycheck-manual)
+  ("s" flycheck-select-checker)
+  ("v" flycheck-verify-setup))
+
+(defhydra hydra-projectile (:color teal
+								   :hint nil)
+  "
+	 PROJECTILE: %(projectile-project-root)
+
+	 Find File            Search/Tags          Buffers                Cache
+------------------------------------------------------------------------------------------
+  _r_: recent file         _s_: rg           _b_: switch to buffer    _x_: remove known project
+  _d_: dir                 _m_: multi-occur                         _c_: cache clear
+						 _l_: proj-rg-no-in
+																^^^^_X_: cleanup non-existing
+																^^^^_z_: cache current
+
+"
+  ("s"   helm-projectile-rg)
+  ("b"   helm-projectile-switch-to-buffer)
+  ("c"   projectile-invalidate-cache)
+  ("d"   helm-projectile-find-dir)
+  ("f"   helm-projectile-find-file)
+  ("K"   projectile-kill-buffers)
+  ("m"   projectile-multi-occur)
+  ("p"   helm-projectile-switch-project)
+  ("r"   helm-projectile-recentf)
+  ("x"   projectile-remove-known-project)
+  ("X"   projectile-cleanup-known-projects)
+  ("z"   projectile-cache-current-file)
+  ("l"   projectile-ripgrep-no-input)
+  ("q"   nil "cancel" :color blue)
+  ("C-g" nil "cancel" :color blue))
+
+(define-key global-map (kbd "C-l") 'hydra-projectile/body)
+
+(defhydra hydra-spotify (:hint nil)
+  "
+^Search^                  ^Control^               ^Manage^
+^^^^^^^^-----------------------------------------------------------------
+_t_: Track               _SPC_: Play/Pause        _+_: Volume up
+_m_: My Playlists        _n_  : Next Track        _-_: Volume down
+_f_: Featured Playlists  _p_  : Previous Track    _x_: Mute
+_u_: User Playlists      _r_  : Repeat            _d_: Device
+^^                       _s_  : Shuffle           _q_: Quit
+"
+  ("t" spotify-track-search :exit t)
+  ("m" spotify-my-playlists :exit t)
+  ("f" spotify-featured-playlists :exit t)
+  ("u" spotify-user-playlists :exit t)
+  ("SPC" spotify-toggle-play :exit nil)
+  ("n" spotify-next-track :exit nil)
+  ("p" spotify-previous-track :exit nil)
+  ("r" spotify-toggle-repeat :exit nil)
+  ("s" spotify-toggle-shuffle :exit nil)
+  ("+" spotify-volume-up :exit nil)
+  ("-" spotify-volume-down :exit nil)
+  ("x" spotify-volume-mute-unmute :exit nil)
+  ("d" spotify-select-device :exit nil)
+  ("q" quit-window "quit" :color blue))
+
+(define-key global-map (kbd "C-c .") 'hydra-spotify/body)
+
+
+(use-package delight)
+
+;; https://emacs.stackexchange.com/questions/8135/why-does-compilation-buffer-show-control-characters
+(use-package ansi-color
+  :ensure nil
+  :defer t
+  :config
+  (defun my/ansi-colorize-buffer ()
+	(let ((buffer-read-only nil))
+	  (ansi-color-apply-on-region (point-min) (point-max))))
+  (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer))
+
+
+(use-package ediff
+  :ensure nil
+  :defer t
+  :config
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+  (setq-default ediff-highlight-all-diffs 'nil)
+  (setq ediff-diff-options "-w"))
+
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns x))
+  :config
+  ;; Add GOPATH to shell
+  (setq exec-path-from-shell-check-startup-files nil)
+  (exec-path-from-shell-copy-env "GOPATH")
+  (exec-path-from-shell-copy-env "PYTHONPATH")
+  (exec-path-from-shell-initialize))
+
+(use-package multiple-cursors
+  :bind
+  ("C-S-c C-S-c" . mc/edit-lines)
+  ("C->" . mc/mark-next-like-this)
+  ("C-<" . mc/mark-previous-like-this)
+  ("C-c C->" . mc/mark-all-like-this))
+
+(use-package recentf
+  :ensure nil
+  :commands (recentf-mode
+			 recentf-add-file
+			 recentf-apply-filename-handlers)
+  :config
+  (setq recentf-save-file (recentf-expand-file-name (locate-user-emacs-file "private/cache/recentf")))
+  (recentf-mode 1))
+
+;; Use smartparens instead of autopair
+(use-package smartparens)
+(use-package smartparens-config
+  :ensure smartparens
+  :after smartparens
+  :config
+  (smartparens-global-mode)
+  (setq sp-autoescape-string-quote nil)
+  (setq sp-escape-quotes-after-insert nil))
+
+;; == undo-tree ==
+(use-package undo-tree
+  :diminish undo-tree-mode
+  :config
+  (global-undo-tree-mode 1)
+  (setq undo-tree-visualizer-timestamps t)
+  (setq undo-tree-visualizer-diff t)
+  (setq undo-tree-auto-save-history nil))
+
+(use-package which-key
+  :config
+  (which-key-mode))
+
+(use-package try
+  :defer t)
+
+(use-package wgrep)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;ARIBAS is an interactive interpreter for big integer arithmetic and multi-precision floating point arithmetic with a Pascal/Modula like syntax. ;;
+;; https://www.mathematik.uni-muenchen.de/~forster/sw/aribas.html                                                                                  ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package aribas
+  :load-path "lisp/aribas"
+  :config
+  (autoload 'run-aribas "aribas" "Run ARIBAS." t))
+
+(use-package leo
+  :load-path "lisp/leo"
+  :config
+  (global-set-key (kbd "C-M-ä") '(lambda () (interactive)(leo-translate-word-at-point 'spanish 'german)))
+  (global-set-key (kbd "C-M-ü") '(lambda () (interactive)(leo-translate-word-at-point 'english 'german)))
+  (global-set-key (kbd "C-M-ö") '(lambda () (interactive)(leo-translate-word-at-point 'french 'german))))
+
+(use-package crux
+  :bind
+  ("C-c o" . crux-open-with)
+  ("C-c t" . crux-visit-term-buffer)
+  ("C-c r" . crux-rename-file-and-buffer)
+  ("C-c I" . crux-find-user-init-file)
+  ("C-c D" . crux-delete-file-and-buffer)
+  ("C-c ü" . crux-cleanup-buffer-or-region)
+  ("C-c e" . crux-eval-and-replace)
+  :config
+  (crux-reopen-as-root-mode)
+  (crux-with-region-or-buffer indent-region)
+  (crux-with-region-or-buffer untabify)
+  (crux-with-region-or-line comment-or-uncomment-region))
+
+
+(use-package helpful
+  :config
+  (global-set-key (kbd "C-h f") #'helpful-callable)
+  (global-set-key (kbd "C-h v") #'helpful-variable)
+  (global-set-key (kbd "C-h k") #'helpful-key)
+  (global-set-key (kbd "C-c C-f") #'helpful-function)
+  (global-set-key (kbd "C-c C-d") #'helpful-at-point))
+
+
+(use-package dumb-jump
+  :disabled ;; I don't use this (atm only making use of lsp)
+  :config
+  (global-set-key (kbd "C-M-p")
+				  (defhydra dumb-jump-hydra (:color blue :columns 3)
+					"Dumb Jump"
+					("j" dumb-jump-go "Go")
+					("o" dumb-jump-go-other-window "Other (when )indow")
+					("e" dumb-jump-go-prefer-external "Go external")
+					("x" dumb-jump-go-prefer-external-other-window "Go external other window")
+					("i" dumb-jump-go-prompt "Prompt")
+					("l" dumb-jump-quick-look "Quick look")
+					("b" dumb-jump-back "Back"))))
+
+(use-package iedit)
+
+(use-package docker
+  :bind ("C-c d" . docker))
+
+;; modern emacs package menu
+(use-package paradox
+  :config
+  (paradox-enable))
+
+;; improved emacs controls for managing packages
+(use-package package-utils)
+
+(use-package rg
+  :config
+  (rg-enable-default-bindings))
+
+(use-package direnv
+  :config
+  (direnv-mode))
+
+(use-package google-this
+  :init
+  (setq google-this-keybind (kbd "C-c g"))
+  :config
+  (google-this-mode 1))
+
+(use-package proced
+  :ensure nil
+  :custom
+  (proced-auto-update-interval 1)
+  :hook
+  (proced-mode . (lambda () (proced-toggle-auto-update 1))))
+
+(use-package vterm)
+
+(use-package matrix-client
+  :quelpa (matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
+						 :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
+
+(use-package oauth2)
+(use-package spotify
+  :after oauth2
+  :defer 5
+  :quelpa (spotify.el :fetcher github :repo "danielfm/spotify.el"))
+
+
+(use-package htmlize
+  :defer)
+
+(provide 'base-extensions)
+;;; base-extensions.el ends here
+#+end_src
+
+* Base Customization
+  #+begin_src emacs-lisp :tangle yes
+	;; Package -- base-customization
+	;;; Commentary:
+	;;; this is for my functions, my keybindings and my aliases
+
+	;;;;; Key bindings ;;;;;;
+
+	;;; Code:
+
+	;;(global-set-key "\C-x/" 'point-to-register)
+	(global-set-key "\C-xj" 'jump-to-register)
+	;;(global-set-key "\C-xc" 'compile)
+
+
+	;;;;Open certain directories easy
+	(defun my/open-directory (DIRECTORY)
+	  "Open interactive find-files in DIRECTORY."
+	  (interactive)
+	  (let ((default-directory DIRECTORY))
+		(call-interactively 'helm-find-files)))
+
+	(global-set-key "\C-xä" '(lambda () (interactive)(my/open-directory my-tex-files-directory)))
+
+	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	;; Custom splitting functions ;;
+	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	(defun vsplit-last-buffer ()
+	  "Split the buffer vertically and open last buffer."
+	  (interactive)
+	  (split-window-vertically)
+	  (other-window 1 nil)
+	  (switch-to-next-buffer)
+	  )
+	(defun hsplit-last-buffer ()
+	  "Split the buffer horizontally and open last buffer."
+	  (interactive)
+	  (split-window-horizontally)
+	  (other-window 1 nil)
+	  (switch-to-next-buffer)
+	  )
+
+	(global-set-key (kbd "C-x 2") 'vsplit-last-buffer)
+	(global-set-key (kbd "C-x 3") 'hsplit-last-buffer)
+
+	;; Reload buffer with F5
+	(global-set-key (kbd "<f5>") 'revert-buffer)
+
+	;; from: https://with-emacs.com/posts/tips/quit-current-context/
+	(defun keyboard-quit-context+ ()
+	  "Quit current context.
+		This function is a combination of `keyboard-quit' and
+		`keyboard-escape-quit' with some parts omitted and some custom
+		behavior added."
+	  (interactive)
+	  (cond ((region-active-p)
+			 ;; Avoid adding the region to the window selection.
+			 (setq saved-region-selection nil)
+			 (let (select-active-regions)
+			   (deactivate-mark)))
+			((eq last-command 'mode-exited) nil)
+			(current-prefix-arg
+			 nil)
+			(defining-kbd-macro
+			  (message
+			   (substitute-command-keys
+				"Quit is ignored during macro defintion, use \\[kmacro-end-macro] if you want to stop macro definition"))
+			  (cancel-kbd-macro-events))
+			((active-minibuffer-window)
+			 (when (get-buffer-window "*Completions*")
+			   ;; hide completions first so point stays in active window when
+			   ;; outside the minibuffer
+			   (minibuffer-hide-completions))
+			 (abort-recursive-edit))
+			(t
+			 (keyboard-quit))))
+	(global-set-key [remap keyboard-quit] #'keyboard-quit-context+)
+
+
+	;; Aliases
+	;;
+	(defalias 'sh 'shell)
+	(defalias 'indr 'indent-region)
+
+
+	(provide 'base-customization)
+	;;; base-customization.el ends here
+  #+end_src
+
+  #+RESULTS:
+  : base-customization
+
+* Navigation
+  #+begin_src emacs-lisp :tangle yes
+	;;; package -- emacs navigation
+	;;; Commentary:
+	;;; Code:
+
+	;; buffer layout
+	(use-package treemacs
+	  :custom
+	  (treemacs-width 44)
+	  :bind (("<f9>" . treemacs-select-window))
+	  :config
+	  (global-set-key (kbd "C-ü") (defhydra treemacs-hydra (:color red :hint nil)
+									"Treemacs hydra"
+									("b" treemacs-bookmark "Bookmark in treemacs")
+									("f" treemacs-find-file "Current file in treemacs")
+									("s" treemacs-select-window "Select treemacs window")
+									("p" treemacs-projectile "Add a project from projectile to treemacs"))))
+
+
+	(use-package treemacs-evil
+	  :after treemacs evil)
+	(use-package treemacs-projectile
+	  :after treemacs projectile)
+	(use-package treemacs-icons-dired
+	  :after treemacs dired
+	  :config
+	  (treemacs-icons-dired-mode))
+	(use-package treemacs-magit
+	  :after treemacs magit)
+
+	(use-package centaur-tabs
+	  :after evil
+	  :config
+	  (centaur-tabs-mode t)
+	  (setq centaur-tabs-set-modified-marker t)
+	  (centaur-tabs-group-by-projectile-project)
+	  (setq centaur-tabs-style "bar")
+	  (setq centaur-tabs-set-close-button nil)
+	  :bind
+	  (:map evil-normal-state-map
+			("g t" . centaur-tabs-forward)
+			("g T" . centaur-tabs-backward)))
+
+	(use-package zoom
+	  :custom
+	  (zoom-mode t))
+
+	(use-package eyebrowse
+	  :disabled
+	  :config
+	  (eyebrowse-mode t))
+
+	;; Add more functionality to dired
+	;; https://github.com/purcell/emacs.d/blob/master/lisp/init-dired.el
+	(setq-default dired-dwim-target t)
+	(use-package diredfl
+	  :defer 4
+	  :config
+	  (diredfl-global-mode))
+
+	(use-package expand-region
+	  :bind
+	  ("C-=" . er/expand-region))
+
+
+	(use-package windmove
+	  :ensure nil
+	  :bind
+	  ("C-c k" . windmove-up)
+	  ("C-c j" . windmove-down)
+	  ("C-x <left>" . windmove-left)
+	  ("C-x <right>" . windmove-right))
+
+	(use-package ace-window
+	  :init
+	  (global-set-key [remap other-window] 'ace-window)
+	  (global-unset-key (kbd "C-x o"))
+	  (custom-set-faces
+	   '(aw-leading-char-face
+		 ((t (:inherit ace-jump-face-foreground :height 3.0)))))
+	  :bind
+	  ("M-ö" . ace-window))
+
+	(use-package ace-jump-mode
+	  :bind
+	  ("C-c SPC" . ace-jump-mode))
+
+	(use-package discover-my-major
+	  :bind
+	  ("C-h C-m" . discover-my-major)
+	  ("C-h M-m" . discover-my-mode))
+
+
+	(provide 'navigation)
+	;;; navigation.el ends here
+
+  #+end_src
+
+* Visual
+  #+begin_src emacs-lisp :tangle yes
+;;; package -- emacs visual stuff (highlighting)
+;;; Commentary:
+;;; Code:
+
+;; highlight text
+(use-package hl-todo
+  :config
+  (global-hl-todo-mode))
+
+(use-package rainbow-delimiters
+  :config
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+
+(use-package rainbow-mode
+  :config
+  (rainbow-mode))
+
+(use-package highlight-operators)
+
+(use-package highlight-numbers
+  :config
+  (add-hook 'prog-mode-hook 'highlight-numbers-mode))
+
+
+(use-package doom-modeline
+  :custom
+  (doom-modeline-buffer-encoding nil)
+  (doom-modeline-vcs-max-length 50)
+  :config
+  (column-number-mode)
+  (doom-modeline-mode))
+
+
+(provide 'visual)
+;;; visual.el ends here
+
+  #+end_src
+
+* Editing
+  #+begin_src emacs-lisp :tangle yes
+	;;; package -- helper modes to make editing easier
+	;;; Commentary:
+	;; clean up whitespaces etc.
+	;;; Code:
+
+
+	(setq tramp-terminal-type "tramp")
+	(setq tramp-shell-prompt-pattern "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(^[\\[[0-9;]*[a-zA-Z] *\\)*")
+	(setq remote-file-name-inhibit-cache nil)
+	(setq vc-ignore-dir-regexp
+		  (format "%s\\|%s"
+				  vc-ignore-dir-regexp
+				  tramp-file-name-regexp))
+	(setq tramp-verbose 1)
+
+	(use-package hungry-delete
+	  :disabled
+	  :defer t
+	  :config
+	  (global-hungry-delete-mode 1))
+
+	(use-package whitespace-cleanup-mode
+	  :disabled
+	  :config
+	  (global-whitespace-cleanup-mode))
+
+	(use-package format-all
+	  :demand
+	  :hook
+	  ((prog-mode . format-all-ensure-formatter)
+	   (latex-mode . format-all-mode)
+	   (emacs-lisp-mode . format-all-mode)
+	   (fish-mode . format-all-mode)
+	   (nix-mode . format-all-mode)
+	   (c++-mode . format-all-mode)
+	   (c-mode . format-all-mode)
+	   (python-mode . format-all-mode)
+	   (rustic-mode . format-all-mode)
+	   (rust-mode . format-all-mode)))
+
+	(use-package aggressive-indent
+	  :disabled
+	  :config
+	  (global-aggressive-indent-mode 1))
+
+	(use-package origami
+	  :config
+	  (global-origami-mode))
+
+	;; light following the cursor
+	(use-package beacon
+	  :defer 5
+	  :config
+	  (beacon-mode 1))
+
+	(use-package su
+	  :quelpa (su :repo "PythonNut/su.el" :fetcher github)
+	  :config
+	  (su-mode))
+
+	(use-package define-word)
+
+	(use-package tree-sitter
+	  :disabled
+	  :defer 10
+	  :config
+	  (global-tree-sitter-mode))
+
+	(use-package tree-sitter-langs
+	  :after tree-sitter)
+
+	(use-package browse-at-remote
+	  :bind
+	  ("C-c b" . browse-at-remote))
+
+	(provide 'editing)
+	;;; editing.el ends here
+
+  #+end_src
+
+* Evil
+  #+begin_src emacs-lisp :tangle yes
+	;;; package --- summary
+	;;; setup for evil-mode
+
+	;;; Commentary:
+
+	;;; Code:
+
+	(use-package evil
+	  :init
+	  (setq evil-want-integration t)
+	  (setq evil-want-keybinding nil)
+	  :config
+	  (evil-mode 1)
+	  (add-to-list 'desktop-locals-to-save 'evil-markers-alist)
+	  (define-key evil-normal-state-map " " 'save-buffer))
+
+	(use-package evil-collection
+	  :after evil
+	  :config
+	  (evil-collection-init))
+
+	(use-package evil-org
+	  :after (evil org)
+	  :hook
+	  (org-mode . evil-org-mode)
+	  (evil-org-mode . (lambda () (evil-org-set-key-theme)))
+	  :config
+	  (require 'evil-org-agenda)
+	  (evil-org-agenda-set-keys))
+
+	(use-package evil-commentary
+	  :after evil
+	  :config
+	  (evil-commentary-mode))
+
+	(use-package evil-smartparens
+	  :after smartparens
+	  :hook
+	  (smartparens-enabled . evil-smartparens-mode))
+
+	(use-package evil-leader
+	  :after evil
+	  :config
+	  (global-evil-leader-mode)
+	  (evil-leader/set-leader "ü")
+	  (evil-leader/set-key
+		"e" 'find-file
+		"b" 'switch-to-buffer
+		"k" 'kill-buffer))
+
+	(provide 'evil-setup)
+	;;; evil-setup ends here
+
+  #+end_src
+  
+* Helm
+  #+begin_src emacs-lisp :tangle yes
+	;; package -- helm-setup
+	;;; Commentary:
+	;;; setup helm and connected packages
+	;;; Code:
+
+
+	(use-package helm
+	  :init
+	  (use-package helm-icons
+		:demand
+		:after treemacs
+		:config
+		(helm-icons-enable))
+	  ;; some nicer icons for helm
+	  (require 'helm-files)
+	  (require 'helm-config)
+	  (global-set-key (kbd "C-c h") 'helm-command-prefix)
+	  (global-unset-key (kbd "C-x c")) ;; unset normal helm command prefix
+	  (global-set-key (kbd "C-x C-r") 'helm-recentf)
+
+	  :diminish helm-mode
+	  :custom
+	  (helm-M-x-always-save-history t)
+	  (helm-display-function 'pop-to-buffer)
+	  (savehist-additional-variables '(extended-command-history))
+	  (history-delete-duplicates t)
+	  :config
+	  (setq helm-split-window-inside-p          t
+			helm-idle-delay                       0.0
+			helm-input-idle-delay                 0.01
+			helm-yas-display-key-on-candidate     t
+			helm-quick-update                     t
+			helm-move-to-line-cycle-in-source     t
+			helm-ff-search-library-in-sexp        t
+			helm-scroll-amount                    8
+			helm-M-x-fuzzy-match                  t
+			helm-buffers-fuzzy-matching           t
+			helm-recentf-fuzzy-match              t
+			helm-semantic-fuzzy-match             t
+			helm-imenu-fuzzy-match                t
+			helm-ff-file-name-history-use-recentf t
+			helm-split-window-default-side        'below
+			helm-ff-skip-boring-files             t)
+	  (helm-adaptive-mode t)
+	  (helm-mode 1)
+
+	  (defun spacemacs//hide-cursor-in-helm-buffer ()
+		"Hide the cursor in helm buffers."
+		(with-helm-buffer
+		  (setq cursor-in-non-selected-windows nil)))
+	  (add-hook 'helm-after-initialize-hook 'spacemacs//hide-cursor-in-helm-buffer)
+
+	  (if (string-equal system-type "gnu/linux")
+		  (setq helm-grep-default-command
+				"grep --color=always -d skip %e -n%cH -e %p %f"
+				helm-grep-default-recurse-command
+				"grep --color=always -d recurse %e -n%cH -e %p %f"))
+
+	  :bind (([remap list-buffers] . helm-mini)
+			 ([remap find-file] . helm-find-files)
+			 ("C-x b" . helm-mini)
+			 ("M-x" . helm-M-x)
+			 ("C-h a" . helm-apropos)
+			 ("M-y" . helm-show-kill-ring)
+			 :map helm-command-map
+			 ("x" . helm-register)
+			 ("g" . helm-google-suggest)
+			 :map helm-map
+			 ("C-i" . helm-execute-persistent-action)
+			 ("C-z" . helm-select-action)
+			 ("C-j" . helm-next-line)
+			 ("C-k" . helm-previous-line)
+			 ("C-h" . helm-next-source)
+			 ("C-S-h" . describe-key)
+			 ;; ("C-e" . hydra-helm-menu/body)
+			 :map helm-find-files-map
+			 ("C-l" . helm-execute-persistent-action)
+			 ("C-h" . helm-find-files-up-one-level)
+			 :map helm-read-file-map
+			 ("C-l" . helm-execute-persistent-action)
+			 ("C-h" . helm-find-files-up-one-level)))
+
+	;; == ag ==
+	;; Note that 'ag' (the silver searcher) needs to be installed.
+	;; Ubuntu: sudo apt-get install silversearcher-ag
+	;; OSX: brew install ag
+	(use-package ag
+	  :defer t
+	  )
+	(use-package helm-ag
+	  :defer t
+	  :after helm
+	  :config
+	  (general-define-key :keymaps 'helm-ag-map
+						  "C-c C-e" 'helm-ag-edit)
+	  (bind-key "C-c C-e" 'helm-ag-edit helm-ag-mode-map)
+	  )
+
+	(use-package helm-bibtex
+	  :after org-ref
+	  :config
+	  (setq bibtex-completion-bibliography org-ref-default-bibliography
+			bibtex-completion-library-path (concat org-ref-pdf-directory "/")
+			bibtex-completion-notes-path org-ref-bibliography-notes))
+
+	(use-package helm-rg
+	  :config
+	  (defun my/rg-through-emacs-config ()
+		"Ripgrep through my emacs configuration."
+		(interactive)
+		(let ((default-directory user-emacs-directory)
+			  (helm-projectile-set-input-automatically nil))
+		  (helm-projectile-rg))))
+
+
+	(use-package helm-swoop
+	  :after helm
+	  :bind
+	  ("M-s" . helm-swoop)
+	  ("M-i" . helm-swoop-without-pre-input)
+	  ("M-I" . helm-swoop-back-to-last-point)
+	  ("C-c M-i" . helm-multi-swoop)
+	  ("C-x M-i" . helm-multi-swoop-all)
+	  :config
+											; Change the keybinds to whatever you like :)
+	  ;; When doing isearch, hand the word over to helm-swoop
+	  (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+	  ;; From helm-swoop to helm-multi-swoop-all
+	  (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+	  ;; When doing evil-search, hand the word over to helm-swoop
+
+	  ;; Instead of helm-multi-swoop-all, you can also use helm-multi-swoop-current-mode
+	  (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
+
+	  ;; Save buffer when helm-multi-swoop-edit complete
+	  (setq helm-multi-swoop-edit-save t)
+
+	  ;; If this value is t, split window inside the current window
+	  (setq helm-swoop-split-with-multiple-windows nil)
+
+	  ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+	  (setq helm-swoop-split-direction 'split-window-vertically)
+
+	  ;; If nil, you can slightly boost invoke speed in exchange for text color
+	  ;;    (setq helm-swoop-speed-or-color nil)
+
+	  ;; ;; Go to the opposite side of line from the end or beginning of line
+	  (setq helm-swoop-move-to-line-cycle t)
+
+	  ;; Optional face for line numbers
+	  ;; Face name is `helm-swoop-line-number-face`
+	  (setq helm-swoop-use-line-number-face t)
+
+	  ;; If you prefer fuzzy matching
+	  ;;    (setq helm-swoop-use-fuzzy-match t)
+	  )
+
+	(use-package helm-make
+	  :after helm)
+
+	(provide 'helm-setup)
+	;;; helm-setup.el ends here
+
+  #+end_src
+
+* Projectile
+  #+begin_src emacs-lisp :tangle yes
+	;;; projectile-setup --- specify projectile and complementary packages and define keybindings
+	;;; Commentary:
+
+	;;; Code:
+
+	(use-package projectile
+	  :diminish projectile-mode
+	  :config
+	  (projectile-mode +1)
+	  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+	  (setq projectile-known-projects-file
+			(expand-file-name "projectile-bookmarks.eld" temp-dir))
+
+	  (use-package helm-projectile
+		:after helm
+		:config
+		(helm-projectile-on)
+		(setq helm-projectile-set-input-automatically t))
+
+	  (use-package projectile-ripgrep
+		:after (rg helm-rg helm-projectile)
+		:config
+		;;TODO: add DIRECTORY arg here
+		(defun projectile-ripgrep-no-input ()
+		  "Execute projectile-ripgrep, but with empty input"
+		  (interactive)
+		  (let ((helm-projectile-set-input-automatically nil))
+			(helm-projectile-rg)))))
+
+
+
+	(provide 'projectile-setup)
+	;;; projectile-setup.el ends here
+
+  #+end_src
+
+* Org Setup
+  #+begin_src emacs-lisp :tangle yes
+	;;; org-setup -- setup org-mode
+
+	;;; Commentary:
+
+	;;; Code:
+
+	(use-package org
+	  :init
+	  (defun locate-user-org-file (FILENAME)
+		"Return an absolute per-user org file name."
+		(concat org-directory FILENAME))
+	  :config
+	  (setq org-directory "~/org/"
+			org-default-notes-file (locate-user-org-file "notes.org"))
+	  (defvar org-default-projects-file (locate-user-org-file "projects.org"))
+	  (push '("pdf" . zathura) org-file-apps)
+	  (setq org-agenda-files `(,org-default-projects-file)
+			org-agenda-skip-scheduled-if-done t
+			org-agenda-skip-unavailable-files t
+			org-agenda-skip-deadline-if-done t
+			org-agenda-include-deadlines t
+			org-startup-with-inline-images t
+			org-agenda-block-separator nil
+			org-return-follows-link t
+			org-log-done 'time
+			org-agenda-span 'week
+			org-agenda-start-on-weekday nil
+			org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))
+			org-agenda-compact-blocks t
+			;; make html export more beautiful
+			org-html-head "<link rel=\"stylesheet\" href=\"https://orthen.net/sakura.css\" type=\"text/css\">")
+
+	  (setq org-refile-targets '((org-default-projects-file :maxlevel . 3)
+								 (org-default-notes-file :maxlevel . 1)
+								 ("~/org/someday.org" :level . 1)))
+
+	  (advice-add 'org-refile :after
+				  (lambda (&rest _)
+					(org-save-all-org-buffers)))
+
+	  (defun add-pcomplete-to-capf ()
+		(add-hook 'completion-at-point-functions 'pcomplete-completions-at-point nil t))
+	  (add-hook 'org-mode-hook #'add-pcomplete-to-capf)
+
+	  (defun my/rg-through-org-directory ()
+		"Interactively (rip)grep through org-directory (by default ~/org/)"
+		(interactive)
+		(let ((default-directory org-directory))
+		  (helm-rg "")))
+
+	  (use-package toc-org)
+
+	  (use-package org-sidebar)
+
+	  (use-package org-noter)
+
+	  (use-package org-download
+		:after org
+		:bind
+		(:map org-mode-map
+			  (("M-p" . org-download-screenshot)
+			   ("M-P" . org-download-yank))))
+
+	  (use-package org-ref
+		:config
+		(require 'org-ref-latex)
+		(require 'org-ref-pdf)
+		(setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+
+		(defvar my-bibliography-dir "~/bibliography/")
+		(setq reftex-default-bibliography  (concat my-bibliography-dir "references.bib"))
+
+		;; see org-ref for use of these variables
+		(setq org-ref-bibliography-notes (locate-user-org-file "bib.org")
+			  org-ref-default-bibliography (cons (concat my-bibliography-dir "references.bib") ())
+			  org-ref-pdf-directory (concat my-bibliography-dir "bibtex-pdfs/"))
+		:bind
+		("C-c C-ö" . org-ref-bibtex-hydra/body))
+
+	  (use-package org-roam
+		:hook
+		(after-init . org-roam-mode)
+		:custom
+		(org-roam-directory (locate-user-org-file "org-roam/"))
+		:bind (:map org-roam-mode-map
+					(("C-c n l" . org-roam)
+					 ("C-c n f" . org-roam-find-file)
+					 ("C-c n b" . org-roam-switch-to-buffer)
+					 ("C-c n g" . org-roam-graph))
+					:map org-mode-map
+					(("C-c n i" . org-roam-insert))))
+
+	  (use-package org-roam-server
+		:after org-roam
+		:config
+		(setq org-roam-server-host "127.0.0.1"
+			  org-roam-server-port 9090
+			  org-roam-server-export-inline-images t
+			  org-roam-server-authenticate nil
+			  org-roam-server-network-poll t
+			  org-roam-server-network-arrows nil
+			  org-roam-server-network-label-truncate t
+			  org-roam-server-network-label-truncate-length 60
+			  org-roam-server-network-label-wrap-length 20))
+
+
+	  (use-package org-capture
+		:init
+		(defvar org-default-inbox-file (locate-user-org-file "inbox.org"))
+		:ensure nil
+		:config
+		(require 'org-protocol)
+		(setq org-capture-templates
+			  '(("t" "Todo" entry (file org-default-notes-file)
+				 "* TODO SCHEDULED: %T\n %?\n %i\n  %a")
+				("a" "Urgent simple todo" entry (file org-default-notes-file)
+				 "* TODO [#A] %?\n SCHEDULED: %T \n %i\n")
+				("b" "Near-future simple todo" entry (file org-default-notes-file)
+				 "* TODO [#B] %?\n SCHEDULED: %T \n %i\n")
+				("c" "Long-term simple todo" entry (file org-default-notes-file)
+				 "* TODO [#C] %?\n SCHEDULED: %T \n %i\n")
+				("j" "Journal" entry (file+olp+datetree "~/org/journal.org")
+				 "* %?\nEntered on %U\n  %i\n  %a")
+				("i" "Inbox" entry (file+headline org-default-inbox-file "Tasks")
+				 "* TODO %i%?\n /Entered on/ %U")))
+
+		;; from advice in org-protocol
+		(defun transform-square-brackets-to-round-ones(string-to-transform)
+		  "Transforms [ into ( and ] into ), other chars left unchanged."
+		  (concat
+		   (mapcar #'(lambda (c) (if (equal c ?\[) ?\( (if (equal c ?\]) ?\) c))) string-to-transform))
+		  )
+
+		(push '("P" "Protocol" entry (file+headline org-default-inbox-file "Links")
+				"* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
+			  org-capture-templates)
+		(push '("L" "Protocol Link" entry (file+headline org-default-inbox-file "Links")
+				"* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]%(progn (setq kk/delete-frame-after-capture 2) \"\")\nCaptured On: %U")
+			  org-capture-templates)
+
+		(require 'org-roam-protocol))
+
+
+	  (defun org-archive-done-tasks ()
+		(interactive)
+		(org-map-entries
+		 (lambda ()
+		   (org-archive-subtree)
+		   (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
+		 "/DONE" 'file))
+
+	  :bind
+	  ("C-c l" . org-store-link)
+	  ("C-c a" . org-agenda)
+	  ("C-c c" . org-capture))
+
+
+	(use-package org-protocol-capture-html
+	  :quelpa (org-protocol-capture-html :fetcher github :repo "alphapapa/org-protocol-capture-html")
+	  :after org-protocol
+	  :config
+	  (push '("w" "Web site" entry (file+headline org-default-inbox-file "Links") "* %a :website:\n\n%U %?\n\n%:initial") org-capture-templates)
+	  )
+
+	(use-package org-projectile
+	  :defer 3
+	  :after org projectile
+	  :config
+	  (push (org-projectile-project-todo-entry) org-capture-templates)
+	  (setq org-projectile-projects-file org-default-projects-file))
+
+	(use-package helm-org
+	  :after helm org)
+
+	(use-package org-projectile-helm
+	  :after (helm-org org-projectile)
+	  :bind (("C-c n p" . org-projectile-helm-template-or-project)))
+
+
+	(use-package helm-org-rifle
+	  :bind ("C-c C-h" . helm-org-rifle-agenda-files))
+
+	(use-package org-bullets
+	  :config
+	  (setq org-hide-leading-stars t)
+	  :hook (org-mode . (lambda ()
+						  (org-bullets-mode t))))
+
+	(use-package org-fs-tree
+	  :after org
+	  :quelpa (org-fs-tree :repo "ScriptDevil/org-fs-tree" :fetcher github))
+
+	(use-package org-super-agenda
+	  :after org
+	  :config
+	  (org-super-agenda-mode t)
+	  (setq org-super-agenda-groups
+			'(;; Each group has an implicit boolean OR operator between its selectors.
+			  (:name "Next tasks"  ; Optionally specify section name
+					 :and (:scheduled t
+									  :todo ("TODO")))
+			  (:name "Projects"
+					 :and (:children t
+									 :todo ("TODO" "NEXT"))))))
+
+	(use-package org-ql
+	  :after org
+	  :config
+	  (defun my/custom-org-agenda ()
+		"Show common tasks that are scheduled now"
+
+		(interactive)
+		(org-ql-search (org-agenda-files)
+		  '(and (or (and (or (ts-active :on today)
+							 (deadline auto)
+							 (scheduled :to today))
+						 (or
+						  (ancestors "Common Tasks")
+						  (tags "buy")))
+					(and (ancestors "Schulden")
+						 (or
+						  (parent "Haben")
+						  (parent "Soll"))))
+				(not (todo "DONE" "WAITING")))
+		  :title "My Agenda View"
+		  ;; The `org-super-agenda-groups' setting is used automatically when set, or it
+		  ;; may be overriden by specifying it here:
+		  :super-groups '((:name "Schulden: noch begleichen"
+								 :tag "soll"
+								 :order 4)
+						  (:name "Schulden: noch bekommen"
+								 :tag "haben"
+								 :order 5)
+						  (:name "Tasks"
+								 :todo "TODO"
+								 :order 1)
+						  (:name "Buy stuff"
+								 :tag "buy"
+								 :order 7)
+						  (:todo "WAITING"
+								 :order 9)
+						  (:discard (:anything t)))))
+
+	  (define-key global-map (kbd "C-c u") 'my/custom-org-agenda)
+
+
+	  (defun my/custom-projects-agenda ()
+		"Show tasks of projects."
+		(interactive)
+		(org-ql-search (org-agenda-files)
+		  '(and (not (outline-path "Common Tasks"))
+				(not (outline-path "Finanzen" "Schulden"))
+				(or (todo "NEXT")
+					(and (not (todo "DONE" "WAITING"))
+						 (or (ts-active :on today)
+							 (deadline auto)
+							 (scheduled :to today)))))
+		  :title "My projects"
+		  :super-groups '((:auto-outline-path t))))
+
+
+	  (define-key global-map (kbd "C-c u") 'my/custom-org-agenda)
+	  (define-key global-map (kbd "C-c i") 'my/custom-projects-agenda))
+
+
+	(use-package org-pandoc-import
+	  :quelpa (org-pandoc-import
+			   :repo "tecosaur/org-pandoc-import"
+			   :fetcher github
+			   :files ("filters" "*.el"))
+	  :if (executable-find "pandoc"))
+
+
+	(provide 'org-setup)
+	;;; org-setup.el ends here
+
+  #+end_src
+
+* File Handlers
+  #+begin_src emacs-lisp :tangle yes
+;;; package --- file-handler
+;;; Commentary:
+
+;;; Code:
+
+
+;; == File types ==
+;; Web-mode for .launch files (effectively xml)
+(add-to-list 'auto-mode-alist '("\\.launch?\\'" . web-mode))
+
+;; == YAML Mode ==
+(use-package yaml-mode
+  :mode
+  ("\\.yml\\'"
+   "\\.yaml\\'"))
+
+
+;; == Markdown ==
+(use-package markdown-mode
+  :mode
+  ("INSTALL\\'"
+   "CONTRIBUTORS\\'"
+   "LICENSE\\'"
+   "README\\'"
+   "\\.markdown\\'"
+   "\\.md\\'"))
+
+
+;; == JSON Mode ==
+(use-package json-mode
+  :mode "\\.json\\'")
+
+(use-package json-reformat
+  :after json-mode)
+
+(use-package json-snatcher
+  :after json-mode)
+
+;; XML-mode
+(use-package nxml-mode
+  :ensure nil
+  :config
+  (autoload 'xml-mode "nxml" "XML editing mode" t))
+
+(use-package web-mode
+  :config
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  :mode (;; ("\\.xml$" . web-mode)
+		 ("\\.xsl$" . web-mode)
+		 ("\\.xhtml$" . web-mode)
+		 ("\\.page$" . web-mode)
+		 ("\\.xslt$" .  web-mode)
+		 ("\\.launch?\\'" . web-mode)
+		 ("\\.html?\\'" . web-mode)
+		 ("\\.phtml\\'" . web-mode)
+		 ("\\.tpl\\.php\\'" . web-mode)
+		 ("\\.[agj]sp\\'" . web-mode)
+		 ("\\.as[cp]x\\'" . web-mode)
+		 ("\\.erb\\'" . web-mode)
+		 ("\\.mustache\\'" . web-mode)
+		 ("\\.djhtml\\'" . web-mode)))
+
+(use-package csv-mode
+  :mode
+  ("\\.[Cc][Ss][Vv]\\'"))
+
+(use-package pdf-tools
+  :magic ("%PDF" . pdf-view-mode)
+  :config
+  (pdf-tools-install)
+
+  (use-package pdf-continuous-scroll-mode :quelpa (:location (recipe
+															  :fetcher github
+															  :repo "dalanicolai/pdf-continuous-scroll-mode.el"))
+	:hook
+	(pdf-view-mode . pdf-continuous-scroll-mode)))
+
+(use-package pandoc-mode
+  :if (executable-find "pandoc")
+  :config
+  (use-package ox-pandoc)
+  (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
+
+(use-package ansible
+  :defer)
+
+(use-package nix-mode
+  :mode "\\.nix\\'")
+
+(use-package dockerfile-mode
+  :mode ("Dockerfile\\'" . dockerfile-mode))
+
+(use-package docker-compose-mode
+  :defer 10)
+
+(use-package groovy-mode
+  :defer 10)
+
+(use-package fish-mode
+  :defer 10)
+
+(use-package nov
+  :mode ("\\.epub\\'" . nov-mode))
+
+(provide 'file-handler)
+;;; file-handler.el ends here
+
+  #+end_src
+
+* Flycheck
+  #+begin_src emacs-lisp :tangle yes
+	;;; package -- setup for flycheck
+	;;; Commentary:
+	;;; Using vale and proselint as natural language linters
+
+	;;; Code:
+
+	(use-package flycheck
+	  :diminish flycheck-mode
+	  :config
+	  (global-flycheck-mode)
+	  :custom
+	  (flycheck-checker-error-threshold 10000))
+
+
+	(use-package flycheck-color-mode-line
+	  :after flycheck
+	  :config
+	  '(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode))
+
+	(use-package flycheck-yamllint
+	  :defer t
+	  :init
+	  (progn
+		(eval-after-load 'flycheck
+		  '(add-hook 'flycheck-mode-hook 'flycheck-yamllint-setup))))
+
+	(use-package flycheck-pycheckers
+	  :after flycheck
+	  :config
+	  (with-eval-after-load 'flycheck
+		(add-hook 'flycheck-mode-hook #'flycheck-pycheckers-setup))
+	  (setq flycheck-pycheckers-checkers '(pylint flake8 bandit mypy3)))
+
+	;; https://github.com/jyp/attrap
+	;; Fix the flycheck-error at point (currently for Lisp and Haskell ;;
+	(use-package attrap
+	  :bind (("C-x /" . attrap-attrap)))
+
+	;;;###autoload
+	(defun flycheck-proselint-setup ()
+	  "Add proselist to list of flycheck checkers."
+	  (flycheck-define-checker proselint
+		"A linter for prose."
+		:command ("proselint" source-inplace)
+		:error-patterns
+		((warning line-start (file-name) ":" line ":" column ": "
+				  (id (one-or-more (not (any " "))))
+				  " "
+				  (message (one-or-more not-newline)
+						   (zero-or-more "\n" (any " ") (one-or-more not-newline)))
+				  line-end))
+		:modes (text-mode markdown-mode gfm-mode message-mode)
+		(add-to-list 'flycheck-checkers 'proselint))
+
+	  (flycheck-proselint-setup))
+
+	(use-package flycheck-vale
+	  :defer t
+	  :after flycheck
+	  :config
+	  (flycheck-vale-setup)
+	  (flycheck-add-next-checker 'vale 'proselint)
+	  )
+
+	;;;;;;;;;;;;;;;;;;;;
+	;; Spell checking ;;
+	;;;;;;;;;;;;;;;;;;;;
+
+
+	(use-package ispell
+	  :ensure nil
+	  :config
+	  (setq ispell-program-name "aspell")
+	  (setq ispell-dictionary "en_US")
+	  (defun fd-switch-dictionary()
+		(interactive)
+		(let* ((dic ispell-current-dictionary)
+			   (change (if (string= dic "de_DE") "en_US" "de_DE")))
+		  (ispell-change-dictionary change)
+		  (message "Dictionary switched from %s to %s" dic change)
+		  ))
+
+	  (global-set-key (kbd "<f8>")   'fd-switch-dictionary))
+
+
+	(use-package flyspell
+	  :ensure nil
+	  :config
+	  (dolist (hook '(text-mode-hook))
+		(add-hook hook (lambda () (flyspell-mode 1))))
+
+	  (dolist (mode '(emacs-lisp-mode-hook
+					  inferior-lisp-mode-hook
+					  clojure-mode-hook
+					  python-mode-hook
+					  js-mode-hook
+					  R-mode-hook))
+		(add-hook mode
+				  '(lambda ()
+					 (flyspell-prog-mode))))
+	  (define-key flyspell-mode-map (kbd "C-;") nil)
+	  (global-set-key (kbd "<f6>") 'ispell-word)
+	  (defun flyspell-check-next-highlighted-word ()
+		"Custom function to spell check next highlighted word"
+		(interactive)
+		(flyspell-goto-next-error)
+		(ispell-word))
+	  (global-set-key (kbd "M-<f6>") 'flyspell-check-next-highlighted-word))
+
+
+	;; NOTE: if this gets reactivated, install languagetool with nix
+
+	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	;; https://github.com/mhayashi1120/Emacs-langtool ;;
+	;; Languagetool setup				  ;;
+	;; this is outcommented now, will reconfigure it again when I need it
+	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	;; (use-package langtool
+	;;   :defer t
+	;;   :config
+	;;   (setq langtool-default-language "en-US")
+	;;   (setq langtool-mother-tongue "de")
+	;;   (setq langtool-language-tool-jar "$HOME/LanguageTool-4.0/languagetool-commandline.jar")
+	;;   (defun langtool-autoshow-detail-popup (overlays)
+	;;     (when (require 'popup nil t)
+	;;       ;; Do not interrupt current popup
+	;;       (unless (or popup-instances
+	;; 				  ;; suppress popup after type `C-g` .
+	;; 				  (memq last-command '(keyboard-quit)))
+	;; 		(let ((msg (langtool-details-error-message overlays)))
+	;; 		  (popup-tip msg)))))
+	;;   (setq langtool-autoshow-message-function
+	;; 		'langtool-autoshow-detail-popup))
+
+	(provide 'flycheck-setup)
+	;;; flycheck-setup.el ends here
+
+  #+end_src
+
+* Text Completion
+  #+begin_src emacs-lisp :tangle yes
+	;;; package --- text completion using company and yasnippet
+
+	;;; Commentary:
+	;; Combined use of yasnippet with company with company-mode/backend-with-yas function
+
+	;;; Code:
+
+	;; Add yasnippet support for all company backends
+	;; https://github.com/syl20bnr/spacemacs/pull/179
+	(setq tab-always-indent 'complete)
+
+	(defvar company-mode/enable-yas t
+	  "Enable yasnippet for all backends.")
+
+	(defun company-mode/backend-with-yas (backend)
+	  "Add :with company-yasnippet to BACKEND if it is possible."
+	  (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
+		  backend
+		(append (if (consp backend) backend (list backend))
+				'(:with company-yasnippet))))
+
+	(use-package company-math
+	  :config
+	  (setq company-math-allow-latex-symbols-in-faces t))
+
+	(use-package company-web)
+
+	(use-package company-auctex
+	  :config
+	  (company-auctex-init))
+
+	(use-package company-c-headers
+	  :config
+	  (add-to-list 'company-backends 'company-c-headers))
+
+	(use-package  company-statistics
+	  :defer t
+	  :config
+	  (company-statistics-mode))
+
+	(use-package helm-company
+	  :after helm
+	  :config
+	  (define-key company-mode-map (kbd "C-:") 'helm-company)
+	  (define-key company-active-map (kbd "C-:") 'helm-company))
+
+	(use-package company-quickhelp
+	  :config
+	  (company-quickhelp-mode 1))
+
+
+	(use-package company
+	  :diminish company-mode
+	  :init
+	  (global-company-mode 1)
+	  (general-define-key
+	   :keymaps 'company-active-map
+	   "C-j" 'company-select-next
+	   "C-k" 'company-select-previous
+	   "C-l" 'company-complete-selection)
+	  :hook
+	  (after-init . (lambda() (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))))
+	  :config
+	  (setq company-idle-delay              0.0
+			company-minimum-prefix-length   1
+			company-show-numbers            t
+			company-tooltip-limit           20
+			company-dabbrev-downcase        nil
+			completion-styles               '(basic substring partial-completion))
+	  (use-package company-box
+		:hook (company-mode . company-box-mode))
+	  :bind
+	  ("C-<tab>" . #'company-complete))
+
+	(use-package prescient)
+	(use-package company-prescient
+	  :after prescient
+	  :config
+	  (company-prescient-mode))
+
+	(use-package yasnippet
+	  :config
+	  (yas-global-mode t)
+	  (use-package yasnippet-snippets)
+	  :bind
+	  ("C-<return>" . yas-expand-from-trigger-key))
+
+	(provide 'text-completion)
+	;;; text-completion.el ends here
+
+  #+end_src
+
+* Lisp Setup
+  #+begin_src emacs-lisp :tangle yes
+	;;; Lisp -- environment for writing code in lisp
+
+	;;; Commentary:
+
+	;;; Code:
+
+
+	(use-package highlight-defined
+	  :config
+	  (add-hook 'emacs-lisp-mode-hook 'highlight-defined-mode))
+
+	(use-package ielm
+	  :ensure nil
+	  :defer t
+	  :init (add-hook 'ielm-mode-hook '(lambda () (setq-local scroll-margin 0))))
+
+	(use-package lisp-mode
+	  :ensure nil
+	  :delight lisp-mode "Lisp")
+
+	(use-package slime
+	  :disabled t
+	  :defer t
+	  :config
+	  (setq inferior-lisp-program "/usr/bin/sbcl")
+	  (setq slime-contribs '(slime-fancy)))
+
+
+	(provide 'lisp-setup)
+	;;; lisp-setup.el ends here
+
+  #+end_src
+
+* Clojure
+  #+begin_src emacs-lisp :tangle yes
+	;;; clojure-setup.el --- Setup for clojure development
+
+	;;; Commentary:
+	;;
+
+	;;; Code:
+
+
+	(use-package cider
+	  :defer)
+
+	(use-package helm-cider
+	  :after helm cider)
+
+	(provide 'clojure-setup)
+
+	;;; clojure-setup.el ends here
+
+  #+end_src
+
+* LaTeX
+  #+begin_src emacs-lisp :tangle yes
+	;;; latex --- environment for writing latex documents
+
+	;;; Commentary:
+
+	;;; Code:
+
+
+
+	(use-package tex
+	  :quelpa (auctex)
+	  :mode ("\\.tex\\'" . TeX-latex-mode)
+	  :hook
+	  ((LaTeX-mode . visual-line-mode)
+	   (LaTeX-mode . flyspell-mode)
+	   (LaTeX-mode . LaTeX-math-mode)
+	   (LaTeX-mode . turn-on-reftex))
+	  :config
+	  (setq TeX-auto-save t
+			TeX-parse-self t
+			TeX-save-query nil
+			TeX-PDF-mode t)
+	  (setq bibtex-dialect 'biblatex)
+	  (setq-default TeX-master nil)
+	  (setq reftex-plug-into-AUCTeX t)
+	  (TeX-global-PDF-mode t)
+	  (setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
+
+
+	  (add-hook 'TeX-mode-hook '(lambda () (setq TeX-engine 'luatex)))
+
+	  ;; to use pdfview with auctex
+	  (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+			TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))
+			TeX-source-correlate-start-server t) ;; not sure if last line is neccessary
+
+	  ;; to have the buffer refresh after compilation
+	  (add-hook 'TeX-after-compilation-finished-functions
+				#'TeX-revert-document-buffer)
+
+	  ;; " expands into csquotes macros
+	  (setq LaTeX-csquotes-close-quote "}"
+			LaTeX-csquotes-open-quote "\\enquote{")
+	  ;; company and yasnippet setup is handled in text-completion
+	  (add-hook 'TeX-mode-hook 'prettify-symbols-mode)
+	  ;; Don't use Helm for the reftex-citation lookup
+	  (eval-after-load 'helm-mode
+		'(add-to-list 'helm-completing-read-handlers-alist '(reftex-citation . nil))))
+
+	(use-package latex-preview-pane
+	  :config
+	  (latex-preview-pane-enable))
+
+	(use-package auctex-latexmk
+	  :config
+	  (setq auctex-latexmk-inherit-TeX-PDF-mode t)
+	  (auctex-latexmk-setup))
+
+	(use-package reftex
+	  :ensure nil
+	  :after auctex
+	  :hook (LaTeX-mode . reftex-mode))
+
+
+	(provide 'lang-latex)
+	;;; lang-latex.el ends here
+
+  #+end_src
+
+* Python
+  #+begin_src emacs-lisp :tangle yes
+	;;; package -- setting up a proper python IDE in emacs
+
+	;;; Commentary:
+	;; don't use ipython, jedi, elpy anymore
+	;; only relying on lsp-mode
+
+	;;; Code:
+
+	;;;;;;;;;;;;;;;;;;;;;
+	;;;python
+	;;;;;;;;;;;;;;;;
+
+
+	(use-package python
+	  :ensure nil
+	  :delight python-mode "Python"
+	  :custom
+	  (python-shell-interpreter "python")
+	  :interpreter ("python" . python-mode))
+
+	(use-package python-pytest
+	  :after python
+	  :custom
+	  (python-pytest-arguments
+	   '("--color"          ;; colored output in the buffer
+		 "--failed-first"   ;; run the previous failed tests first
+		 "--maxfail=5"))    ;; exit in 5 continuous failures in a run
+	  :config
+	  (which-key-declare-prefixes-for-mode 'python-mode "SPC pt" "Testing")
+	  (evil-leader/set-key-for-mode 'python-mode
+		"ptp" 'python-pytest-popup
+		"ptt" 'python-pytest
+		"ptf" 'python-pytest-file
+		"ptF" 'python-pytest-file-dwim
+		"ptm" 'python-pytest-function
+		"ptM" 'python-pytest-function-dwim
+		"ptl" 'python-pytest-last-failed)
+	  )
+
+	(use-package pip-requirements
+	  :delight pip-requirements-mode "PyPA Requirements"
+	  :preface
+	  (defun me/pip-requirements-ignore-case ()
+		(setq-local completion-ignore-case t))
+	  :init (add-hook 'pip-requirements-mode-hook #'me/pip-requirements-ignore-case))
+
+
+	(use-package sphinx-doc
+	  :config
+	  (add-hook 'python-mode-hook (lambda ()
+									(require 'sphinx-doc)
+									(sphinx-doc-mode t))))
+
+
+	(provide 'lang-python)
+	;;; lang-python.el ends here
+
+  #+end_src
+
+* C and C++
+  #+begin_src emacs-lisp :tangle yes
+	;;; package -- support for C/C++ language
+	;;; Commentary:
+	;;; Code:
+
+	(use-package cc-mode
+	  :ensure nil
+	  :config
+	  (add-to-list 'auto-mode-alist '("\\.ipp\\'" . c++-mode))
+
+	  (define-key c-mode-map  [(tab)] 'company-complete)
+	  (define-key c++-mode-map  [(tab)] 'company-complete)
+	  (setq-default c-basic-offset 4
+					c-default-style "linux"
+					gdb-many-windows t
+					tab-width 4
+					indent-tabs-mode t))
+
+	(use-package cmake-mode
+	  :defer t
+	  :init             ; Add cmake listfile names to the mode list.
+	  (setq auto-mode-alist
+			(append
+			 '(("CMakeLists\\.txt\\'" . cmake-mode))
+			 '(("\\.cmake\\'" . cmake-mode))
+			 auto-mode-alist)))
+
+	(use-package modern-cpp-font-lock
+	  :diminish
+	  :config
+	  (modern-c++-font-lock-global-mode))
+
+	(use-package disaster)
+
+	(use-package helm-ctest
+	  :after helm)
+
+	(provide 'lang-c)
+	;;; lang-c.el ends here
+
+  #+end_src
+
+* Rust
+  #+begin_src emacs-lisp :tangle yes
+	;; lang-rust --- rust-mode, racer, cargo
+
+	;;; Commentary:
+	;; Taken from http://emacs-bootstrap.com/
+
+	;;; Code:
+
+	(use-package rustic
+	  :after lsp
+	  :config
+	  (setq lsp-rust-analyzer-cargo-watch-command "clippy")
+	  (setq rustic-lsp-server 'rust-analyzer)
+	  (rustic-doc-mode))
+
+	(provide 'lang-rust)
+	;;; lang-rust.el ends here
+
+  #+end_src
+
+* Haskell
+  #+begin_src emacs-lisp :tangle yes
+	;; haskell-mode configuration
+	;; https://github.com/haskell/haskell-mode
+	(use-package haskell-mode
+	  ;; haskell-mode swaps `C-m' and `C-j' behavior. Revert it back
+	  :bind (:map haskell-mode-map
+				  ("C-m" . newline)
+				  ("C-j" . electric-newline-and-maybe-indent))
+	  :config
+	  (defun my-haskell-mode-hook ()
+		"Hook for `haskell-mode'."
+		(set (make-local-variable 'company-backends)
+			 '((company-intero company-files))))
+	  (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
+	  (add-hook 'haskell-mode-hook 'company-mode)
+	  (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
+
+	  ;; intero-mode for a complete IDE solution to haskell
+	  ;; commercialhaskell.github.io/intero
+	  (use-package intero
+		:config (add-hook 'haskell-mode-hook 'intero-mode))
+
+	  ;; hindent - format haskell code automatically
+	  ;; https://github.com/chrisdone/hindent
+	  (when (executable-find "hindent")
+		(use-package hindent
+		  :diminish hindent-mode
+		  :config
+		  (add-hook 'haskell-mode-hook #'hindent-mode)
+		  ;; reformat the buffer using hindent on save
+		  (setq hindent-reformat-buffer-on-save t))))
+
+	(provide 'lang-haskell)
+  #+end_src
+
+* Go
+  #+begin_src emacs-lisp :tangle yes
+	;;; package --- lang-go
+	;;; Commentary:
+	;;  packages that support development in the go language
+
+	;;; Code:
+
+	(use-package go-mode
+	  :mode
+	  ("\\.go\\'")
+	  :config
+											; Use goimports instead of go-fmt
+	  (setq gofmt-command "goimports")
+	  (add-hook 'go-mode-hook 'company-mode)
+	  ;; Call Gofmt before saving
+	  (add-hook 'before-save-hook 'gofmt-before-save)
+	  (add-hook 'go-mode-hook 'setup-go-mode-compile)
+	  (add-hook 'go-mode-hook #'smartparens-mode)
+	  (add-hook 'go-mode-hook '(lambda ()
+								 (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)))
+	  (add-hook 'go-mode-hook '(lambda ()
+								 (local-set-key (kbd "C-c C-g") 'go-goto-imports)))
+	  (add-hook 'go-mode-hook (lambda ()
+								(set (make-local-variable 'company-backends) '(company-go))
+								(company-mode)))
+
+	  (defun setup-go-mode-compile ()
+											; Customize compile command to run go build
+		(if (not (string-match "go" compile-command))
+			(set (make-local-variable 'compile-command)
+				 "go build -v && go test -v && go vet"))))
+
+	(use-package company-go
+	  :after go-mode
+	  :config
+	  (setq tab-width 4)
+
+	  :bind (:map go-mode-map
+											; Godef jump key binding
+				  ("M-." . godef-jump)))
+
+	(use-package flymake-go)
+
+	(use-package go-eldoc
+	  :after go
+	  :config
+	  (add-hook 'go-mode-hook 'go-eldoc-setup))
+
+	(provide 'lang-go)
+	;;; lang-go.el ends here
+
+  #+end_src
+
+* Debugging
+  #+begin_src emacs-lisp :tangle yes
+	;;; Debugging
+
+	;;; Commentary:
+
+	;;; Code:
+
+	;; * Debug on error
+
+	(toggle-debug-on-error)
+	(add-hook 'after-init-hook 'toggle-debug-on-error)
+
+	;; * Find bugs in config files
+
+	(use-package bug-hunter
+	  :defer t)
+
+	(provide 'debugging)
+	;;; debugging.el ends here
+
+  #+end_src
+
+* Language Server - LSP
+  #+begin_src emacs-lisp :tangle yes
+	;;; package -- support the language server protocol
+	;;; Commentary:
+	;;; Code:
+
+	(use-package lsp-mode
+	  :init
+	  (setq lsp-keymap-prefix "C-ö")
+	  :after yasnippet
+	  :commands lsp
+	  :config
+	  ;; Mainly for lsp readout
+	  (setq read-process-output-max (* (* 1024 1024) 4))
+	  (setq lsp-restart 'ignore
+			lsp-before-save-edits t
+			lsp-signature-auto-activate nil
+			lsp-signature-render-documentation t
+			lsp-enable-text-document-color t
+			lsp-semantic-highlighting 'immediate
+			lsp-file-watch-threshold nil
+			lsp-headerline-breadcrumb-enable t
+			lsp-modeline-diagnostics-enable t
+			lsp-auto-guess-root t
+			lsp-enable-snippet t
+			lsp-idle-delay 0.1
+			lsp-rust-server 'rust-analyzer
+			lsp-clients-clangd-args '("-background-index" "-j=2" "-log=error" "-clang-tidy")
+			)
+	  (advice-add 'lsp-completion-mode :after #'(lambda(&rest r) (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))))
+
+	  :hook
+	  (python-mode . lsp-deferred)
+	  (rustic-mode . lsp-deferred)
+	  (c-mode-common . lsp-deferred)
+	  (latex-mode . lsp-deferred)
+	  (tex-mode . lsp-deferred)
+	  (yaml-mode . lsp-deferred))
+
+	(use-package lsp-python-ms
+	  :if (boundp 'my-lsp-python-ms-executable)
+	  :init
+	  ;; load from custom.el
+	  (setq lsp-python-ms-executable my-lsp-python-ms-executable))
+
+	(use-package lsp-pyright
+	  :hook (python-mode . (lambda ()
+							 (require 'lsp-pyright))))
+
+	(use-package lsp-java
+	  :hook
+	  (java-mode . lsp-deferred))
+
+
+	(use-package lsp-ui
+	  :after lsp-mode
+	  :diminish
+	  :commands lsp-ui-mode
+	  :custom-face
+	  (lsp-ui-doc-header ((t (:inherit (font-lock-string-face italic)))))
+	  :bind
+	  (:map lsp-ui-mode-map
+			([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+			([remap xref-find-references] . lsp-ui-peek-find-references)
+			("C-c u" . lsp-ui-imenu))
+	  :config
+	  (setq lsp-ui-doc-enable t
+			lsp-ui-doc-header t
+			lsp-ui-doc-include-signature t
+			lsp-ui-doc-delay 0.5
+			lsp-ui-doc-position 'top
+			;; lsp-ui-doc-border (face-foreground 'default)
+			lsp-ui-sideline-enable t
+			;; lsp-ui-doc-use-childframe nil
+			lsp-ui-sideline-ignore-duplicate t
+			lsp-ui-sideline-show-code-actions t)
+	  ;; If the server supports custom cross references
+	  )
+
+	(use-package posframe)
+
+	(use-package dap-mode
+	  :commands dap-mode
+	  :after posframe
+	  :config
+
+	  (use-package dap-java
+		:after lsp-java
+		:ensure nil)
+
+	  (add-hook 'dap-stopped-hook
+				(lambda (arg) (call-interactively #'dap-hydra)))
+	  (dap-mode 1)
+	  (require 'dap-ui)
+	  (dap-ui-mode 1)
+	  (tooltip-mode 1)
+	  ;; (dap-ui-controls-mode 1)
+
+	  ;; support for different protocols
+	  (require 'dap-python)
+
+	  (require 'dap-lldb)
+	  (require 'dap-cpptools)
+
+	  (require 'dap-gdb-lldb)
+	  (dap-gdb-lldb-setup))
+
+	(use-package helm-lsp
+	  :after helm projectile lsp-mode
+	  :commands helm-lsp-workspace-symbol
+	  :config
+	  ;; got this from issue #1 in helm-lsp repo
+	  (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
+
+	(use-package helm-xref
+	  :after helm)
+
+	(use-package lsp-treemacs
+	  :after treemacs lsp-mode
+	  :commands lsp-treemacs-errors-list
+	  :config
+	  (lsp-treemacs-sync-mode 1))
+
+	(use-package lsp-origami
+	  :after lsp-mode
+	  :config
+	  (add-hook 'lsp-after-open-hook #'lsp-origami-mode))
+
+
+	(provide 'lsp-setup)
+	;;; lsp-setup.el ends here
+
+  #+end_src
+
+* Fun Stuff
+  #+begin_src emacs-lisp :tangle yes
+	;;; package -- Fun stuff in emacs
+
+	;;; Commentary:
+											; it's not really necessary
+
+	;;; Code:
+
+	(use-package xkcd)
+
+	(use-package selectric-mode)
+
+	(use-package nyan-mode
+	  :disabled
+	  :config
+	  (nyan-mode)
+	  (setq nyan-animate-nyancat t))
+
+	(use-package fireplace)
+
+	(provide 'fun-stuff)
+	;;; fun-stuff.el ends here
+
+  #+end_src
+
+* Git Setup
+  #+begin_src emacs-lisp :tangle yes
+	;;; package -- git setup
+	;;; Commentary:
+	;;; Code:
+
+	(use-package git-timemachine)
+
+	(use-package magit
+	  :bind
+	  ;; Magic
+	  ("C-x g" . magit-status))
+
+	(use-package magit-todos
+	  :after magit)
+
+	(use-package forge
+	  :after magit)
+
+	(use-package gitignore-mode
+	  :mode ("\\.gitignore\\'" . gitignore-mode))
+
+	(provide 'git-setup)
+	;;; git-setup.el ends here
+
+  #+end_src

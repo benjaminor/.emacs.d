@@ -9,7 +9,7 @@
 ;;; This file bootstraps the configuration, which is divided into
 ;;; a number of other files.
 
-(let ((minver "26.3"))
+(let ((minver "27.1"))
   (when (version< emacs-version minver)
     (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
 
@@ -21,10 +21,11 @@
 ;; Adjust garbage collection thresholds during startup, and thereafter
 ;;----------------------------------------------------------------------------
 
-(setq package-enable-at-startup nil
-      file-name-handler-alist nil
-      message-log-max 16384
-      gc-cons-percentage 0.6)
+;; (setq package-enable-at-startup nil
+;;       file-name-handler-alist nil
+;;       message-log-max 16384
+;;       gc-cons-threshold most-positive-fixnum
+;;       gc-cons-percentage 0.6)
 
 (add-hook 'after-init-hook
 		  '(lambda ()
@@ -34,65 +35,78 @@
 			 (garbage-collect)) t)
 
 
+(let ((package-enable-at-startup nil)
+      (file-name-handler-alist nil)
+      (message-log-max 16384)
+      (gc-cons-threshold most-positive-fixnum)
+      (gc-cons-percentage 0.6))
+
+  (add-to-list 'load-path (locate-user-emacs-file "elisp"))
+  (let ((default-directory (locate-user-emacs-file "lisp/")))
+	(normal-top-level-add-subdirs-to-load-path))
+  (org-babel-load-file (locate-user-emacs-file "config.org")))
+
+
+
 ;;;;;Code from emacs-bootstrap
-(add-to-list 'load-path (locate-user-emacs-file "elisp"))
-(let ((default-directory (locate-user-emacs-file "lisp/")))
-  (normal-top-level-add-subdirs-to-load-path))
+;; (add-to-list 'load-path (locate-user-emacs-file "elisp"))
+;; (let ((default-directory (locate-user-emacs-file "lisp/")))
+;;   (normal-top-level-add-subdirs-to-load-path))
 
 
-(require 'base)
+;; (require 'base)
 
-(require 'base-theme)
+;; (require 'base-theme)
 
-(require 'base-extensions)
+;; (require 'base-extensions)
 
-(require 'base-customization)
+;; (require 'base-customization)
 
-(require 'navigation)
+;; (require 'navigation)
 
-(require 'visual)
+;; (require 'visual)
 
-(require 'editing)
+;; (require 'editing)
 
-(require 'evil-setup)
+;; (require 'evil-setup)
 
-(require 'helm-setup)
+;; (require 'helm-setup)
 
-(require 'projectile-setup)
+;; (require 'projectile-setup)
 
-(require 'org-setup)
+;; (require 'org-setup)
 
-(require 'file-handler)
+;; (require 'file-handler)
 
-(require 'flycheck-setup)
+;; (require 'flycheck-setup)
 
-(require 'text-completion)
+;; (require 'text-completion)
 
-(require 'lisp-setup)
+;; (require 'lisp-setup)
 
-(require 'clojure-setup)
+;; (require 'clojure-setup)
 
-(require 'lang-latex)
+;; (require 'lang-latex)
 
-(require 'lang-python)
+;; (require 'lang-python)
 
-(require 'lang-c)
+;; (require 'lang-c)
 
-(require 'lang-rust)
+;; (require 'lang-rust)
 
-(require 'lang-haskell)
+;; (require 'lang-haskell)
 
-(require 'lang-go)
+;; (require 'lang-go)
 
-(require 'debugging)
+;; (require 'debugging)
 
-(require 'lsp-setup)
+;; (require 'lsp-setup)
 
-(require 'fun-stuff)
+;; (require 'fun-stuff)
 
-(require 'git-setup)
+;; (require 'git-setup)
 
-(require 'leo)
+;; (require 'leo)
 
 (provide 'init)
 ;;; init.el ends here

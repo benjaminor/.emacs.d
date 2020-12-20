@@ -56,7 +56,6 @@ straight/
 /elisp/.emacs.desktop
 /projectile.cache
 /company-statistics-cache.el
-*.org
 .mc-lists.el
 elisp/flycheck_*.el
 /.lsp-session-v1
