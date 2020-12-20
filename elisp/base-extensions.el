@@ -206,6 +206,13 @@ _u_: User Playlists      _r_  : Repeat            _d_: Device
   :config
   (autoload 'run-aribas "aribas" "Run ARIBAS." t))
 
+(use-package leo
+  :load-path "lisp/leo"
+  :config
+  (global-set-key (kbd "C-M-ä") '(lambda () (interactive)(leo-translate-word-at-point 'spanish 'german)))
+  (global-set-key (kbd "C-M-ü") '(lambda () (interactive)(leo-translate-word-at-point 'english 'german)))
+  (global-set-key (kbd "C-M-ö") '(lambda () (interactive)(leo-translate-word-at-point 'french 'german))))
+
 (use-package crux
   :bind
   ("C-c o" . crux-open-with)

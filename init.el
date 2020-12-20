@@ -92,5 +92,7 @@
 
 (require 'git-setup)
 
+(require 'leo)
+
 (provide 'init)
 ;;; init.el ends here

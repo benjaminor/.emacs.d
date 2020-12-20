@@ -58,7 +58,6 @@ straight/
 /company-statistics-cache.el
 *.org
 .mc-lists.el
-/lisp/
 elisp/flycheck_*.el
 /.lsp-session-v1
 /.cache/treemacs-persist-at-last-error
