@@ -71,3 +71,5 @@ transient/
 /.extension/
 /.perspective-session
 /eln-cache/
+/config.el
+/org-roam.db
