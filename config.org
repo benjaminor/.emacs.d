@@ -915,7 +915,11 @@ _u_: User Playlists      _r_  : Repeat            _d_: Device
 	  :config
 	  (evil-mode 1)
 	  (add-to-list 'desktop-locals-to-save 'evil-markers-alist)
-	  (define-key evil-normal-state-map " " 'save-buffer))
+	  (define-key evil-normal-state-map " " 'save-buffer)
+	  (with-eval-after-load 'evil-maps
+		(define-key evil-motion-state-map (kbd "SPC") nil)
+		(define-key evil-motion-state-map (kbd "RET") nil)
+		(define-key evil-motion-state-map (kbd "TAB") nil)))
 
 	(use-package evil-collection
 	  :after evil
@@ -1175,6 +1179,9 @@ _u_: User Playlists      _r_  : Repeat            _d_: Device
 		"Return an absolute per-user org file name."
 		(concat org-directory FILENAME))
 	  :config
+	  (evil-define-key 'normal org-mode-map (kbd "<return>") 'org-edit-special)
+	  ;; see https://github.com/noctuid/evil-guide#why-dont-keys-defined-with-evil-define-key-work-immediately
+	  (evil-define-key 'normal 'org-src-mode
 	  (setq org-directory "~/org/"
 			org-default-notes-file (locate-user-org-file "notes.org"))
 	  (defvar org-default-projects-file (locate-user-org-file "projects.org"))
