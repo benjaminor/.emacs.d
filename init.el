@@ -21,12 +21,6 @@
 ;; Adjust garbage collection thresholds during startup, and thereafter
 ;;----------------------------------------------------------------------------
 
-;; (setq package-enable-at-startup nil
-;;       file-name-handler-alist nil
-;;       message-log-max 16384
-;;       gc-cons-threshold most-positive-fixnum
-;;       gc-cons-percentage 0.6)
-
 (add-hook 'after-init-hook
 		  '(lambda ()
 			 (setq file-name-handler-alist file-name-handler-alist-old
@@ -44,69 +38,8 @@
   (add-to-list 'load-path (locate-user-emacs-file "elisp"))
   (let ((default-directory (locate-user-emacs-file "lisp/")))
 	(normal-top-level-add-subdirs-to-load-path))
+
   (org-babel-load-file (locate-user-emacs-file "config.org")))
-
-
-
-;;;;;Code from emacs-bootstrap
-;; (add-to-list 'load-path (locate-user-emacs-file "elisp"))
-;; (let ((default-directory (locate-user-emacs-file "lisp/")))
-;;   (normal-top-level-add-subdirs-to-load-path))
-
-
-;; (require 'base)
-
-;; (require 'base-theme)
-
-;; (require 'base-extensions)
-
-;; (require 'base-customization)
-
-;; (require 'navigation)
-
-;; (require 'visual)
-
-;; (require 'editing)
-
-;; (require 'evil-setup)
-
-;; (require 'helm-setup)
-
-;; (require 'projectile-setup)
-
-;; (require 'org-setup)
-
-;; (require 'file-handler)
-
-;; (require 'flycheck-setup)
-
-;; (require 'text-completion)
-
-;; (require 'lisp-setup)
-
-;; (require 'clojure-setup)
-
-;; (require 'lang-latex)
-
-;; (require 'lang-python)
-
-;; (require 'lang-c)
-
-;; (require 'lang-rust)
-
-;; (require 'lang-haskell)
-
-;; (require 'lang-go)
-
-;; (require 'debugging)
-
-;; (require 'lsp-setup)
-
-;; (require 'fun-stuff)
-
-;; (require 'git-setup)
-
-;; (require 'leo)
 
 (provide 'init)
 ;;; init.el ends here
