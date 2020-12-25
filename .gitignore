@@ -73,3 +73,6 @@ transient/
 /eln-cache/
 /config.el
 /org-roam.db
+/.org-id-locations
+/nov-places
+/forge-database.sqlite
