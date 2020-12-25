@@ -147,7 +147,7 @@
 		vc-follow-symlinks                 nil
 		term-suppress-hard-newline         t
 		view-read-only                     t
-		default-frame-alist '((font . "Iosevka")))
+		default-frame-alist '((font . "Iosevka Nerd Font")))
   (delete-selection-mode 1)
   (global-display-line-numbers-mode)
 
@@ -571,7 +571,14 @@
 	:hook
 	(proced-mode . (lambda () (proced-toggle-auto-update 1))))
 
-  (use-package vterm)
+  (use-package vterm
+	:config
+	(setq vterm-shell "fish")
+	:hook
+	(vterm-mode . (lambda ()
+					(setq-local global-hl-line-mode nil
+								hl-line-mode nil
+								explicit-shell-file-name "fish"))))
 
   (use-package matrix-client
 	:quelpa (matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
