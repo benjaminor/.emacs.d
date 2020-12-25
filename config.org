@@ -492,6 +492,12 @@
 	(global-set-key (kbd "C-M-ü") '(lambda () (interactive)(leo-translate-word-at-point-or-prompt 'english 'german)))
 	(global-set-key (kbd "C-M-ö") '(lambda () (interactive)(leo-translate-word-at-point-or-prompt 'french 'german))))
 
+  (use-package guess-language
+	:hook
+	(text-mode . (lambda () (guess-language-mode 1)))
+	:config
+	(setq guess-language-languages '(en de es fr)))
+
   (use-package crux
 	:bind
 	("C-c o" . crux-open-with)
