@@ -3,6 +3,8 @@
 #+PROPERTY: header-args :results silent
 
 * Base
+  Code to bootstrap emacs.
+  + Add package repositories we need.
 #+begin_src emacs-lisp :tangle yes
   ;;; package --- summary
   ;;; basic extensions
@@ -22,13 +24,15 @@
   There are two things you can do about this warning:
   1. Install an Emacs version that does support SSL and be safe.
   2. Remove this warning from your init file so you won't see it again."))
-	;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
 	(add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
 	(add-to-list 'package-archives (cons "org" (concat proto "://orgmode.org/elpa/")) t)
 	(when (< emacs-major-version 24)
 	  ;; For important compatibility libraries like cl-lib
 	  (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")))))
+#+end_src
 
+  + Add quelpa bootstrap code. We use quelpa for packages which are not in the repositories but nonetheless useful.
+#+begin_src emacs-lisp :tangle yes
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;; Bootstrap `quelpa';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (setq quelpa-build-explicit-tar-format-p t)
@@ -228,65 +232,64 @@
 
 * Theme
 #+begin_src emacs-lisp :tangle yes
-;; Package -- summary
+  ;; Package -- summary
+  ;;; Commentary:
 
-;;; Commentary:
 
+  ;;; Code:
+  ;; Use nice theme for emacs
+  (use-package solarized-theme
+	:config
+	;; make the fringe stand out from the background
+	(setq solarized-distinct-fringe-background t)
 
-;;; Code:
-;; Use nice theme for emacs
-(use-package solarized-theme
-  :config
-  ;; make the fringe stand out from the background
-  (setq solarized-distinct-fringe-background t)
+	;; Don't change the font for some headings and titles
+	;; (setq solarized-use-variable-pitch nil)
 
-  ;; Don't change the font for some headings and titles
-  ;; (setq solarized-use-variable-pitch nil)
+	;; make the modeline high contrast
+	;; (setq solarized-high-contrast-mode-line t)
 
-  ;; make the modeline high contrast
-  ;; (setq solarized-high-contrast-mode-line t)
+	;; Use less bolding
+	(setq solarized-use-less-bold t)
 
-  ;; Use less bolding
-  (setq solarized-use-less-bold t)
+	;; Use more italics
+	(setq solarized-use-more-italic t)
 
-  ;; Use more italics
-  (setq solarized-use-more-italic t)
+	;; Use less colors for indicators such as git:gutter, flycheck and similar
+	;; (setq solarized-emphasize-indicators nil)
 
-  ;; Use less colors for indicators such as git:gutter, flycheck and similar
-  ;; (setq solarized-emphasize-indicators nil)
+	;; Don't change size of org-mode headlines (but keep other size-changes)
+	(setq solarized-scale-org-headlines nil)
 
-  ;; Don't change size of org-mode headlines (but keep other size-changes)
-  (setq solarized-scale-org-headlines nil)
+	;; Avoid all font-size changes
+	(setq solarized-height-minus-1 1.0)
+	(setq solarized-height-plus-1 1.0)
+	(setq solarized-height-plus-2 1.0)
+	(setq solarized-height-plus-3 1.0)
+	(setq solarized-height-plus-4 1.0)
+	(load-theme 'solarized-dark t))
 
-  ;; Avoid all font-size changes
-  (setq solarized-height-minus-1 1.0)
-  (setq solarized-height-plus-1 1.0)
-  (setq solarized-height-plus-2 1.0)
-  (setq solarized-height-plus-3 1.0)
-  (setq solarized-height-plus-4 1.0)
-  (load-theme 'solarized-dark t))
+  (use-package all-the-icons)
 
-(use-package all-the-icons)
+  (use-package font-lock+
+	:quelpa (font-lock+ :repo "emacsmirror/font-lock-plus" :fetcher github))
 
-(use-package font-lock+
-  :quelpa (font-lock+ :repo "emacsmirror/font-lock-plus" :fetcher github))
-
-(provide 'base-theme)
-;;; base-theme.el ends here
+  (provide 'base-theme)
+  ;;; base-theme.el ends here
 #+end_src
 
 * Base Extensions
 #+begin_src emacs-lisp :tangle yes
-  ;;; package -- base extensions
-  ;;; Commentary:
-  ;;; Code:
+	;;; package -- base extensions
+	;;; Commentary:
+	;;; Code:
 
   (use-package general
 	:defer t)
 
   (use-package hydra
 	:preface
-	(defun me/make-hydra-heading (&rest headings)
+	(defun my/make-hydra-heading (&rest headings)
 	  "Format HEADINGS to look pretty in a hydra docstring."
 	  (mapconcat (lambda (it)
 				   (propertize (format "%-20s" it) 'face 'font-lock-doc-face))
@@ -307,12 +310,12 @@
 									 :hint nil
 									 :columns 5)
 	"
-  ^Emacs^                      ^Buffer^                          ^Org^
-  ^^^^^^^^------------------------------------------------------------------------------
-  _u_: upgrade all packages  _e_: eval-buffer                   _o_: rg through org-dir
-  _r_: rg in emacs config    _h_: helm-rg for buffer and below
+	^Emacs^                      ^Buffer^                          ^Org^
+	^^^^^^^^------------------------------------------------------------------------------
+	_u_: upgrade all packages  _e_: eval-buffer                   _o_: rg through org-dir
+	_r_: rg in emacs config    _h_: helm-rg for buffer and below
 
-  "
+	"
 	("u" package-utils-upgrade-all)
 	("e" eval-buffer)
 	("h" helm-rg)
@@ -323,13 +326,13 @@
 
 
   (defhydra hydra-flycheck (:color blue)
-	(concat "\n " (me/make-hydra-heading "Flycheck" "Errors" "Checker")
+	(concat "\n " (my/make-hydra-heading "Flycheck" "Errors" "Checker")
 			"
-   _q_ quit              _j_ previous          _?_ describe
-   _m_ manual            _k_ next              _d_ disable
-   _v_ verify setup      _f_ check             _s_ select
-   ^^                    _l_ list              ^^
-  ")
+	 _q_ quit              _j_ previous          _?_ describe
+	 _m_ manual            _k_ next              _d_ disable
+	 _v_ verify setup      _f_ check             _s_ select
+	 ^^                    _l_ list              ^^
+	")
 	("q" nil)
 	("j" flycheck-previous-error :color red)
 	("k" flycheck-next-error :color red)
@@ -344,17 +347,17 @@
   (defhydra hydra-projectile (:color teal
 									 :hint nil)
 	"
-	   PROJECTILE: %(projectile-project-root)
+		 PROJECTILE: %(projectile-project-root)
 
-	   Find File            Search/Tags          Buffers                Cache
-  ------------------------------------------------------------------------------------------
-	_r_: recent file         _s_: rg           _b_: switch to buffer    _x_: remove known project
-	_d_: dir                 _m_: multi-occur                         _c_: cache clear
-						   _l_: proj-rg-no-in
-																  ^^^^_X_: cleanup non-existing
-																  ^^^^_z_: cache current
+		 Find File            Search/Tags          Buffers                Cache
+	------------------------------------------------------------------------------------------
+	  _r_: recent file         _s_: rg           _b_: switch to buffer    _x_: remove known project
+	  _d_: dir                 _m_: multi-occur                         _c_: cache clear
+							 _l_: proj-rg-no-in
+																	^^^^_X_: cleanup non-existing
+																	^^^^_z_: cache current
 
-  "
+	"
 	("s"   helm-projectile-rg)
 	("b"   helm-projectile-switch-to-buffer)
 	("c"   projectile-invalidate-cache)
@@ -375,14 +378,14 @@
 
   (defhydra hydra-spotify (:hint nil)
 	"
-  ^Search^                  ^Control^               ^Manage^
-  ^^^^^^^^-----------------------------------------------------------------
-  _t_: Track               _SPC_: Play/Pause        _+_: Volume up
-  _m_: My Playlists        _n_  : Next Track        _-_: Volume down
-  _f_: Featured Playlists  _p_  : Previous Track    _x_: Mute
-  _u_: User Playlists      _r_  : Repeat            _d_: Device
-  ^^                       _s_  : Shuffle           _q_: Quit
-  "
+	^Search^                  ^Control^               ^Manage^
+	^^^^^^^^-----------------------------------------------------------------
+	_t_: Track               _SPC_: Play/Pause        _+_: Volume up
+	_m_: My Playlists        _n_  : Next Track        _-_: Volume down
+	_f_: Featured Playlists  _p_  : Previous Track    _x_: Mute
+	_u_: User Playlists      _r_  : Repeat            _d_: Device
+	^^                       _s_  : Shuffle           _q_: Quit
+	"
 	("t" spotify-track-search :exit t)
 	("m" spotify-my-playlists :exit t)
 	("f" spotify-featured-playlists :exit t)
@@ -475,10 +478,10 @@
 
   (use-package wgrep)
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;ARIBAS is an interactive interpreter for big integer arithmetic and multi-precision floating point arithmetic with a Pascal/Modula like syntax. ;;
   ;; https://www.mathematik.uni-muenchen.de/~forster/sw/aribas.html                                                                                  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   (use-package aribas
 	:load-path "lisp/aribas"
@@ -641,7 +644,7 @@
 
 
   (provide 'base-extensions)
-  ;;; base-extensions.el ends here
+	;;; base-extensions.el ends here
 #+end_src
 
 * Base Customization
