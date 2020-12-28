@@ -594,6 +594,51 @@
   (use-package htmlize
 	:defer)
 
+
+  (use-package versuri
+	:load-path "lisp/versuri"
+	:config
+	(use-package unidecode)
+	(versuri-add-website "mygenius"
+						 "https://genius.com/${artist}-${song}-lyrics"
+						 "-" "div[class*=\"Lyrics__Container\"]")
+	(defvar my/spotify-sanitize-words '("bonus"
+										"demo"
+										"edit"
+										"explicit"
+										"extended"
+										"feat"
+										"mono"
+										"remaster"
+										"stereo"
+										"version")
+	  "Words to remove from spotify title")
+	;; got this sanitation from https://github.com/ultrabug/py3status/blob/master/py3status/modules/spotify.py
+	(let ((meta-words (s-join "\\|" my/spotify-sanitize-words)))
+	  (defvar my/sanitize-spotify-title-inside-brackets (format "\\([(\\[][^])]*?\\(%s\\)[^])]*?[])]\\)" meta-words)"Regex to sanitize away metadata in brackets like (feat. artist)")
+	  (defvar my/sanitize-spotify-title-after-delimiter (format "\\([\-,;/]\\)\\([^\-,;/]\\)*\\(%s\\).*" meta-words) "Regex to sanitize away additional metadata like - Remastered 2020"))
+
+	(defun my/find-current-song-on-spotify-lyrics ()
+	  (interactive)
+	  (when-let* ((metadata
+				   (dbus-get-property
+					:session
+					"org.mpris.MediaPlayer2.spotify"
+					"/org/mpris/MediaPlayer2"
+					"org.mpris.MediaPlayer2.Player"
+					"Metadata"
+					))
+				  (artist        (car (car (car (cdr (assoc "xesam:artist" metadata))))))
+				  (title          (car (car (cdr (assoc "xesam:title" metadata)))))
+				  (sanitized-title (s-trim (replace-regexp-in-string my/sanitize-spotify-title-after-delimiter ""
+																	 (replace-regexp-in-string
+																	  my/sanitize-spotify-title-inside-brackets ""
+																	  title)))))
+		(versuri-display (unidecode artist)
+						 (unidecode sanitized-title)
+						 ))))
+
+
   (provide 'base-extensions)
   ;;; base-extensions.el ends here
 #+end_src
