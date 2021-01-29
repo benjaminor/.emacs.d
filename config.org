@@ -297,7 +297,7 @@
 				 nil))
 	:bind
 	("<f2>" . hydra-zoom/body)
-	("C-ä" . hydra-misc-helper/body)
+	("M-," . hydra-misc-helper/body)
 	("C-c f" . hydra-flycheck/body))
 
   (defhydra hydra-zoom ()
@@ -491,9 +491,9 @@
   (use-package leo
 	:load-path "lisp/leo"
 	:config
-	(global-set-key (kbd "C-M-ä") '(lambda () (interactive)(leo-translate-word-at-point-or-prompt 'spanish 'german)))
-	(global-set-key (kbd "C-M-ü") '(lambda () (interactive)(leo-translate-word-at-point-or-prompt 'english 'german)))
-	(global-set-key (kbd "C-M-ö") '(lambda () (interactive)(leo-translate-word-at-point-or-prompt 'french 'german))))
+	(global-set-key my/leo-spanish-german-key '(lambda () (interactive)(leo-translate-word-at-point-or-prompt 'spanish 'german)))
+	(global-set-key my/leo-english-german-key '(lambda () (interactive)(leo-translate-word-at-point-or-prompt 'english 'german)))
+	(global-set-key my/leo-french-german-key '(lambda () (interactive)(leo-translate-word-at-point-or-prompt 'french 'german))))
 
   (use-package guess-language
 	:hook
@@ -507,7 +507,7 @@
 	("C-c r" . crux-rename-file-and-buffer)
 	("C-c I" . crux-find-user-init-file)
 	("C-c D" . crux-delete-file-and-buffer)
-	("C-c ü" . crux-cleanup-buffer-or-region)
+	("C-c #" . crux-cleanup-buffer-or-region)
 	("C-c e" . crux-eval-and-replace)
 	:config
 	(crux-reopen-as-root-mode)
@@ -669,7 +669,7 @@
 	  (let ((default-directory DIRECTORY))
 		(call-interactively 'helm-find-files)))
 
-	(global-set-key "\C-xä" '(lambda () (interactive)(my/open-directory my-tex-files-directory)))
+	(global-set-key my/tex-files-dir-key '(lambda () (interactive)(my/open-directory my-tex-files-directory)))
 
 	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	;; Custom splitting functions ;;
@@ -752,7 +752,7 @@
 	  (treemacs-width 44)
 	  :bind (("<f9>" . treemacs-select-window))
 	  :config
-	  (global-set-key (kbd "C-ü") (defhydra treemacs-hydra (:color red :hint nil)
+	  (global-set-key my/treemacs-hydra-key (defhydra treemacs-hydra (:color red :hint nil)
 									"Treemacs hydra"
 									("b" treemacs-bookmark "Bookmark in treemacs")
 									("f" treemacs-find-file "Current file in treemacs")
@@ -822,7 +822,7 @@
 	   '(aw-leading-char-face
 		 ((t (:inherit ace-jump-face-foreground :height 3.0)))))
 	  :bind
-	  ("M-ö" . ace-window))
+	  ("M-m" . ace-window))
 
 	(use-package ace-jump-mode
 	  :bind
@@ -1011,7 +1011,7 @@
 	  :after evil
 	  :config
 	  (global-evil-leader-mode)
-	  (evil-leader/set-leader "ü")
+	  (evil-leader/set-leader my/evil-leader-key)
 	  (evil-leader/set-key
 		"e" 'find-file
 		"b" 'switch-to-buffer
@@ -1310,7 +1310,7 @@
 			  org-ref-default-bibliography (cons (concat my-bibliography-dir "references.bib") ())
 			  org-ref-pdf-directory (concat my-bibliography-dir "bibtex-pdfs/"))
 		:bind
-		("C-c C-ö" . org-ref-bibtex-hydra/body))
+		("C-c C-k" . org-ref-bibtex-hydra/body))
 
 	  (use-package org-roam
 		:hook
@@ -2231,7 +2231,7 @@
 
 	(use-package lsp-mode
 	  :init
-	  (setq lsp-keymap-prefix "C-ö")
+	  (setq lsp-keymap-prefix my/lsp-keymap-prefix)
 	  :after yasnippet
 	  :commands lsp
 	  :config
