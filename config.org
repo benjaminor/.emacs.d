@@ -33,8 +33,8 @@
 
   + Add quelpa bootstrap code. We use quelpa for packages which are not in the repositories but nonetheless useful.
 #+begin_src emacs-lisp :tangle yes
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;;;;;;; Bootstrap `quelpa';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	;;;;;;;; Bootstrap `quelpa';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (setq quelpa-build-explicit-tar-format-p t)
   (unless (package-installed-p 'quelpa)
 	(with-temp-buffer
@@ -42,8 +42,8 @@
 	  (eval-buffer)
 	  (quelpa-self-upgrade)))
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;;;;;;; Bootstrap `use-package' and `quelpa-use-package' ;;;;;;;;;;;;;
+	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	;;;;;;;; Bootstrap `use-package' and `quelpa-use-package' ;;;;;;;;;;;;;
   (quelpa
    '(quelpa-use-package
 	 :fetcher git
@@ -75,7 +75,7 @@
 				evil-visual-state-map
 				evil-insert-state-map)))
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; no mouse, no arrow keys
   (global-unset-key (kbd "<left>"))
   (global-unset-key (kbd "<right>"))
@@ -89,12 +89,12 @@
   (global-unset-key (kbd "<M-right>"))
   (global-unset-key (kbd "<M-up>"))
   (global-unset-key (kbd "<M-down>"))
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;; Don't autoupdate at the moment
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	;;; Don't autoupdate at the moment
+	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   ;; (use-package auto-package-update
   ;;   :config
@@ -104,7 +104,7 @@
   ;; ;;;; Update quelpa packages on Mondays ;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; (when (string= (substring (current-time-string) 0 3) "Mon")
   ;;                (setq quelpa-upgrade-p t))
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   (use-package benchmark-init
 	:config
@@ -158,9 +158,9 @@
   (setq-default cursor-type 'bar)           ; Line-style cursor similar to other text editors
 
 
-  ;;; Offload the custom-set-variables to a separate file
-  ;;; This keeps your init.el neater and you have the option
-  ;;; to gitignore your custom.el if you see fit.
+	;;; Offload the custom-set-variables to a separate file
+	;;; This keeps your init.el neater and you have the option
+	;;; to gitignore your custom.el if you see fit.
   (setq custom-file (locate-user-emacs-file "custom.el"))
   (unless (file-exists-p custom-file)
 	(write-region "" nil custom-file))
@@ -205,7 +205,7 @@
 
   (global-prettify-symbols-mode +1)
 
-  ;;;Maximize on startup
+	;;;Maximize on startup
   (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
   ;; Save session
@@ -215,7 +215,7 @@
 
   ;; Garbage collection
   (add-function :after after-focus-change-function #'garbage-collect)
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   ;; mark line where cursor is
   (global-hl-line-mode t)
@@ -227,7 +227,7 @@
 
 
   (provide 'base)
-  ;;; base ends here
+	;;; base ends here
 #+end_src
 
 * Theme
@@ -1185,9 +1185,8 @@
 
 	(provide 'helm-setup)
 	;;; helm-setup.el ends here
-
   #+end_src
-
+  
 * Projectile
   #+begin_src emacs-lisp :tangle yes
 	;;; projectile-setup --- specify projectile and complementary packages and define keybindings
@@ -1513,115 +1512,116 @@
 
 * File Handlers
   #+begin_src emacs-lisp :tangle yes
-;;; package --- file-handler
-;;; Commentary:
+	;;; package --- file-handler
+	;;; Commentary:
 
-;;; Code:
-
-
-;; == File types ==
-;; Web-mode for .launch files (effectively xml)
-(add-to-list 'auto-mode-alist '("\\.launch?\\'" . web-mode))
-
-;; == YAML Mode ==
-(use-package yaml-mode
-  :mode
-  ("\\.yml\\'"
-   "\\.yaml\\'"))
+	;;; Code:
 
 
-;; == Markdown ==
-(use-package markdown-mode
-  :mode
-  ("INSTALL\\'"
-   "CONTRIBUTORS\\'"
-   "LICENSE\\'"
-   "README\\'"
-   "\\.markdown\\'"
-   "\\.md\\'"))
+	;; == File types ==
+	;; Web-mode for .launch files (effectively xml)
+	(add-to-list 'auto-mode-alist '("\\.launch?\\'" . web-mode))
+
+	;; == YAML Mode ==
+	(use-package yaml-mode
+	  :mode
+	  ("\\.yml\\'"
+	   "\\.yaml\\'"))
 
 
-;; == JSON Mode ==
-(use-package json-mode
-  :mode "\\.json\\'")
+	;; == Markdown ==
+	(use-package markdown-mode
+	  :mode
+	  ("INSTALL\\'"
+	   "CONTRIBUTORS\\'"
+	   "LICENSE\\'"
+	   "README\\'"
+	   "\\.markdown\\'"
+	   "\\.md\\'"))
 
-(use-package json-reformat
-  :after json-mode)
 
-(use-package json-snatcher
-  :after json-mode)
+	;; == JSON Mode ==
+	(use-package json-mode
+	  :mode "\\.json\\'")
 
-;; XML-mode
-(use-package nxml-mode
-  :ensure nil
-  :config
-  (autoload 'xml-mode "nxml" "XML editing mode" t))
+	(use-package json-reformat
+	  :after json-mode)
 
-(use-package web-mode
-  :config
-  (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-css-indent-offset 2)
-  (setq web-mode-code-indent-offset 2)
-  :mode (;; ("\\.xml$" . web-mode)
-		 ("\\.xsl$" . web-mode)
-		 ("\\.xhtml$" . web-mode)
-		 ("\\.page$" . web-mode)
-		 ("\\.xslt$" .  web-mode)
-		 ("\\.launch?\\'" . web-mode)
-		 ("\\.html?\\'" . web-mode)
-		 ("\\.phtml\\'" . web-mode)
-		 ("\\.tpl\\.php\\'" . web-mode)
-		 ("\\.[agj]sp\\'" . web-mode)
-		 ("\\.as[cp]x\\'" . web-mode)
-		 ("\\.erb\\'" . web-mode)
-		 ("\\.mustache\\'" . web-mode)
-		 ("\\.djhtml\\'" . web-mode)))
+	(use-package json-snatcher
+	  :after json-mode)
 
-(use-package csv-mode
-  :mode
-  ("\\.[Cc][Ss][Vv]\\'"))
+	;; XML-mode
+	(use-package nxml-mode
+	  :ensure nil
+	  :config
+	  (autoload 'xml-mode "nxml" "XML editing mode" t))
 
-(use-package pdf-tools
-  :magic ("%PDF" . pdf-view-mode)
-  :config
-  (pdf-tools-install)
+	(use-package web-mode
+	  :config
+	  (setq web-mode-markup-indent-offset 2)
+	  (setq web-mode-css-indent-offset 2)
+	  (setq web-mode-code-indent-offset 2)
+	  :mode (;; ("\\.xml$" . web-mode)
+			 ("\\.xsl$" . web-mode)
+			 ("\\.xhtml$" . web-mode)
+			 ("\\.page$" . web-mode)
+			 ("\\.xslt$" .  web-mode)
+			 ("\\.launch?\\'" . web-mode)
+			 ("\\.html?\\'" . web-mode)
+			 ("\\.phtml\\'" . web-mode)
+			 ("\\.tpl\\.php\\'" . web-mode)
+			 ("\\.[agj]sp\\'" . web-mode)
+			 ("\\.as[cp]x\\'" . web-mode)
+			 ("\\.erb\\'" . web-mode)
+			 ("\\.mustache\\'" . web-mode)
+			 ("\\.djhtml\\'" . web-mode)))
 
-  (use-package pdf-continuous-scroll-mode :quelpa (:location (recipe
-															  :fetcher github
-															  :repo "dalanicolai/pdf-continuous-scroll-mode.el"))
-	:hook
-	(pdf-view-mode . pdf-continuous-scroll-mode)))
+	(use-package csv-mode
+	  :mode
+	  ("\\.[Cc][Ss][Vv]\\'"))
 
-(use-package pandoc-mode
-  :if (executable-find "pandoc")
-  :config
-  (use-package ox-pandoc)
-  (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
+	(use-package pdf-tools
+	  :magic ("%PDF" . pdf-view-mode)
+	  :hook
+	  (pdf-view-mode . (lambda () (set (make-local-variable 'evil-emacs-state-cursor) (list nil))))
+	  :config
+	  (pdf-tools-install)
 
-(use-package ansible
-  :defer)
+	  (use-package pdf-continuous-scroll-mode :quelpa (:location (recipe
+																  :fetcher github
+																  :repo "dalanicolai/pdf-continuous-scroll-mode.el"))
+		:hook
+		(pdf-view-mode . pdf-continuous-scroll-mode)))
 
-(use-package nix-mode
-  :mode "\\.nix\\'")
+	(use-package pandoc-mode
+	  :if (executable-find "pandoc")
+	  :config
+	  (use-package ox-pandoc)
+	  (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
 
-(use-package dockerfile-mode
-  :mode ("Dockerfile\\'" . dockerfile-mode))
+	(use-package ansible
+	  :defer)
 
-(use-package docker-compose-mode
-  :defer 10)
+	(use-package nix-mode
+	  :mode "\\.nix\\'")
 
-(use-package groovy-mode
-  :defer 10)
+	(use-package dockerfile-mode
+	  :mode ("Dockerfile\\'" . dockerfile-mode))
 
-(use-package fish-mode
-  :defer 10)
+	(use-package docker-compose-mode
+	  :defer 10)
 
-(use-package nov
-  :mode ("\\.epub\\'" . nov-mode))
+	(use-package groovy-mode
+	  :defer 10)
 
-(provide 'file-handler)
-;;; file-handler.el ends here
+	(use-package fish-mode
+	  :defer 10)
 
+	(use-package nov
+	  :mode ("\\.epub\\'" . nov-mode))
+
+	(provide 'file-handler)
+	;;; file-handler.el ends here
   #+end_src
 
 * Flycheck
@@ -1857,7 +1857,6 @@
 
 	(provide 'text-completion)
 	;;; text-completion.el ends here
-
   #+end_src
 
 * Lisp Setup
@@ -1984,7 +1983,6 @@
 
 	(provide 'lang-latex)
 	;;; lang-latex.el ends here
-
   #+end_src
 
 * Python
