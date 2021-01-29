@@ -49,11 +49,6 @@
 	 :fetcher git
 	 :url "https://github.com/quelpa/quelpa-use-package.git"))
 
-  ;; leave it in but should not be necessary because we are using emacs-overlay now
-  ;; and define use-package as a dependency there
-  (quelpa
-   '(use-package))
-
   (eval-when-compile
 	(require 'quelpa)
 	(require 'quelpa-use-package)
@@ -107,6 +102,7 @@
 	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   (use-package benchmark-init
+	:disabled
 	:config
 	;; To disable collection of benchmark data after init is done.
 	(add-hook 'after-init-hook 'benchmark-init/deactivate))
@@ -1033,7 +1029,6 @@
 	  :init
 	  (use-package helm-icons
 		:demand
-		:after treemacs
 		:config
 		(helm-icons-enable))
 	  ;; some nicer icons for helm
@@ -1653,6 +1648,7 @@
 		  '(add-hook 'flycheck-mode-hook 'flycheck-yamllint-setup))))
 
 	(use-package flycheck-pycheckers
+	  :disabled
 	  :after flycheck
 	  :config
 	  (with-eval-after-load 'flycheck
@@ -1938,7 +1934,9 @@
 	  (setq TeX-auto-save t
 			TeX-parse-self t
 			TeX-save-query nil
-			TeX-PDF-mode t)
+			TeX-PDF-mode t
+			TeX-error-overview-open-after-TeX-run t
+			TeX-error-overview-setup 'separate-frame)
 	  (setq bibtex-dialect 'biblatex)
 	  (setq-default TeX-master nil)
 	  (setq reftex-plug-into-AUCTeX t)
@@ -2133,15 +2131,16 @@
 	  (use-package intero
 		:config (add-hook 'haskell-mode-hook 'intero-mode))
 
+	  ;; https://github.com/mihaimaruseac/hindent/issues/570 until this is solved
 	  ;; hindent - format haskell code automatically
 	  ;; https://github.com/chrisdone/hindent
-	  (when (executable-find "hindent")
-		(use-package hindent
-		  :diminish hindent-mode
-		  :config
-		  (add-hook 'haskell-mode-hook #'hindent-mode)
-		  ;; reformat the buffer using hindent on save
-		  (setq hindent-reformat-buffer-on-save t))))
+	  ;; (when (executable-find "hindent")
+	  ;; 	(use-package hindent
+	  ;; 	  :diminish hindent-mode
+	  ;; 	  :config
+	  ;; 	  (add-hook 'haskell-mode-hook #'hindent-mode)
+	  ;; 	  ;; reformat the buffer using hindent on save
+	  ;; 	  (setq hindent-reformat-buffer-on-save t))))
 
 	(provide 'lang-haskell)
   #+end_src
