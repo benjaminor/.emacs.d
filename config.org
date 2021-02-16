@@ -270,6 +270,11 @@
   (use-package font-lock+
 	:quelpa (font-lock+ :repo "emacsmirror/font-lock-plus" :fetcher github))
 
+  (use-package unicode-fonts
+	:demand
+	:config
+	(unicode-fonts-setup))
+
   (provide 'base-theme)
   ;;; base-theme.el ends here
 #+end_src
@@ -974,6 +979,7 @@
 	  (evil-mode 1)
 	  (add-to-list 'desktop-locals-to-save 'evil-markers-alist)
 	  (define-key evil-normal-state-map " " 'save-buffer)
+      (global-unset-key (kbd "C-x C-s"))
 	  (with-eval-after-load 'evil-maps
 		(define-key evil-motion-state-map (kbd "SPC") nil)
 		(define-key evil-motion-state-map (kbd "RET") nil)
@@ -2141,6 +2147,7 @@
 	  ;; 	  (add-hook 'haskell-mode-hook #'hindent-mode)
 	  ;; 	  ;; reformat the buffer using hindent on save
 	  ;; 	  (setq hindent-reformat-buffer-on-save t))))
+	  )
 
 	(provide 'lang-haskell)
   #+end_src
